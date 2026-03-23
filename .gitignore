@@ -1,0 +1,21 @@
+# Environnement
+.env
+
+# Dépendances Composer
+/vendor/
+
+# Uploads utilisateurs
+/public/images/uploads/*
+!/public/images/uploads/.gitkeep
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# SCSS compilé (généré automatiquement)
+/public/css/main.css
+/public/css/main.css.map
