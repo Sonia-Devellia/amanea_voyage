@@ -18,10 +18,8 @@ class Admin extends Model
         parent::__construct();
     }
 
-    // -------------------------------------------------------------------------
-    // Crée un nouvel admin en base de données
-    // $data est un tableau contenant email et password ,true si l'insertion a réussi, false sinon
-    // -------------------------------------------------------------------------
+
+    // Crée un nouvel admin en bdd $data est un tableau contenant email et password ,true si l'insertion a réussi, false sinon
     public function create(array $data): bool
     {
         // On prépare la requête SQL avec des paramètres nommés (:nom) pour éviter les injections SQL
@@ -37,9 +35,8 @@ class Admin extends Model
         ]);
     }
 
-    // -------------------------------------------------------------------------
+
     // Met à jour l'email d'un admin existant
-    // -------------------------------------------------------------------------
     public function update(int $id, array $data): bool
     {
         $stmt = $this->db->prepare("
@@ -77,7 +74,7 @@ class Admin extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Met à jour uniquement le mp d'un admin
+    // MAJ uniquement le mp d'un admin
     // Le nouveau mp est hashé avant d'être enregistré
     // -------------------------------------------------------------------------
     public function updatePassword(int $id, string $newPassword): bool

@@ -26,18 +26,31 @@ class Message extends Model
     {
         $stmt = $this->db->prepare("
             INSERT INTO {$this->table}
-                (name, email, phone, message, status, sent_date)
+                (firstname, lastname, email, phone,
+                 travel_type, destination, duration,
+                 budget, travelers, departure_date, project,
+                 status, sent_date)
             VALUES
-                (:name, :email, :phone, :message, :status, :sent_date)
+                (:firstname, :lastname, :email, :phone,
+                 :travel_type, :destination, :duration,
+                 :budget, :travelers, :departure_date, :project,
+                 :status, :sent_date)
         ");
 
         return $stmt->execute([
-            ':name'      => $data['name'],
-            ':email'     => $data['email'],
-            ':phone'     => $data['phone']   ?? null,
-            ':message'   => $data['message'],
-            ':status'    => 'non_lu',
-            ':sent_date' => date('Y-m-d H:i:s'),
+            ':firstname'      => $data['firstname'],
+            ':lastname'       => $data['lastname'],
+            ':email'          => $data['email'],
+            ':phone'          => $data['phone'],
+            ':travel_type'    => $data['travel_type'],
+            ':destination'    => $data['destination']    ?: null,
+            ':duration'       => $data['duration'],
+            ':budget'         => $data['budget']         ?: null,
+            ':travelers'      => $data['travelers'],
+            ':departure_date' => $data['departure_date'] ?: null,
+            ':project'        => $data['project'],
+            ':status'         => 'non_lu',
+            ':sent_date'      => date('Y-m-d H:i:s'),
         ]);
     }
 

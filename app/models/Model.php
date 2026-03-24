@@ -25,9 +25,9 @@ abstract class Model
         $this->db = Database::getInstance();
     }
 
-    // -------------------------------------------------------------------------
+    
     // Récupère tous les enregistrements de la table
-    // -------------------------------------------------------------------------
+
     public function findAll(): array
     {
         $stmt = $this->db->query("SELECT * FROM {$this->table}");

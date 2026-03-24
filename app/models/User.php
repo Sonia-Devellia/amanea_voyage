@@ -3,15 +3,14 @@
 // Déclare le namespace : User fait partie des Models
 namespace App\Models;
 
-// User hérite de Model : il récupère automatiquement
-// findAll(), findById() et delete()
+// User hérite de Model 
 class User extends Model
 {
     // Nom de la table en base de données
-    protected string $table = 'user';
+    protected string $table = 'USER';
 
     // Nom de la clé primaire de la table
-    protected string $primaryKey = 'id_user';
+    protected string $primaryKey = 'Id_USER';
 
     // Le constructeur appelle celui du parent (Model)
     // ce qui déclenche la connexion PDO via Database
@@ -21,8 +20,8 @@ class User extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Crée un nouvel utilisateur en bd
-    // $data est un tableau contenant les champs du formulaire d'inscription
+    // Crée un nouvel utilisateur en base de données
+    // $data est un tableau contenant les champs du formulaire
     // Retourne true si l'insertion a réussi, false sinon
     // -------------------------------------------------------------------------
     public function create(array $data): bool
@@ -31,12 +30,13 @@ class User extends Model
         // pour éviter les injections SQL
         $stmt = $this->db->prepare("
             INSERT INTO {$this->table}
-                (last_name, first_name, email, password, phone, registration_date)
+                (last_name, first_name, email, password, phone, registration_date, password_changed)
             VALUES
-                (:last_name, :first_name, :email, :password, :phone, :registration_date)
+                (:last_name, :first_name, :email, :password, :phone, :registration_date, 0)
         ");
 
-        // On exécute la requête en passant les vraies valeurs
+        // Le mP est hashé avec bcrypt avant d'être enregistré
+        // password_changed = 0 car c'est un mot de passe temporaire
         return $stmt->execute([
             ':last_name'         => $data['last_name'],
             ':first_name'        => $data['first_name'],
@@ -48,7 +48,7 @@ class User extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Met à jour les informations d'un utilisateur existant
+    // MAJ les informations d'un utilisateur existant
     // -------------------------------------------------------------------------
     public function update(int $id, array $data): bool
     {
@@ -85,9 +85,9 @@ class User extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Vérifie que le mp  correspond au hash enregistré en BDD
-    // password_verify() compare le mp en clair avec le hash bcrypt
-    // Retourne true si le mp est correct, false sinon
+    // Vérifie que le mot de passe correspond au hash enregistré en BDD
+    // password_verify() compare le mot de passe en clair avec le hash bcrypt
+    // Retourne true si le mot de passe est correct, false sinon
     // -------------------------------------------------------------------------
     public function verifyPassword(string $password, string $hash): bool
     {
@@ -95,7 +95,8 @@ class User extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Met à jour uniquement le mp d'un user le nouveau mp est hashé avant d'être enregistré
+    // Met à jour le mot de passe d'un utilisateur
+    // Le nouveau mp est hashé avant d'être enregistré
     // -------------------------------------------------------------------------
     public function updatePassword(int $id, string $newPassword): bool
     {
@@ -112,13 +113,26 @@ class User extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Récupère tous les projets de voyage d'un utilisateur
+    // Marque le mot de passe comme changé après la première connexion
+    // password_changed passe de 0 à 1
     // -------------------------------------------------------------------------
+    public function markPasswordChanged(int $id): bool
+    {
+        $stmt = $this->db->prepare("
+            UPDATE {$this->table}
+            SET password_changed = 1
+            WHERE {$this->primaryKey} = :id
+        ");
+        return $stmt->execute([':id' => $id]);
+    }
+
+
+    // Récupère tous les projets de voyage d'un utilisateur
     public function getTravelProjects(int $id): array
     {
         $stmt = $this->db->prepare("
-            SELECT * FROM travel_project
-            WHERE id_user = :id
+            SELECT * FROM TRAVEL_PROJECT
+            WHERE Id_USER = :id
         ");
         $stmt->execute([':id' => $id]);
         return $stmt->fetchAll();

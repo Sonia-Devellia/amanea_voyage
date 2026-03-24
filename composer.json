@@ -1,11 +1,21 @@
-{   
+{
     "name": "amaneav/voyage",
     "description": "Amanéa Voyage — Création de voyage sur-mesure",
     "type": "project",
+
+    "authors": [
+        {
+            "name": "Sonia Devellia",
+            "email": "sonia@example.com",
+            "role": "Developer"
+        }
+    ],
+
     "require": {
         "php": ">=8.1",
         "vlucas/phpdotenv": "^5.6"
     },
+
     "autoload": {
         "psr-4": {
             "Config\\":                   "config/",
@@ -14,5 +24,13 @@
             "App\\Controllers\\Admin\\":  "app/controllers/admin/",
             "App\\Controllers\\Client\\": "app/controllers/client/"
         }
+    },
+
+    "scripts": {
+        "refresh": "composer dump-autoload"
+    },
+
+    "config": {
+        "optimize-autoloader": true
     }
 }

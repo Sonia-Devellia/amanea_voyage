@@ -1,0 +1,22 @@
+{
+  "name": "amaneav",
+  "version": "1.0.0",
+  "description": "Amanéa Voyage , Création de voyage sur mesure ethique et authentique ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sonia-Devellia/amanea_voyage.git"
+  },
+  "author": "Habibi Sonia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sonia-Devellia/amanea_voyage/issues"
+  },
+  "homepage": "https://github.com/Sonia-Devellia/amanea_voyage#readme",
+  "dependencies": {
+    "sass": "^1.98.0"
+  }
+}
