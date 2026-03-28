@@ -25,7 +25,7 @@ abstract class Model
         $this->db = Database::getInstance();
     }
 
-    
+
     // Récupère tous les enregistrements de la table
 
     public function findAll(): array
@@ -57,6 +57,15 @@ abstract class Model
             "DELETE FROM {$this->table} WHERE {$this->primaryKey} = :id"
         );
         return $stmt->execute([':id' => $id]);
+    }
+
+    // -------------------------------------------------------------------------
+    // Retourne le nombre total d'enregistrements dans la table
+    // -------------------------------------------------------------------------
+    public function count(): int
+    {
+        $stmt = $this->db->query("SELECT COUNT(*) FROM {$this->table}");
+        return (int) $stmt->fetchColumn();
     }
 
     // -------------------------------------------------------------------------

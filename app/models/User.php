@@ -126,6 +126,25 @@ class User extends Model
         return $stmt->execute([':id' => $id]);
     }
 
+    // -------------------------------------------------------------------------
+    // Enregistre l'acceptation des CGV et de la Charte Amanéa
+    // terms_accepted passe de 0 à 1 et enregistre la date d'acceptation
+    // -------------------------------------------------------------------------
+    public function acceptTerms(int $id): bool
+    {
+        $stmt = $this->db->prepare("
+            UPDATE {$this->table}
+            SET terms_accepted      = 1,
+                terms_accepted_date = :terms_accepted_date
+            WHERE {$this->primaryKey} = :id
+        ");
+ 
+        return $stmt->execute([
+            ':terms_accepted_date' => date('Y-m-d H:i:s'),
+            ':id'                  => $id,
+        ]);
+    }
+ 
 
     // Récupère tous les projets de voyage d'un utilisateur
     public function getTravelProjects(int $id): array

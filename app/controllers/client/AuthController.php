@@ -1,44 +1,46 @@
 <?php
 
-// On déclare le namespace : AuthController fait partie des Controllers Client
+// On déclare le namespace 
 namespace App\Controllers\Client;
 
-// On importe la classe parente et le Model dont on a besoin
+// On importe la classe parente et les Models dont on a besoin
 use App\Controllers\Controller;
 use App\Models\User;
+use App\Models\Notification;
 
 // AuthController gère la connexion et la déconnexion des clients
 // Les comptes sont créés par l'admin depuis le back-office
 class AuthController extends Controller
 {
-    // Le Model utilisé dans ce Controller
+    // Les Models utilisés dans ce Controller
     private User $userModel;
+    private Notification $notificationModel;
 
-    // Le constructeur instancie le Model dont on a besoin
+    // Le constructeur instancie les Models dont on a besoin
     public function __construct()
     {
-        $this->userModel = new User();
+        $this->userModel         = new User();
+        $this->notificationModel = new Notification();
     }
 
-   
     // Affiche le formulaire de connexion
     public function login(): void
     {
         // Si le client est déjà connecté on le redirige vers son espace
         if (!empty($_SESSION['user'])) {
-            $this->redirect('client');
+            $this->redirect('client/dashboard');
         }
 
         $this->render('client/login');
     }
 
-   
+    
     // Traite le formulaire de connexion
-   public function authenticate(): void
+    public function authenticate(): void
     {
         // On vérifie que la requête vient bien d'un formulaire POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('login');
+            $this->redirect('client/connexion');
             return;
         }
 
@@ -82,46 +84,52 @@ class AuthController extends Controller
             'lastname'         => $user['last_name'],
             'email'            => $user['email'],
             'password_changed' => $user['password_changed'],
+            'terms_accepted'   => $user['terms_accepted'],
         ];
 
-        // Si c'est la première connexion (password_changed = 0)
-        // On force le client à changer son mot de passe temporaire
+        // ÉTAPE 1 : Si c'est la première connexion → changer le mot de passe
         if ($user['password_changed'] == 0) {
-            $this->redirect('login/changePassword');
+            $this->redirect('client/changePassword');
             return;
         }
 
-        // Sinon on redirige vers l'espace client
-        $this->redirect('client');
+        // ÉTAPE 2 : Si les CGV n'ont pas encore été acceptées → page CGV
+        if ($user['terms_accepted'] == 0) {
+            $this->redirect('client/terms');
+            return;
+        }
+
+        // ÉTAPE 3 : Tout est bon → accès au dashboard
+        $this->redirect('client/dashboard');
     }
 
-  
-    // Affiche le formulaire de changement de mot de passeniquement accessible si le client vient de se connecter
- 
+    // -------------------------------------------------------------------------
+    // Affiche le formulaire de changement de mot de passe
+    // Accessible uniquement lors de la première connexion
+    // -------------------------------------------------------------------------
     public function changePassword(): void
     {
         // On vérifie que le client est bien connecté
         if (empty($_SESSION['user'])) {
-            $this->redirect('login');
+            $this->redirect('client/connexion');
             return;
         }
 
         $this->render('client/change_password');
     }
 
- 
     // Traite le formulaire de changement de mot de passe
     public function savePassword(): void
     {
         // On vérifie que la requête vient bien d'un formulaire POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('login/changePassword');
+            $this->redirect('client/changePassword');
             return;
         }
 
         // On vérifie que le client est bien connecté
         if (empty($_SESSION['user'])) {
-            $this->redirect('login');
+            $this->redirect('client/connexion');
             return;
         }
 
@@ -152,21 +160,88 @@ class AuthController extends Controller
             return;
         }
 
-        // On met à jour le mot de passe en base de données
         $id = $_SESSION['user']['id'];
+
+        // On met à jour le mot de passe en base de données
         $this->userModel->updatePassword($id, $password);
 
-        // On marque le mot de passe comme changé en base de données
+        // On marque le mot de passe comme changé
         $this->userModel->markPasswordChanged($id);
 
         // On met à jour la session
         $_SESSION['user']['password_changed'] = 1;
 
-        // On redirige vers l'espace client
-        $this->redirect('client');
+        // On redirige vers la page CGV car c'est la prochaine étape
+        $this->redirect('client/terms');
     }
 
-   
+    // -------------------------------------------------------------------------
+    // Affiche la page CGV et Charte Amanéa
+    // Le client doit lire et accepter les deux documents avant d'accéder au dashboard
+    // -------------------------------------------------------------------------
+    public function terms(): void
+    {
+        // On vérifie que le client est bien connecté
+        if (empty($_SESSION['user'])) {
+            $this->redirect('client/connexion');
+            return;
+        }
+
+        // Si le client a déjà accepté les CGV on le redirige vers le dashboard
+        if ($_SESSION['user']['terms_accepted'] == 1) {
+            $this->redirect('client/dashboard');
+            return;
+        }
+
+        $this->render('client/terms');
+    }
+
+
+    // Traite l'acceptation des CGV et de la Charte Amanéa
+    public function acceptTerms(): void
+    {
+        // On vérifie que la requête vient bien d'un formulaire POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('client/terms');
+            return;
+        }
+
+        // On vérifie que le client est bien connecté
+        if (empty($_SESSION['user'])) {
+            $this->redirect('client/connexion');
+            return;
+        }
+
+        // On vérifie que les deux cases ont bien été cochées
+        if (empty($_POST['accept_cgv']) || empty($_POST['accept_charte'])) {
+            $this->render('client/terms', [
+                'error' => 'Vous devez lire et accepter les deux documents pour continuer.',
+            ]);
+            return;
+        }
+
+        $id = $_SESSION['user']['id'];
+
+        // On enregistre l'acceptation en base de données avec la date et l'heure
+        $this->userModel->acceptTerms($id);
+
+        // On met à jour la session
+        $_SESSION['user']['terms_accepted'] = 1;
+
+        // On crée une notification pour l'admin (Id_ADMIN = 1 car il n'y a qu'un seul admin)
+        // La notification indique quel client a accepté et à quelle date
+        $this->notificationModel->create([
+            'type'     => 'terms_accepted',
+            'message'  => $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname'] . ' a lu et accepté les CGV et la Charte Amanéa.',
+            'id_user'  => $_SESSION['user']['id'],
+            'id_admin' => 1,
+        ]);
+
+        // On redirige vers le dashboard
+        $this->redirect('client/dashboard');
+    }
+
+
     // Déconnecte le client
     public function logout(): void
     {
