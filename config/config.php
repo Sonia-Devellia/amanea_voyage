@@ -13,7 +13,8 @@ $dotenv->required([
     'APP_URL',
     'DB_HOST',
     'DB_NAME',
-    'DB_USER',
+    'DB_USERNAME',
+    'DB_PASSWORD',
     'DB_CHARSET',
 ]);
 
@@ -25,8 +26,8 @@ define('APP_DEBUG',   $_ENV['APP_DEBUG'] === 'true');
 
 define('DB_HOST',    $_ENV['DB_HOST']);
 define('DB_NAME',    $_ENV['DB_NAME']);
-define('DB_USER',    $_ENV['DB_USER']);
-define('DB_PASS',    $_ENV['DB_PASS']    ?? '');
+define('DB_USERNAME',    $_ENV['DB_USERNAME']);
+define('DB_PASSWORD',    $_ENV['DB_PASSWORD']    ?? '');
 define('DB_CHARSET', $_ENV['DB_CHARSET']);
 
 define('PEXELS_API_KEY', $_ENV['PEXELS_API_KEY'] ?? '');

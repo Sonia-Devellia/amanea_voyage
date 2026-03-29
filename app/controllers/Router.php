@@ -93,6 +93,7 @@ class Router
         'admin/blog/publish' => ['App\Controllers\Admin\AdminArticleController', 'publish'],
         'admin/blog/addMedia'    => ['App\Controllers\Admin\AdminArticleController', 'addMedia'],
         'admin/blog/removeMedia' => ['App\Controllers\Admin\AdminArticleController', 'removeMedia'],
+        'admin/blog/updateCover' => ['App\Controllers\Admin\AdminArticleController', 'updateCover'],
 
         // Gestion du portfolio
         'admin/portfolio'       => ['App\Controllers\Admin\AdminMediaController',   'index'],

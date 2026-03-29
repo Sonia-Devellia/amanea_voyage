@@ -6,7 +6,7 @@ namespace App\Models;
 // Media hérite de Model 
 class Media extends Model
 {
-    // Nom de la table en base de données
+    // Nom de la table en bdd
     protected string $table = 'MEDIA';
 
     // Nom de la clé primaire de la table

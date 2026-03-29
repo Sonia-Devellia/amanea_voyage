@@ -6,7 +6,7 @@ namespace App\Models;
 // Notebook hérite de Model
 class Notebook extends Model
 {
-    // Nom de la table en base de données
+    // Nom de la table en bdd
     protected string $table = 'NOTEBOOK';
 
     // Nom de la clé primaire de la table
@@ -18,10 +18,10 @@ class Notebook extends Model
         parent::__construct();
     }
 
-    // -------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------
     // Crée un nouveau carnet de voyage en bd $data contient le nom du fichier PDF et l'id du projet associé
     // Retourne true si l'insertion a réussi, false sinon
-    // -------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------
     public function create(array $data): bool
     {
         $stmt = $this->db->prepare("
@@ -36,7 +36,7 @@ class Notebook extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Met à jour le fichier PDF d'un carnet existant
+    // MAJ le fichier PDF d'un carnet existant
     // Utilisé quand l'admin remplace le carnet d'un projet
     // -------------------------------------------------------------------------
     public function update(int $id, array $data): bool

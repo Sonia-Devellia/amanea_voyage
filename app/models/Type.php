@@ -6,7 +6,7 @@ namespace App\Models;
 // Type hérite de Model 
 class Type extends Model
 {
-    // Nom de la table en base de données
+    // Nom de la table en bdd
     protected string $table = 'TYPE';
 
     // Nom de la clé primaire de la table
@@ -18,10 +18,10 @@ class Type extends Model
         parent::__construct();
     }
 
-    // -------------------------------------------------------------------------
-    // Crée une nouvelle formule de voyage en bd $data contient le titre, la description, le slug et l'id du média associé
+    // ---------------------------------------------------------------------------------------------------------------------------
+    // Crée une nouvelle formule de voyage en bdd $data contient le titre, la description, le slug et l'id du média associé
     // Retourne true si l'insertion a réussi, false sinon
-    // -------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------------------------
     public function create(array $data): bool
     {
         $stmt = $this->db->prepare("
@@ -39,9 +39,8 @@ class Type extends Model
         ]);
     }
 
-    // -------------------------------------------------------------------------
+    
     // MAJ une formule de voyage existante
-    // -------------------------------------------------------------------------
     public function update(int $id, array $data): bool
     {
         $stmt = $this->db->prepare("
@@ -60,9 +59,7 @@ class Type extends Model
         ]);
     }
 
-    // -------------------------------------------------------------------------------------
     // Récupère une formule par son slug pour afficher la page d'une formule depuis son URL
-    // -------------------------------------------------------------------------------------
     public function findBySlug(string $slug): array|false
     {
         $stmt = $this->db->prepare("
@@ -74,9 +71,8 @@ class Type extends Model
         return $stmt->fetch();
     }
 
-    // -----------------------------------------------------------------------------
-    // Récupère une formule avec son image associée ,jointure avec la table MEDIA 
-    // -----------------------------------------------------------------------------
+   
+    // Récupère une formule avec son image associée 
     public function findWithMedia(int $id): array|false
     {
         $stmt = $this->db->prepare("

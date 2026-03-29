@@ -142,10 +142,8 @@ class AdminController extends Controller
         ]);
     }
 
-    // -------------------------------------------------------------------------
-    // Page paramètres
-    // Permet à Nora de modifier les informations de son compte admin
-    // -------------------------------------------------------------------------
+   
+    // Page paramètres ,permet à Nora de modifier les informations de son compte
     public function parametres(): void
     {
         // On vérifie que l'admin est bien connecté

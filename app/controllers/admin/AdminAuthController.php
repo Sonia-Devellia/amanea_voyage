@@ -61,10 +61,10 @@ class AdminAuthController extends Controller
             return;
         }
 
-        // On cherche le compte admin par email en base de données
+        // On cherche le compte admin par email en bdd
         $admin = $this->adminModel->findByEmail($email);
 
-        // Si le compte n'existe pas ou le mot de passe est incorrect
+        // Si le compte n'existe pas ou le mp est incorrect
         // Message volontairement vague pour ne pas donner d'indices
         if (!$admin || !$this->adminModel->verifyPassword($password, $admin['password'])) {
             $this->render('admin/login', [
@@ -74,7 +74,7 @@ class AdminAuthController extends Controller
         }
 
         // Connexion réussie : on stocke les infos de l'admin en session
-        // On ne stocke jamais le mot de passe en session
+        // On ne stocke jamais le mp en session
         $_SESSION['admin'] = [
             'id'    => $admin['Id_ADMIN'],
             'email' => $admin['email'],

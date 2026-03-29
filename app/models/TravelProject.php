@@ -6,7 +6,7 @@ namespace App\Models;
 // TravelProject hérite de Model 
 class TravelProject extends Model
 {
-    // Nom de la table en base de données
+    // Nom de la table en bdd
     protected string $table = 'TRAVEL_PROJECT';
 
     // Nom de la clé primaire de la table
@@ -19,7 +19,7 @@ class TravelProject extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Crée un nouveau projet de voyage en base de données $data contient les informations saisies
+    // Crée un nouveau projet de voyage en bdd $data contient les informations saisies
     // Retourne true si l'insertion a réussi, false sinon
     // -------------------------------------------------------------------------
     public function create(array $data): bool
@@ -43,9 +43,8 @@ class TravelProject extends Model
         ]);
     }
 
-    // -------------------------------------------------------------------------
-    // Met à jour les informations d'un projet de voyage existant
-    // -------------------------------------------------------------------------
+   
+    // MAJ les informations d'un projet de voyage existant
     public function update(int $id, array $data): bool
     {
         $stmt = $this->db->prepare("
@@ -70,9 +69,8 @@ class TravelProject extends Model
         ]);
     }
 
-    // -------------------------------------------------------------------------
-    // Met à jour uniquement le statut d'un projet utilisé par l'admin pour faire avancer le projet
-    // -------------------------------------------------------------------------
+    
+    // Maj uniquement le statut d'un projet utilisé par l'admin pour faire avancer le projet
     public function updateStatus(int $id, string $status): bool
     {
         $stmt = $this->db->prepare("
@@ -87,10 +85,8 @@ class TravelProject extends Model
         ]);
     }
 
-    // -------------------------------------------------------------------------
+    
     // Récupère tous les projets d'un utilisateur
-    // Utilisé dans l'espace client pour afficher ses projets
-    // -------------------------------------------------------------------------
     public function findByUser(int $idUser): array
     {
         $stmt = $this->db->prepare("
@@ -105,7 +101,7 @@ class TravelProject extends Model
 
     // -------------------------------------------------------------------------
     // Récupère tous les projets avec le statut donné
-    // Utilisé dans le back-office pour filtrer les projets
+    // Utilisé dans le back-office admin pour filtrer les projets
     // -------------------------------------------------------------------------
     public function findByStatus(string $status): array
     {

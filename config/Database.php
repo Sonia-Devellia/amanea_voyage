@@ -4,21 +4,16 @@ namespace Config;
 
 use PDO;
 
-/**
- * Classe Database — Pattern Singleton
- *
- * Garantit qu'une seule connexion PDO est créée durant toute l'exécution.
- * On accède à cette connexion via Database::getInstance().
- */
+// Classe Database : Pattern Singleton
+// Garantit qu'une seule connexion PDO est créée durant toute l'exécution.
+// On accède à cette connexion via Database::getInstance()
 class Database
 {
-    // Stocke la connexion PDO unique. Null tant qu'elle n'a pas été créée.
+    // Stocke la connexion PDO unique et Null tant qu'elle n'a pas été créée
     private static ?PDO $instance = null;
 
-    /**
-     * Constructeur privé 
-     * Crée la connexion PDO à partir des variables d'environnement et la stocke.
-     */
+    // Constructeur privé 
+    // Crée la co PDO à partir des variables d'environnement et la stocke
     private function __construct()
     {
         // DSN (Data Source Name) : chaîne qui indique à PDO le driver, l'hôte,la bdd et l'encodage à utiliser pour la co.
@@ -41,10 +36,8 @@ class Database
     // Interdit la duplication de l'objet via "clone" pour respecter le Singleton
     private function __clone() {}
 
-    /**
-     * Point d'accès unique à la connexion PDO.
-     * Crée la connexion si elle n'existe pas encore, puis la retourne.
-     */
+    // Point d'accès unique à la connexion PDO
+    // Crée la connexion si elle n'existe pas encore
     public static function getInstance(): PDO
     {
         // Si aucune connexion n'existe, on en crée une (appelle le constructeur)

@@ -261,4 +261,33 @@ class AdminArticleController extends Controller
         // On redirige vers le formulaire de modification de l'article
         $this->redirect('admin/blog/edit/' . $idArticle);
     }
+
+
+    // MAJ uniquement l'image de couverture d'un article
+    // Nora peut changer la couverture sans modifier le reste de l'article
+    public function updateCover(int $id): void
+    {
+        // On vérifie que l'admin est bien connecté
+        $this->requireAdmin();
+ 
+        // On vérifie que la requête vient bien d'un formulaire POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('admin/blog/edit/' . $id);
+            return;
+        }
+ 
+        $idMedia = (int) ($_POST['id_media'] ?? 0);
+ 
+        // On vérifie qu'un média a bien été sélectionné
+        if (empty($idMedia)) {
+            $this->redirect('admin/blog/edit/' . $id);
+            return;
+        }
+ 
+        // On maj uniquement l'image de couverture
+        $this->articleModel->updateCover($id, $idMedia);
+ 
+        // On redirige vers le formulaire de modification de l'article
+        $this->redirect('admin/blog/edit/' . $id);
+    }
 }

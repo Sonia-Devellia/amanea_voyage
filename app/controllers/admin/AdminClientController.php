@@ -65,7 +65,7 @@ class AdminClientController extends Controller
 
     // -------------------------------------------------------------------------
     // Affiche le formulaire de création d'un client
-    // Nora crée le compte client avec un mot de passe temporaire généré automatiquement
+    // Nora crée le compte client avec un mp temporaire généré automatiquement
     // -------------------------------------------------------------------------
     public function create(): void
     {
@@ -76,7 +76,7 @@ class AdminClientController extends Controller
     }
 
   
-    // Enregistre le nouveau client en base de données
+    // Enregistre le nouveau client en bdd
     public function store(): void
     {
         // On vérifie que l'admin est bien connecté

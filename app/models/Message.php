@@ -6,7 +6,7 @@ namespace App\Models;
 // Message hérite de Model 
 class Message extends Model
 {
-    // Nom de la table en base de données
+    // Nom de la table en bdd
     protected string $table = 'MESSAGE';
 
     // Nom de la clé primaire de la table
@@ -55,9 +55,8 @@ class Message extends Model
     }
 
    
-    // Met à jour le statut d'un message
-   
-    public function update(int $id, array $data): bool
+    // MAJ le statut d'un message
+   public function update(int $id, array $data): bool
     {
         $stmt = $this->db->prepare("
             UPDATE {$this->table}
@@ -73,8 +72,7 @@ class Message extends Model
 
 
     // Assigne un message à un admin, Appelé quand la gérante prend en charge un message
-   
-    public function assignToAdmin(int $idMessage, int $idAdmin): bool
+   public function assignToAdmin(int $idMessage, int $idAdmin): bool
     {
         $stmt = $this->db->prepare("
             UPDATE {$this->table}
@@ -90,7 +88,7 @@ class Message extends Model
 
     // -------------------------------------------------------------------------
     // Récupère tous les messages avec un statut donné
-    // Utilisé dans le back-office pour filtrer les messages
+    // Utilisé pour filtrer les messages
     // -------------------------------------------------------------------------
     public function findByStatus(string $status): array
     {

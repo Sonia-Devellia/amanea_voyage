@@ -6,7 +6,7 @@ namespace App\Models;
 // Document hérite de Model 
 class Document extends Model
 {
-    // Nom de la table en base de données
+    // Nom de la table en bdd
     protected string $table = 'DOCUMENT';
 
     // Nom de la clé primaire de la table
@@ -41,7 +41,7 @@ class Document extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Met à jour le statut d'un document existant
+    // MAJ le statut d'un document existant
     // -------------------------------------------------------------------------
     public function update(int $id, array $data): bool
     {

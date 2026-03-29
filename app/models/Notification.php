@@ -3,11 +3,10 @@
 // On déclare le namespace 
 namespace App\Models;
 
-// Notification hérite de Model : il récupère automatiquement
-// findAll(), findById() et delete()
+// Notification hérite de Model 
 class Notification extends Model
 {
-    // Nom de la table en base de données
+    // Nom de la table en bdd
     protected string $table = 'NOTIFICATION';
 
     // Nom de la clé primaire de la table
@@ -67,10 +66,8 @@ class Notification extends Model
         return $stmt->fetchAll();
     }
 
-    // -------------------------------------------------------------------------
-    // Marque une notification comme lue
-    // Appelé quand Nora consulte la notification dans son dashboard
-    // -------------------------------------------------------------------------
+    
+    // Marque une notification comme lue quand Nora consulte la notification dans son dashboard
     public function markAsRead(int $id): bool
     {
         $stmt = $this->db->prepare("
@@ -82,9 +79,8 @@ class Notification extends Model
         return $stmt->execute([':id' => $id]);
     }
 
-    // -------------------------------------------------------------------------
+    
     // Marque toutes les notifications comme lues
-    // -------------------------------------------------------------------------
     public function markAllAsRead(): bool
     {
         $stmt = $this->db->query("

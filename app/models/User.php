@@ -1,12 +1,12 @@
 <?php
 
-// Déclare le namespace : User fait partie des Models
+// Déclare le namespace 
 namespace App\Models;
 
 // User hérite de Model 
 class User extends Model
 {
-    // Nom de la table en base de données
+    // Nom de la table en bdd
     protected string $table = 'USER';
 
     // Nom de la clé primaire de la table
@@ -19,11 +19,10 @@ class User extends Model
         parent::__construct();
     }
 
-    // -------------------------------------------------------------------------
-    // Crée un nouvel utilisateur en base de données
-    // $data est un tableau contenant les champs du formulaire
+    // ------------------------------------------------------------------------------------------
+    // Crée un nouvel utilisateur en bdd ,$data est un tableau contenant les champs du formulaire
     // Retourne true si l'insertion a réussi, false sinon
-    // -------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------
     public function create(array $data): bool
     {
         // On prépare la requête SQL avec des paramètres nommés (:nom)
@@ -47,9 +46,8 @@ class User extends Model
         ]);
     }
 
-    // -------------------------------------------------------------------------
+    
     // MAJ les informations d'un utilisateur existant
-    // -------------------------------------------------------------------------
     public function update(int $id, array $data): bool
     {
         $stmt = $this->db->prepare("
@@ -85,8 +83,8 @@ class User extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Vérifie que le mot de passe correspond au hash enregistré en BDD
-    // password_verify() compare le mot de passe en clair avec le hash bcrypt
+    // Vérifie que le mp correspond au hash enregistré en BDD
+    // password_verify() compare le mp en clair avec le hash bcrypt
     // Retourne true si le mot de passe est correct, false sinon
     // -------------------------------------------------------------------------
     public function verifyPassword(string $password, string $hash): bool
@@ -94,10 +92,8 @@ class User extends Model
         return password_verify($password, $hash);
     }
 
-    // -------------------------------------------------------------------------
-    // Met à jour le mot de passe d'un utilisateur
-    // Le nouveau mp est hashé avant d'être enregistré
-    // -------------------------------------------------------------------------
+    
+    // Maj le mp d'un utilisateur , le nouveau mp est hashé avant d'être enregistré
     public function updatePassword(int $id, string $newPassword): bool
     {
         $stmt = $this->db->prepare("
@@ -113,7 +109,7 @@ class User extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Marque le mot de passe comme changé après la première connexion
+    // Marque le mp comme changé après la première connexion
     // password_changed passe de 0 à 1
     // -------------------------------------------------------------------------
     public function markPasswordChanged(int $id): bool

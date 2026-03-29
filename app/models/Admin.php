@@ -22,21 +22,20 @@ class Admin extends Model
     // Crée un nouvel admin en bdd $data est un tableau contenant email et password ,true si l'insertion a réussi, false sinon
     public function create(array $data): bool
     {
-        // On prépare la requête SQL avec des paramètres nommés (:nom) pour éviter les injections SQL
+        // On prépare la requête SQL avec des paramètres nommés (évite les injections SQL)
         $stmt = $this->db->prepare("
             INSERT INTO {$this->table} (email, password)
             VALUES (:email, :password)
         ");
 
-        // Le mot de passe est hashé avec bcrypt avant d'être enregistré
+        // Le mp est hashé avec bcrypt avant d'être enregistré
         return $stmt->execute([
             ':email'    => $data['email'],
             ':password' => password_hash($data['password'], PASSWORD_BCRYPT),
         ]);
     }
 
-
-    // Met à jour l'email d'un admin existant
+    // MAJ l'email d'un admin existant
     public function update(int $id, array $data): bool
     {
         $stmt = $this->db->prepare("
@@ -73,10 +72,8 @@ class Admin extends Model
         return password_verify($password, $hash);
     }
 
-    // -------------------------------------------------------------------------
-    // MAJ uniquement le mp d'un admin
-    // Le nouveau mp est hashé avant d'être enregistré
-    // -------------------------------------------------------------------------
+    
+    // MAJ uniquement le mp d'un admin le nouveau mp est hashé avant d'être enregistré
     public function updatePassword(int $id, string $newPassword): bool
     {
         $stmt = $this->db->prepare("
@@ -91,10 +88,8 @@ class Admin extends Model
         ]);
     }
 
-    // -------------------------------------------------------------------------
-    // Enregistre la date et l'heure de la dernière co de l'admin
-    // Appelée automatiquement après une co réussie
-    // -------------------------------------------------------------------------
+    
+    // Enregistre la DATETIME de la dernière co de l'admin automatiquement après une co réussie
     public function updateLastLogin(int $id): bool
     {
         $stmt = $this->db->prepare("

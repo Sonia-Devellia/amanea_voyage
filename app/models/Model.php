@@ -10,10 +10,10 @@ use PDO;
 // abstract  sert de "modèle" pour tous les autres Models
 abstract class Model
 {
-    // La connexion à la base de données (PDO)
+    // La connexion à la bdd
     protected PDO $db;
 
-    // Le nom de la table en base de données
+    // Le nom de la table en bdd
     protected string $table;
 
     // Le nom de la clé primaire de la table
@@ -26,8 +26,7 @@ abstract class Model
     }
 
 
-    // Récupère tous les enregistrements de la table
-
+    // Récupère tous les élements de la table
     public function findAll(): array
     {
         $stmt = $this->db->query("SELECT * FROM {$this->table}");
@@ -59,9 +58,8 @@ abstract class Model
         return $stmt->execute([':id' => $id]);
     }
 
-    // -------------------------------------------------------------------------
+
     // Retourne le nombre total d'enregistrements dans la table
-    // -------------------------------------------------------------------------
     public function count(): int
     {
         $stmt = $this->db->query("SELECT COUNT(*) FROM {$this->table}");
@@ -70,7 +68,7 @@ abstract class Model
 
     // -------------------------------------------------------------------------
     // Ces deux méthodes sont écrites dans chaque Model enfant car chaque table a ses propres champs
-    // Le mot clé "abstract" oblige les classes enfants à les implémenter
+    // "abstract" oblige les classes enfants à les implémenter
     // -------------------------------------------------------------------------
     abstract public function create(array $data): bool;
     abstract public function update(int $id, array $data): bool;

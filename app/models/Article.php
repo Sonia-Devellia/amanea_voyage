@@ -45,7 +45,6 @@ class Article extends Model
 
    
     // MAJ un article existant
-  
     public function update(int $id, array $data): bool
     {
         $stmt = $this->db->prepare("
@@ -70,8 +69,7 @@ class Article extends Model
 
    
     // Publie un article : passe le statut à 'publie' et enregistre la date de publication
-   
-    public function publish(int $id): bool
+   public function publish(int $id): bool
     {
         $stmt = $this->db->prepare("
             UPDATE {$this->table}
@@ -103,7 +101,6 @@ class Article extends Model
 
    
     // Récupère un article par son slug
-    
     public function findBySlug(string $slug): array|false
     {
         $stmt = $this->db->prepare(
@@ -184,6 +181,26 @@ class Article extends Model
             ':id_media'   => $idMedia,
         ]);
     }
+
+    // -------------------------------------------------------------------------
+    // MAJ uniquement l'image de couverture d'un article
+    // Modifie la colonne Id_MEDIA directement dans la table ARTICLE
+    // -------------------------------------------------------------------------
+    public function updateCover(int $idArticle, int $idMedia): bool
+    {
+        $stmt = $this->db->prepare("
+            UPDATE {$this->table}
+            SET Id_MEDIA = :id_media
+            WHERE {$this->primaryKey} = :id
+        ");
+ 
+        return $stmt->execute([
+            ':id_media' => $idMedia,
+            ':id'       => $idArticle,
+        ]);
+    }
+
+ 
 
     // -------------------------------------------------------------------------
     // Ajoute une catégorie à un article

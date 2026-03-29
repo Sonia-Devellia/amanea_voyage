@@ -7,7 +7,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\Controller;
 use App\Models\Media;
 
-// AdminMediaController gère le portfolio de médias du back-office
+// AdminMediaController gère le portfolio des médias du back-office
 // Nora peut ajouter, modifier et supprimer des images depuis le back-office
 class AdminMediaController extends Controller
 {
@@ -92,7 +92,7 @@ class AdminMediaController extends Controller
             return;
         }
 
-        // On enregistre le média en base de données
+        // On enregistre le média en bdd
         $data = [
             'file_name' => $fileName,
             'caption'   => htmlspecialchars(trim($_POST['caption']   ?? '')),
@@ -130,7 +130,7 @@ class AdminMediaController extends Controller
         ]);
     }
 
-    // -------------------------------------------------------------------------
+
     // Enregistre les modifications d'un média en bdd
     // On peut modifier uniquement la légende et le copyright
     public function update(int $id): void
@@ -178,7 +178,7 @@ class AdminMediaController extends Controller
                 unlink($filePath);
             }
 
-            // On supprime le média de la base de données
+            // On supprime le média de la bdd
             $this->mediaModel->delete($id);
         }
 
