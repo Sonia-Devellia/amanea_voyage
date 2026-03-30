@@ -148,6 +148,79 @@ class AdminClientController extends Controller
     }
 
    
+    // Affiche le formulaire de modification d'un client
+    public function edit(int $id): void
+    {
+        // On vérifie que l'admin est bien connecté
+        $this->requireAdmin();
+
+        // On récupère le client à modifier
+        $client = $this->userModel->findById($id);
+
+        // Si le client n'existe pas on redirige vers la liste
+        if (!$client) {
+            $this->redirect('admin/clients');
+            return;
+        }
+
+        $this->render('admin/clients/edit', [
+            'client' => $client,
+        ]);
+    }
+
+
+    // Enregistre les modifications d'un client en bdd
+    public function update(int $id): void
+    {
+        // On vérifie que l'admin est bien connecté
+        $this->requireAdmin();
+
+        // On vérifie que la requête vient bien d'un formulaire POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('admin/clients/edit/' . $id);
+            return;
+        }
+
+        // On récupère et nettoie les données du formulaire
+        $data = [
+            'last_name'  => htmlspecialchars(trim($_POST['last_name']  ?? '')),
+            'first_name' => htmlspecialchars(trim($_POST['first_name'] ?? '')),
+            'email'      => htmlspecialchars(trim($_POST['email']      ?? '')),
+            'phone'      => htmlspecialchars(trim($_POST['phone']      ?? '')),
+        ];
+
+        // Validation des champs obligatoires
+        if (empty($data['last_name']) || empty($data['first_name']) || empty($data['email'])) {
+            $this->render('admin/clients/edit', [
+                'error'  => 'Veuillez remplir tous les champs obligatoires.',
+                'client' => $data,
+            ]);
+            return;
+        }
+
+        // Validation du format de l'email
+        if (!filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL)) {
+            $this->render('admin/clients/edit', [
+                'error'  => 'L\'adresse email n\'est pas valide.',
+                'client' => $data,
+            ]);
+            return;
+        }
+
+        // On met à jour le client en base de données
+        $success = $this->userModel->update($id, $data);
+
+        if ($success) {
+            $this->redirect('admin/clients/show/' . $id);
+        } else {
+            $this->render('admin/clients/edit', [
+                'error'  => 'Une erreur est survenue. Veuillez réessayer.',
+                'client' => $data,
+            ]);
+        }
+    }
+
+
     // Supprime un client
     public function delete(int $id): void
     {

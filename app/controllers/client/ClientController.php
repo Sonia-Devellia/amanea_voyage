@@ -84,6 +84,66 @@ class ClientController extends Controller
     }
 
    
+    // Affiche le carnet de voyage du client connecté
+    public function notebook(): void
+    {
+        // On vérifie que le client est bien connecté
+        $this->requireAuth();
+
+        // On récupère l'id du client depuis la session
+        $idUser = $_SESSION['user']['id'];
+
+        // On récupère tous les projets du client
+        $projects = $this->travelProjectModel->findByUser($idUser);
+
+        // Pour chaque projet on récupère le carnet de voyage associé
+        $notebooks = [];
+        foreach ($projects as $project) {
+            $notebook = $this->notebookModel->findByTravelProject($project['Id_TRAVEL_PROJECT']);
+            if ($notebook) {
+                $notebooks[] = [
+                    'project'  => $project,
+                    'notebook' => $notebook,
+                ];
+            }
+        }
+
+        $this->render('client/notebook', [
+            'notebooks' => $notebooks,
+        ]);
+    }
+
+
+    // Affiche les documents du client connecté
+    public function documents(): void
+    {
+        // On vérifie que le client est bien connecté
+        $this->requireAuth();
+
+        // On récupère l'id du client depuis la session
+        $idUser = $_SESSION['user']['id'];
+
+        // On récupère tous les projets du client
+        $projects = $this->travelProjectModel->findByUser($idUser);
+
+        // Pour chaque projet on récupère les documents associés
+        $documents = [];
+        foreach ($projects as $project) {
+            $docs = $this->documentModel->findByTravelProject($project['Id_TRAVEL_PROJECT']);
+            if (!empty($docs)) {
+                $documents[] = [
+                    'project'   => $project,
+                    'documents' => $docs,
+                ];
+            }
+        }
+
+        $this->render('client/documents', [
+            'documents' => $documents,
+        ]);
+    }
+
+
     // Affiche le profil du client connecté
     public function profile(): void
     {

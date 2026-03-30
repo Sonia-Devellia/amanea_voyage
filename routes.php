@@ -64,6 +64,7 @@ $router->get('client/changePassword', [AuthController::class,   'changePassword'
 $router->get('client/terms',          [AuthController::class,   'terms']);
 $router->post('client/logout',        [AuthController::class,   'logout']);
 $router->get('client/dashboard',      [ClientController::class, 'index']);
+$router->get('client/projet/{id}',    [ClientController::class, 'project']);
 $router->get('client/carnet',         [ClientController::class, 'notebook']);
 $router->get('client/documents',      [ClientController::class, 'documents']);
 $router->get('client/profil',         [ClientController::class, 'profile']);
@@ -90,17 +91,17 @@ $router->post('admin/markAllNotificationsRead',   [AdminController::class,     '
 // resource() génère les 7 routes standard avec typage {id} préservé
 // ---------------------------------------------------------------------
 
-// Blog : 7 routes standard + 4 routes spécifiques aux médias de l'article
-$router->resource('admin/blog', AdminArticleController::class);
+// Blog : sans show (l'admin passe directement par edit) + 4 routes spécifiques aux médias de l'article
+$router->resource('admin/blog', AdminArticleController::class, ['index', 'create', 'store', 'edit', 'update', 'delete']);
 $router->post('admin/blog/publish/{id}',     [AdminArticleController::class, 'publish']);
 $router->post('admin/blog/addMedia/{id}',    [AdminArticleController::class, 'addMedia']);
 $router->post('admin/blog/removeMedia/{id}', [AdminArticleController::class, 'removeMedia']);
 $router->post('admin/blog/updateCover/{id}', [AdminArticleController::class, 'updateCover']);
 
-// Portfolio médias : 7 routes standard
-$router->resource('admin/portfolio', AdminMediaController::class);
+// Portfolio médias : sans show (l'admin passe directement par edit)
+$router->resource('admin/portfolio', AdminMediaController::class, ['index', 'create', 'store', 'edit', 'update', 'delete']);
 
-// Clients : 7 routes standard (pas d'edit/update côté admin)
+// Clients : 7 routes standard
 $router->resource('admin/clients', AdminClientController::class);
 
 // Projets de voyage : 7 routes standard + updateStatus

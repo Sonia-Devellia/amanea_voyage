@@ -210,6 +210,17 @@ class AdminProjectController extends Controller
     }
 
    
+    // Supprime un projet de voyage
+    public function delete(int $id): void
+    {
+        // On vérifie que l'admin est bien connecté
+        $this->requireAdmin();
+
+        $this->travelProjectModel->delete($id);
+        $this->redirect('admin/projects');
+    }
+
+
     // MAJ le statut d'un projet
     public function updateStatus(int $id): void
     {

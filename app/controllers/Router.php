@@ -6,45 +6,32 @@ namespace App\Controllers;
 // Le Router reçoit les routes enregistrées et dispatch les requêtes
 class Router
 {
-    // Stocke toutes les routes enregistrées
-    // Séparées par méthode HTTP : GET et POST
+    // Stocke toutes les routes enregistrées séparées par méthode HTTP
     private array $routes = [
         'GET'  => [],
         'POST' => [],
     ];
 
 
-    // Enregistre une route GET
+    // enregistre une route GET
     public function get(string $url, array $action): void
     {
         $this->routes['GET'][$url] = $action;
     }
 
 
-    // Enregistre une route POST
+    // enregistre une route POST
     public function post(string $url, array $action): void
     {
         $this->routes['POST'][$url] = $action;
     }
 
-    // -------------------------------------------------------------------------
-    // resource() enregistre les routes CRUD standard pour une entité
-    // Chaque entité (clients, projets, blog...) obtient ses routes en une ligne
-    //
-    // Routes générées pour resource('admin/clients', AdminClientController::class) :
-    //   GET  admin/clients               → index()
-    //   GET  admin/clients/show/{id}     → show(int $id)
-    //   GET  admin/clients/new           → create()
-    //   GET  admin/clients/edit/{id}     → edit(int $id)
-    //   POST admin/clients/store         → store()
-    //   POST admin/clients/update/{id}   → update(int $id)
-    //   POST admin/clients/delete/{id}   → delete(int $id)
-    //
-    // Le paramètre $only permet de limiter aux actions utiles pour l'entité
-    // Exemple : resource('admin/messages', ..., ['index', 'show', 'delete'])
-    // -------------------------------------------------------------------------
+
+    // J'enregistre les 7 routes CRUD standard pour une entité en une seule ligne
+    // Le paramètre $only me permet de limiter aux actions dont j'ai besoin
     public function resource(string $base, string $controller, array $only = []): void
     {
+        // Je définis les 7 routes standard avec leur méthode HTTP, suffixe et action
         $standard = [
             ['GET',  '',               'index'],
             ['GET',  '/show/{id}',     'show'],
@@ -55,6 +42,7 @@ class Router
             ['POST', '/delete/{id}',   'delete'],
         ];
 
+        // Je parcours les routes et je n'enregistre que celles présentes dans $only
         foreach ($standard as [$httpMethod, $suffix, $action]) {
             if (empty($only) || in_array($action, $only)) {
                 $this->{strtolower($httpMethod)}($base . $suffix, [$controller, $action]);
@@ -62,52 +50,45 @@ class Router
         }
     }
 
-    // -------------------------------------------------------------------------
-    // dispatch() est la méthode principale du Router
-    // Elle est appelée une seule fois par index.php à chaque chargement de page
-    //
-    // Deux passes de matching :
-    //   1. Exact  — routes statiques sans paramètre  ex: admin/clients
-    //   2. Pattern — routes avec {id}               ex: admin/clients/show/{id}
-    //      → {id} est converti en regex (\d+)
-    //      → la valeur capturée est castée en int et passée à la méthode
-    //         ce qui permet de garder le typage (int $id) dans les contrôleurs
-    // -------------------------------------------------------------------------
+
+    // Je dispatch la requête vers le bon contrôleur et la bonne méthode
     public function dispatch(): void
     {
-        // récupère l'URL, si vide on affiche la home
+        // Je récupère l'URL, si elle est vide j'affiche la home
         $url = $_GET['url'] ?? 'home';
 
-        // supprime le slash final si présent
+        // Je supprime le slash final s'il est présent
         $url = rtrim($url, '/');
 
-        // nettoie l'URL pour supprimer les caractères dangereux
+        // Je nettoie l'URL pour supprimer les caractères dangereux
         $url = filter_var($url, FILTER_SANITIZE_URL);
 
-        // récupère la méthode HTTP utilisée (GET ou POST)
+        // Je récupère la méthode HTTP utilisée
         $method = $_SERVER['REQUEST_METHOD'];
 
-        // récupère les routes enregistrées pour cette méthode HTTP
+        // Je récupère les routes enregistrées pour cette méthode HTTP
         $routes = $this->routes[$method] ?? [];
 
-        // --- Passe 1 : matching exact (routes sans paramètre) ---
+        // Passe 1 : je cherche une correspondance exacte sur les routes statiques
         if (isset($routes[$url])) {
             [$controllerClass, $action] = $routes[$url];
             (new $controllerClass())->$action();
             return;
         }
 
-        // --- Passe 2 : matching par segments (routes avec {id} ou {slug}) ---
+        // Passe 2 : je cherche une correspondance sur les routes avec {id} ou {slug}
         foreach ($routes as $pattern => $routeAction) {
-            // on ignore les routes sans placeholder
+
+            // J'ignore les routes sans placeholder
             if (!str_contains($pattern, '{')) {
                 continue;
             }
 
+            // Je découpe le pattern et l'URL en segments pour les comparer
             $patternParts = explode('/', $pattern);
             $urlParts     = explode('/', $url);
 
-            // le nombre de segments doit être identique
+            // Si le nombre de segments est différent ce n'est pas la bonne route
             if (count($patternParts) !== count($urlParts)) {
                 continue;
             }
@@ -118,10 +99,10 @@ class Router
 
             foreach ($patternParts as $i => $segment) {
                 if ($segment === '{id}') {
-                    // {id} : segment numérique, casté en int pour conserver le typage
+                    // Je caste en int pour conserver le typage dans les contrôleurs
                     $id = (int) $urlParts[$i];
                 } elseif ($segment === '{slug}') {
-                    // {slug} : segment texte, passé tel quel en string
+                    // Je passe le slug tel quel en string
                     $slug = $urlParts[$i];
                 } elseif ($segment !== $urlParts[$i]) {
                     $match = false;
@@ -129,6 +110,7 @@ class Router
                 }
             }
 
+            // J'appelle la méthode du contrôleur avec le bon paramètre
             if ($match) {
                 [$controllerClass, $action] = $routeAction;
                 $instance = new $controllerClass();
@@ -141,12 +123,12 @@ class Router
             }
         }
 
-        // aucune route trouvée : 404
+        // Aucune route trouvée, j'affiche la page 404
         $this->notFound();
     }
 
 
-    // Affiche la page 404 si la route n'existe pas
+    // J'affiche la page 404 si la route n'existe pas
     private function notFound(): void
     {
         http_response_code(404);
