@@ -23,7 +23,7 @@ class AdminAuthController extends Controller
     // Affiche le formulaire de connexion admin
     public function login(): void
     {
-        // Si l'admin est déjà connecté on le redirige vers le dashboard
+        // Si l'admin est déjà connecté ->redirige vers le dashboard
         if (!empty($_SESSION['admin'])) {
             $this->redirect('admin/dashboard');
         }
@@ -65,7 +65,6 @@ class AdminAuthController extends Controller
         $admin = $this->adminModel->findByEmail($email);
 
         // Si le compte n'existe pas ou le mp est incorrect
-        // Message volontairement vague pour ne pas donner d'indices
         if (!$admin || !$this->adminModel->verifyPassword($password, $admin['password'])) {
             $this->render('admin/login', [
                 'error' => 'Email ou mot de passe incorrect.',
@@ -76,8 +75,9 @@ class AdminAuthController extends Controller
         // Connexion réussie : on stocke les infos de l'admin en session
         // On ne stocke jamais le mp en session
         $_SESSION['admin'] = [
-            'id'    => $admin['Id_ADMIN'],
-            'email' => $admin['email'],
+            'id'            => $admin['Id_ADMIN'],
+            'email'         => $admin['email'],
+            'last_activity' => time(),
         ];
 
         // On enregistre la date de dernière connexion

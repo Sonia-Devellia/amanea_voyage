@@ -1,8 +1,17 @@
+#Désactive l'affichage du contenu des dossiers dans le navigateur
 Options -Indexes
 
+#Active le module de réécriture d'URL
 RewriteEngine On
 
+
+#on n'applique la règle que si ce n'est pas un fichier existant
 RewriteCond %{REQUEST_FILENAME} !-f
+
+
+#on n'applique la règle que si ce n'est pas un dossier existant
 RewriteCond %{REQUEST_FILENAME} !-d
 
+
+#tout ce qui n'est pas un fichier ou dossier existant est redirigé vers index.php avec l'URL en paramètre GET
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

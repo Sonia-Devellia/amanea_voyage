@@ -33,25 +33,52 @@ abstract class Controller
         exit();
     }
 
+    
     // -------------------------------------------------------------------------
-    // Vérifie que le client est bien connecté
-    // Si ce n'est pas le cas, il est redirigé vers la page de connexion
+    // Vérifie que le client est bien connecté, sinon il est redirigé vers la page de connexion
+    // Déconnecte automatiquement le client après 30 minutes d'inactivité (timeout)
     // -------------------------------------------------------------------------
+    private const USER_SESSION_TIMEOUT = 30 * 60;
+
     protected function requireAuth(): void
     {
         if (empty($_SESSION['user'])) {
-            $this->redirect('login');
+            $this->redirect('client/login');
+            return;
         }
+
+        if (isset($_SESSION['user']['last_activity'])
+            && (time() - $_SESSION['user']['last_activity']) > self::USER_SESSION_TIMEOUT
+        ) {
+            unset($_SESSION['user']);
+            $this->redirect('client/login?timeout=1');
+            return;
+        }
+
+        $_SESSION['user']['last_activity'] = time();
     }
 
     // -------------------------------------------------------------------------
-    // Vérifie que l'admin est bien connecté
-    // Si ce n'est pas le cas, il est redirigé vers la page de connexion admin
+    // Vérifie que l'admin est bien connecté, sinon il est redirigé vers la page de connexion admin
+    // Déconnecte automatiquement l'admin après 30 minutes d'inactivité (timeout)
     // -------------------------------------------------------------------------
+    private const ADMIN_SESSION_TIMEOUT = 30 * 60;
+
     protected function requireAdmin(): void
     {
         if (empty($_SESSION['admin'])) {
-            $this->redirect('admin/login');
+            $this->redirect('admin');
+            return;
         }
+
+        if (isset($_SESSION['admin']['last_activity'])
+            && (time() - $_SESSION['admin']['last_activity']) > self::ADMIN_SESSION_TIMEOUT
+        ) {
+            unset($_SESSION['admin']);
+            $this->redirect('admin?timeout=1');
+            return;
+        }
+
+        $_SESSION['admin']['last_activity'] = time();
     }
 }

@@ -1,196 +1,152 @@
 <?php
 
-// On déclare le namespace 
+// On déclare le namespace
 namespace App\Controllers;
 
-// Le Router lit l'URL et appelle le bon Controller et la bonne méthode
+// Le Router reçoit les routes enregistrées et dispatch les requêtes
 class Router
 {
-    // -------------------------------------------------------------------------
-    // Liste de toutes les routes de l'application
-    // Format : 'url' => ['Namespace\NomDuController', 'nomDeLaMethode']
-    //
-    // Chaque route est un tableau avec 2 cases :
-    // case [0] = le nom complet du Controller (avec son namespace)
-    // case [1] = la méthode à appeler dans ce Controller
-    //
-    // Exemple :
-    // 'inspirations' => ['App\Controllers\ArticleController', 'index']
-    //  → l'URL /inspirations appelle ArticleController → index()
-    // -------------------------------------------------------------------------
+    // Stocke toutes les routes enregistrées
+    // Séparées par méthode HTTP : GET et POST
     private array $routes = [
-
-        // ---------------------------------------------------------------------
-        // ESPACE PUBLIC
-        // ---------------------------------------------------------------------
-
-        // Page d'accueil
-        'home'                  => ['App\Controllers\HomeController',               'index'],
-
-        // L'Histoire d'Amanéa
-        'a-propos'              => ['App\Controllers\AproposController',            'index'],
-
-        // Voyages & Expériences — les 4 formules de voyage
-        'voyages'               => ['App\Controllers\VoyagesController',            'index'],
-        'voyages/groupe'        => ['App\Controllers\VoyagesController',            'groupe'],
-        'voyages/feminin'       => ['App\Controllers\VoyagesController',            'feminin'],
-        'voyages/noces'         => ['App\Controllers\VoyagesController',            'noces'],
-        'voyages/personnalises' => ['App\Controllers\VoyagesController',            'personnalises'],
-
-        // Inspirations & Conseils — articles
-        'inspirations'          => ['App\Controllers\ArticleController',            'index'],
-        'inspirations/show'     => ['App\Controllers\ArticleController',            'show'],
-        'inspirations/category' => ['App\Controllers\ArticleController',            'category'],
-
-        // Créons votre voyage — formulaire de contact
-        'contact'               => ['App\Controllers\ContactController',            'index'],
-        'contact/send'          => ['App\Controllers\ContactController',            'send'],
-
-        // ---------------------------------------------------------------------
-        // ESPACE CLIENT
-        // ---------------------------------------------------------------------
-
-        // Connexion / Déconnexion
-        'client/connexion'      => ['App\Controllers\Client\AuthController',        'login'],
-        'client/authenticate'   => ['App\Controllers\Client\AuthController',        'authenticate'],
-        'client/changePassword' => ['App\Controllers\Client\AuthController',        'changePassword'],
-        'client/savePassword'   => ['App\Controllers\Client\AuthController',        'savePassword'],
-        'client/logout'         => ['App\Controllers\Client\AuthController',        'logout'],
-
-        // Tableau de bord
-        'client/dashboard'      => ['App\Controllers\Client\ClientController',      'index'],
-
-        // Mon carnet de voyage
-        'client/carnet'         => ['App\Controllers\Client\ClientController',      'notebook'],
-
-        // Mes documents
-        'client/documents'      => ['App\Controllers\Client\ClientController',      'documents'],
-
-        // Mon profil
-        'client/profil'         => ['App\Controllers\Client\ClientController',      'profile'],
-        'client/updateProfile'  => ['App\Controllers\Client\ClientController',      'updateProfile'],
-
-        // ---------------------------------------------------------------------
-        // BACK-OFFICE ADMIN
-        // ---------------------------------------------------------------------
-
-        // Connexion / Déconnexion
-        'admin'                 => ['App\Controllers\Admin\AdminAuthController',    'login'],
-        'admin/authenticate'    => ['App\Controllers\Admin\AdminAuthController',    'authenticate'],
-        'admin/logout'          => ['App\Controllers\Admin\AdminAuthController',    'logout'],
-
-        // Tableau de bord admin
-        'admin/dashboard'       => ['App\Controllers\Admin\AdminController',        'index'],
-        'admin/stats' => ['App\Controllers\Admin\AdminController', 'stats'],
-
-        // Gestion du blog
-        'admin/blog'            => ['App\Controllers\Admin\AdminArticleController', 'index'],
-        'admin/blog/new'        => ['App\Controllers\Admin\AdminArticleController', 'create'],
-        'admin/blog/edit'       => ['App\Controllers\Admin\AdminArticleController', 'edit'],
-        'admin/blog/delete'     => ['App\Controllers\Admin\AdminArticleController', 'delete'],
-        'admin/blog/store'   => ['App\Controllers\Admin\AdminArticleController', 'store'],
-        'admin/blog/update'  => ['App\Controllers\Admin\AdminArticleController', 'update'],
-        'admin/blog/publish' => ['App\Controllers\Admin\AdminArticleController', 'publish'],
-        'admin/blog/addMedia'    => ['App\Controllers\Admin\AdminArticleController', 'addMedia'],
-        'admin/blog/removeMedia' => ['App\Controllers\Admin\AdminArticleController', 'removeMedia'],
-        'admin/blog/updateCover' => ['App\Controllers\Admin\AdminArticleController', 'updateCover'],
-
-        // Gestion du portfolio
-        'admin/portfolio'       => ['App\Controllers\Admin\AdminMediaController',   'index'],
-        'admin/portfolio/new'   => ['App\Controllers\Admin\AdminMediaController',   'create'],
-        'admin/portfolio/edit'  => ['App\Controllers\Admin\AdminMediaController',   'edit'],
-        'admin/portfolio/delete' => ['App\Controllers\Admin\AdminMediaController',   'delete'],
-
-        // Gestion des clients
-        'admin/clients'         => ['App\Controllers\Admin\AdminClientController',  'index'],
-        'admin/clients/show'    => ['App\Controllers\Admin\AdminClientController',  'show'],
-        'admin/clients/new'     => ['App\Controllers\Admin\AdminClientController',  'create'],
-        'admin/clients/delete'  => ['App\Controllers\Admin\AdminClientController',  'delete'],
-
-        // Gestion des projets de voyage
-        'admin/projects'        => ['App\Controllers\Admin\AdminProjectController', 'index'],
-        'admin/projects/show'   => ['App\Controllers\Admin\AdminProjectController', 'show'],
-        'admin/projects/new'    => ['App\Controllers\Admin\AdminProjectController', 'create'],
-        'admin/projects/edit'   => ['App\Controllers\Admin\AdminProjectController', 'edit'],
-        'admin/projects/store'        => ['App\Controllers\Admin\AdminProjectController', 'store'],
-        'admin/projects/update'       => ['App\Controllers\Admin\AdminProjectController', 'update'],
-        'admin/projects/updateStatus' => ['App\Controllers\Admin\AdminProjectController', 'updateStatus'],
-
-        // Gestion des messages
-        'admin/messages'        => ['App\Controllers\Admin\AdminMessageController', 'index'],
-        'admin/messages/show'   => ['App\Controllers\Admin\AdminMessageController', 'show'],
-
-        // Gestion des notifications
-        'admin/markNotificationRead'      => ['App\Controllers\Admin\AdminController', 'markNotificationRead'],
-        'admin/markAllNotificationsRead'  => ['App\Controllers\Admin\AdminController', 'markAllNotificationsRead'],
-
-        // Paramètres
-        'admin/parametres'      => ['App\Controllers\Admin\AdminController',        'parametres'],
+        'GET'  => [],
+        'POST' => [],
     ];
 
-    // -------------------------------------------------------------------------
-    // dispatch() est la méthode principale du Router
-    // Elle est appelée une seule fois par index.php à chaque chargement de page
-    // Elle lit l'URL, trouve la route correspondante,
-    // et appelle la bonne méthode du bon Controller
-    // -------------------------------------------------------------------------
-    public function dispatch(): void
+
+    // Enregistre une route GET
+    public function get(string $url, array $action): void
     {
-        // ---------------------------------------------------------------------
-        // ÉTAPE 1 : On récupère l'URL
-        // Si l'URL est vide on affiche la page d'accueil
-        // ---------------------------------------------------------------------
-        $url = $_GET['url'] ?? 'home';
+        $this->routes['GET'][$url] = $action;
+    }
 
-        // On supprime le slash final si présent 
-        $url = rtrim($url, '/');
 
-        // On nettoie l'URL pour supprimer les caractères dangereux
-        $url = filter_var($url, FILTER_SANITIZE_URL);
+    // Enregistre une route POST
+    public function post(string $url, array $action): void
+    {
+        $this->routes['POST'][$url] = $action;
+    }
 
-        // ---------------------------------------------------------------------
-        // On sépare le paramètre du reste de l'URL
-        // "inspirations/show/mon-slug" → route = "inspirations/show", paramètre = "mon-slug"
-        // "inspirations"              → route = "inspirations",        paramètre = null
-        // ---------------------------------------------------------------------
-        $parts = explode('/', $url);
-        $param = null;
+    // -------------------------------------------------------------------------
+    // resource() enregistre les routes CRUD standard pour une entité
+    // Chaque entité (clients, projets, blog...) obtient ses routes en une ligne
+    //
+    // Routes générées pour resource('admin/clients', AdminClientController::class) :
+    //   GET  admin/clients               → index()
+    //   GET  admin/clients/show/{id}     → show(int $id)
+    //   GET  admin/clients/new           → create()
+    //   GET  admin/clients/edit/{id}     → edit(int $id)
+    //   POST admin/clients/store         → store()
+    //   POST admin/clients/update/{id}   → update(int $id)
+    //   POST admin/clients/delete/{id}   → delete(int $id)
+    //
+    // Le paramètre $only permet de limiter aux actions utiles pour l'entité
+    // Exemple : resource('admin/messages', ..., ['index', 'show', 'delete'])
+    // -------------------------------------------------------------------------
+    public function resource(string $base, string $controller, array $only = []): void
+    {
+        $standard = [
+            ['GET',  '',               'index'],
+            ['GET',  '/show/{id}',     'show'],
+            ['GET',  '/new',           'create'],
+            ['GET',  '/edit/{id}',     'edit'],
+            ['POST', '/store',         'store'],
+            ['POST', '/update/{id}',   'update'],
+            ['POST', '/delete/{id}',   'delete'],
+        ];
 
-        // Si l'URL a 3 parties, la dernière est un paramètre (slug ou id)
-        if (count($parts) === 3) {
-            $param = array_pop($parts);     // On récupère "mon-slug"
-            $url   = implode('/', $parts);  // Il reste "inspirations/show"
-        }
-
-        // ---------------------------------------------------------------------
-        //  On cherche la route correspondante dans notre liste
-        // ---------------------------------------------------------------------
-        if (!isset($this->routes[$url])) {
-            $this->notFound();
-            return;
-        }
-
-        // case [0] = le nom du Controller
-        // case [1] = le nom de la méthode à appeler
-        $controllerClass = $this->routes[$url][0];
-        $method          = $this->routes[$url][1];
-
-        // ---------------------------------------------------------------------
-        //  On instancie le Controller et on appelle la méthode
-        // ---------------------------------------------------------------------
-        $instance = new $controllerClass();
-
-        // On appelle la méthode avec ou sans paramètre selon l'URL
-        if ($param !== null) {
-            $instance->$method($param);
-        } else {
-            $instance->$method();
+        foreach ($standard as [$httpMethod, $suffix, $action]) {
+            if (empty($only) || in_array($action, $only)) {
+                $this->{strtolower($httpMethod)}($base . $suffix, [$controller, $action]);
+            }
         }
     }
 
     // -------------------------------------------------------------------------
-    // Affiche la page 404 si la route n'existe pas
+    // dispatch() est la méthode principale du Router
+    // Elle est appelée une seule fois par index.php à chaque chargement de page
+    //
+    // Deux passes de matching :
+    //   1. Exact  — routes statiques sans paramètre  ex: admin/clients
+    //   2. Pattern — routes avec {id}               ex: admin/clients/show/{id}
+    //      → {id} est converti en regex (\d+)
+    //      → la valeur capturée est castée en int et passée à la méthode
+    //         ce qui permet de garder le typage (int $id) dans les contrôleurs
     // -------------------------------------------------------------------------
+    public function dispatch(): void
+    {
+        // récupère l'URL, si vide on affiche la home
+        $url = $_GET['url'] ?? 'home';
+
+        // supprime le slash final si présent
+        $url = rtrim($url, '/');
+
+        // nettoie l'URL pour supprimer les caractères dangereux
+        $url = filter_var($url, FILTER_SANITIZE_URL);
+
+        // récupère la méthode HTTP utilisée (GET ou POST)
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        // récupère les routes enregistrées pour cette méthode HTTP
+        $routes = $this->routes[$method] ?? [];
+
+        // --- Passe 1 : matching exact (routes sans paramètre) ---
+        if (isset($routes[$url])) {
+            [$controllerClass, $action] = $routes[$url];
+            (new $controllerClass())->$action();
+            return;
+        }
+
+        // --- Passe 2 : matching par segments (routes avec {id} ou {slug}) ---
+        foreach ($routes as $pattern => $routeAction) {
+            // on ignore les routes sans placeholder
+            if (!str_contains($pattern, '{')) {
+                continue;
+            }
+
+            $patternParts = explode('/', $pattern);
+            $urlParts     = explode('/', $url);
+
+            // le nombre de segments doit être identique
+            if (count($patternParts) !== count($urlParts)) {
+                continue;
+            }
+
+            $id    = null;
+            $slug  = null;
+            $match = true;
+
+            foreach ($patternParts as $i => $segment) {
+                if ($segment === '{id}') {
+                    // {id} : segment numérique, casté en int pour conserver le typage
+                    $id = (int) $urlParts[$i];
+                } elseif ($segment === '{slug}') {
+                    // {slug} : segment texte, passé tel quel en string
+                    $slug = $urlParts[$i];
+                } elseif ($segment !== $urlParts[$i]) {
+                    $match = false;
+                    break;
+                }
+            }
+
+            if ($match) {
+                [$controllerClass, $action] = $routeAction;
+                $instance = new $controllerClass();
+                if ($id !== null) {
+                    $instance->$action($id);
+                } else {
+                    $instance->$action($slug);
+                }
+                return;
+            }
+        }
+
+        // aucune route trouvée : 404
+        $this->notFound();
+    }
+
+
+    // Affiche la page 404 si la route n'existe pas
     private function notFound(): void
     {
         http_response_code(404);

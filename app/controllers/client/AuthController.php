@@ -40,7 +40,7 @@ class AuthController extends Controller
     {
         // On vérifie que la requête vient bien d'un formulaire POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('client/connexion');
+            $this->redirect('client/login');
             return;
         }
 
@@ -67,8 +67,7 @@ class AuthController extends Controller
         // On cherche le compte par email en base de données
         $user = $this->userModel->findByEmail($email);
 
-        // Si le compte n'existe pas ou le mot de passe est incorrect
-        // Message volontairement vague pour ne pas donner d'indices à un attaquant
+        // Si le compte n'existe pas ou le mot de passe est incorrect : message vague 
         if (!$user || !$this->userModel->verifyPassword($password, $user['password'])) {
             $this->render('client/login', [
                 'error' => 'Email ou mot de passe incorrect.',
@@ -85,40 +84,35 @@ class AuthController extends Controller
             'email'            => $user['email'],
             'password_changed' => $user['password_changed'],
             'terms_accepted'   => $user['terms_accepted'],
+            'last_activity'    => time(),
         ];
 
-        // ÉTAPE 1 : Si c'est la première connexion → changer le mot de passe
+        // Si c'est la première connexion : changer le mot de passe
         if ($user['password_changed'] == 0) {
             $this->redirect('client/changePassword');
             return;
         }
 
-        // ÉTAPE 2 : Si les CGV n'ont pas encore été acceptées → page CGV
+        // Si les CGV et la charte n'ont pas encore été acceptées : page CGV et charte 
         if ($user['terms_accepted'] == 0) {
             $this->redirect('client/terms');
             return;
         }
 
-        // ÉTAPE 3 : Tout est bon → accès au dashboard
+        // Tout est bon : accès au dashboard
         $this->redirect('client/dashboard');
     }
 
-    // -------------------------------------------------------------------------
-    // Affiche le formulaire de changement de mot de passe
-    // Accessible uniquement lors de la première connexion
-    // -------------------------------------------------------------------------
+    
+    // Affiche le formulaire de changement de mp uniquement lors de la première connexion
     public function changePassword(): void
     {
-        // On vérifie que le client est bien connecté
-        if (empty($_SESSION['user'])) {
-            $this->redirect('client/connexion');
-            return;
-        }
+        $this->requireAuth();
 
         $this->render('client/change_password');
     }
 
-    // Traite le formulaire de changement de mot de passe
+    // Traite le formulaire de changement de mp
     public function savePassword(): void
     {
         // On vérifie que la requête vient bien d'un formulaire POST
@@ -127,11 +121,7 @@ class AuthController extends Controller
             return;
         }
 
-        // On vérifie que le client est bien connecté
-        if (empty($_SESSION['user'])) {
-            $this->redirect('client/connexion');
-            return;
-        }
+        $this->requireAuth();
 
         $password        = trim($_POST['password']         ?? '');
         $passwordConfirm = trim($_POST['password_confirm'] ?? '');
@@ -144,7 +134,7 @@ class AuthController extends Controller
             return;
         }
 
-        // Validation : le mot de passe fait au moins 8 caractères
+        // Validation : le mp fait au moins 8 caractères avec majuscule, chiffre et caractère spécial
         if (strlen($password) < 8) {
             $this->render('client/change_password', [
                 'error' => 'Le mot de passe doit contenir au moins 8 caractères.',
@@ -152,7 +142,28 @@ class AuthController extends Controller
             return;
         }
 
-        // Validation : les deux mots de passe sont identiques
+        if (!preg_match('/[A-Z]/', $password)) {
+            $this->render('client/change_password', [
+                'error' => 'Le mot de passe doit contenir au moins une lettre majuscule.',
+            ]);
+            return;
+        }
+
+        if (!preg_match('/[0-9]/', $password)) {
+            $this->render('client/change_password', [
+                'error' => 'Le mot de passe doit contenir au moins un chiffre.',
+            ]);
+            return;
+        }
+
+        if (!preg_match('/[\W_]/', $password)) {
+            $this->render('client/change_password', [
+                'error' => 'Le mot de passe doit contenir au moins un caractère spécial.',
+            ]);
+            return;
+        }
+
+        // Validation : les deux mp sont identiques
         if ($password !== $passwordConfirm) {
             $this->render('client/change_password', [
                 'error' => 'Les mots de passe ne correspondent pas.',
@@ -162,13 +173,13 @@ class AuthController extends Controller
 
         $id = $_SESSION['user']['id'];
 
-        // On met à jour le mot de passe en base de données
+        // On maj le mp en bdd
         $this->userModel->updatePassword($id, $password);
 
-        // On marque le mot de passe comme changé
+        // On marque le mp comme changé
         $this->userModel->markPasswordChanged($id);
 
-        // On met à jour la session
+        // On maj la session
         $_SESSION['user']['password_changed'] = 1;
 
         // On redirige vers la page CGV car c'est la prochaine étape
@@ -181,11 +192,7 @@ class AuthController extends Controller
     // -------------------------------------------------------------------------
     public function terms(): void
     {
-        // On vérifie que le client est bien connecté
-        if (empty($_SESSION['user'])) {
-            $this->redirect('client/connexion');
-            return;
-        }
+        $this->requireAuth();
 
         // Si le client a déjà accepté les CGV on le redirige vers le dashboard
         if ($_SESSION['user']['terms_accepted'] == 1) {
@@ -206,11 +213,7 @@ class AuthController extends Controller
             return;
         }
 
-        // On vérifie que le client est bien connecté
-        if (empty($_SESSION['user'])) {
-            $this->redirect('client/connexion');
-            return;
-        }
+        $this->requireAuth();
 
         // On vérifie que les deux cases ont bien été cochées
         if (empty($_POST['accept_cgv']) || empty($_POST['accept_charte'])) {
@@ -225,7 +228,7 @@ class AuthController extends Controller
         // On enregistre l'acceptation en base de données avec la date et l'heure
         $this->userModel->acceptTerms($id);
 
-        // On met à jour la session
+        // On maj la session
         $_SESSION['user']['terms_accepted'] = 1;
 
         // On crée une notification pour l'admin (Id_ADMIN = 1 car il n'y a qu'un seul admin)
