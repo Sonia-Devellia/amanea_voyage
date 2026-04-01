@@ -1,6 +1,6 @@
 <?php
 
-// On déclare le namespace : tous les Models sont dans App\Models
+// On déclare le namespace 
 namespace App\Models;
 
 // On importe la classe Database pour avoir accès à la connexion PDO
