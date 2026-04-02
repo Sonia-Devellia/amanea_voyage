@@ -1,0 +1,119 @@
+// ============================================================
+// abstracts/_variables.scss — Variables globales Amanéa Voyage
+// Charte graphique définie par L'Agence Perchée
+// ============================================================
+
+// ------------------------------------------------------------
+// Couleurs
+// ------------------------------------------------------------
+
+// Couleurs principales
+$color-terra:       #C58A60;   // Terracotta — CTA principal, accents, hover
+$color-beige:       #FEF6ED;   // Beige clair — fond de page principal
+$color-white:       #FFFFFF;   // Blanc pur — fond cards, header scrollé
+$color-dark:        #4A3C32;   // Marron foncé — texte principal, footer
+$color-blue-grey:   #6C7E8F;   // Bleu-gris — couleur dominante du logo
+$color-sage:        #A4B3A1;   // Vert sauge — boutons secondaires, badges
+$color-rose:        #C3998A;   // Rose/Brun — détails décoratifs
+$color-cream:       #EADFC9;   // Beige/Crème — éléments doux, surtitres
+$color-grey:        #A39E93;   // Gris doux — texte secondaire, labels
+
+// Couleurs sémantiques
+$color-border:      #E8DED6;   // Bordures légères
+$color-overlay:     rgba(74, 60, 50, 0.55);   // Overlay hero
+$color-overlay-dark:rgba(74, 60, 50, 0.70);   // Overlay CTA final
+
+// ------------------------------------------------------------
+// Typographie
+// ------------------------------------------------------------
+
+// Familles de polices
+$font-title:  'Cormorant Garamond', Georgia, serif;   // Titres, citations
+$font-body:   'Raleway', 'Helvetica Neue', sans-serif; // Corps, nav, boutons
+
+// Tailles — Titres (Cormorant Garamond)
+$font-size-h1:      72px;   // Hero desktop
+$font-size-h1-mob:  48px;   // Hero mobile
+$font-size-h2:      50px;   // Sections principales
+$font-size-h2-sm:   44px;   // Sections secondaires
+$font-size-h3:      32px;   // Cards voyages
+$font-size-quote:   22px;   // Citations pull-quote
+$font-size-h3-sm:   20px;   // Titres cards valeurs
+
+// Tailles — Corps (Raleway)
+$font-size-base:    16px;   // Corps principal
+$font-size-md:      15px;   // Paragraphes sections
+$font-size-sm:      14px;   // Cards, extraits
+$font-size-xs:      13px;   // Liens, labels, nav
+$font-size-xxs:     12px;   // Footer, mentions
+$font-size-label:   11px;   // Surtitres, badges
+
+// Graisses
+$font-weight-light:   300;   // Corps de texte
+$font-weight-regular: 400;   // Navigation
+$font-weight-medium:  500;   // Boutons, labels
+
+// Letter-spacing
+$ls-label:   4px;    // Surtitres type "TRAVEL PLANNING"
+$ls-nav:     2px;    // Titres colonnes footer
+$ls-sm:      0.5px;  // Navigation, liens
+
+// Line-height
+$lh-tight:   1.0;    // Titres hero
+$lh-normal:  1.5;    // Corps standard
+$lh-loose:   1.8;    // Paragraphes storytelling
+
+// ------------------------------------------------------------
+// Espacements
+// ------------------------------------------------------------
+
+$spacing-section:   100px;  // Padding entre sections
+$spacing-section-sm: 80px;  // Padding sections secondaires
+$spacing-section-xs: 60px;  // Padding sections compactes
+$spacing-inner:      60px;  // Padding interne sections
+$spacing-xl:         40px;
+$spacing-lg:         32px;
+$spacing-md:         24px;
+$spacing-sm:         16px;
+$spacing-xs:         8px;
+
+// ------------------------------------------------------------
+// Grille
+// ------------------------------------------------------------
+
+$grid-columns:      12;
+$grid-gutter:       24px;
+$grid-margin-desk:  80px;
+$grid-margin-mob:   20px;
+$max-width:         1440px;
+
+// ------------------------------------------------------------
+// Breakpoints
+// ------------------------------------------------------------
+
+$bp-desktop:  1200px;   // > 1200px — desktop large
+$bp-tablet:    768px;   // 768px–1199px — tablette
+$bp-mobile:    767px;   // < 768px — mobile
+
+// ------------------------------------------------------------
+// Bordures & Arrondis
+// ------------------------------------------------------------
+
+$radius-card:   5px;    // Cards et images — jamais bold, toujours 5px
+$radius-btn:    28px;   // Boutons arrondis
+$radius-badge:  24px;   // Badges
+$radius-photo:  8px;    // Photos articles
+
+// ------------------------------------------------------------
+// Transitions
+// ------------------------------------------------------------
+
+$transition-fast:   0.2s ease;
+$transition-normal: 0.3s ease;
+
+// ------------------------------------------------------------
+// Ombres
+// ------------------------------------------------------------
+
+$shadow-card:   0 2px 12px rgba(74, 60, 50, 0.08);
+$shadow-header: 0 2px 20px rgba(74, 60, 50, 0.10);

@@ -1,0 +1,189 @@
+// ============================================================
+// base/_typography.scss — Typographie globale Amanéa Voyage
+// Cormorant Garamond → titres, citations
+// Raleway → corps, navigation, boutons
+// ============================================================
+
+// ------------------------------------------------------------
+// @font-face — Cormorant Garamond
+// Fichiers à placer dans public/fonts/cormorant-garamond/
+// ------------------------------------------------------------
+
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('../fonts/cormorant-garamond/cormorant-garamond-v21-latin-300.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('../fonts/cormorant-garamond/cormorant-garamond-v21-latin-300.woff2') format('woff2');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('../fonts/cormorant-garamond/cormorant-garamond-v21-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('../fonts/cormorant-garamond/cormorant-garamond-v21-latin-italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('../fonts/cormorant-garamond/cormorant-garamond-v21-latin-500.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+// ------------------------------------------------------------
+// @font-face — Raleway
+// Fichiers à placer dans public/fonts/raleway/
+// ------------------------------------------------------------
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('../fonts/raleway/raleway-v37-latin-300.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('../fonts/raleway/raleway-v37-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('../fonts/raleway/raleway-v37-latin-500.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('../fonts/raleway/raleway-v37-latin-600.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+// ------------------------------------------------------------
+// Styles de base — balises HTML
+// ------------------------------------------------------------
+
+body {
+    font-family: $font-body;
+    font-size: $font-size-base;
+    font-weight: $font-weight-light;
+    color: $color-dark;
+    background-color: $color-beige;
+    line-height: $lh-normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// ------------------------------------------------------------
+// Titres — Cormorant Garamond, jamais bold
+// L'élégance vient de la finesse du poids 300
+// ------------------------------------------------------------
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: $font-title;
+    font-weight: $font-weight-light;
+    color: $color-dark;
+    line-height: $lh-tight;
+    margin: 0;
+}
+
+h1 {
+    font-size: $font-size-h1;
+}
+
+h2 {
+    font-size: $font-size-h2;
+}
+
+h3 {
+    font-size: $font-size-h3;
+}
+
+// ------------------------------------------------------------
+// Paragraphes
+// ------------------------------------------------------------
+
+p {
+    font-family: $font-body;
+    font-size: $font-size-md;
+    font-weight: $font-weight-light;
+    color: $color-dark;
+    line-height: $lh-loose;
+    margin: 0;
+}
+
+// ------------------------------------------------------------
+// Liens
+// ------------------------------------------------------------
+
+a {
+    font-family: $font-body;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-regular;
+    color: $color-terra;
+    text-decoration: none;
+    letter-spacing: $ls-sm;
+    transition: opacity $transition-fast;
+
+    &:hover {
+        opacity: 0.75;
+    }
+}
+
+// ------------------------------------------------------------
+// Surtitres — style label tout en majuscules
+// Ex : "TRAVEL PLANNING · ÉTHIQUE & SUR MESURE"
+// ------------------------------------------------------------
+
+.label {
+    font-family: $font-body;
+    font-size: $font-size-label;
+    font-weight: $font-weight-regular;
+    letter-spacing: $ls-label;
+    text-transform: uppercase;
+    color: $color-grey;
+}
+
+// ------------------------------------------------------------
+// Citations pull-quote — Cormorant Garamond italic
+// Jamais Raleway en italic pour les citations
+// ------------------------------------------------------------
+
+blockquote {
+    font-family: $font-title;
+    font-size: $font-size-quote;
+    font-style: italic;
+    font-weight: $font-weight-light;
+    color: $color-dark;
+    border-left: 4px solid $color-terra;
+    padding-left: $spacing-md;
+    margin: 0;
+    line-height: $lh-loose;
+}

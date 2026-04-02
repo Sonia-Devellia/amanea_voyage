@@ -1,8 +1,7 @@
 <?php
 
 // ============================================================
-// Fichier de routes de l'application Amanéa Voyage
-// Toutes les routes sont déclarées ici
+// Fichier de routes de Amanéa Voyage
 // GET  → affiche une page
 // POST → traite un formulaire ou une action sensible (écriture, suppression)
 //

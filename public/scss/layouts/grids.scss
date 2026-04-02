@@ -1,0 +1,223 @@
+// ============================================================
+// layouts/_grid.scss — Système de grille Amanéa Voyage
+//
+// Grille 12 colonnes, gouttières 24px
+// Marges : 80px desktop / 20px mobile
+// Max-width : 1440px
+//
+// Breakpoints :
+// $bp-desktop : 1440px (référence)
+// $bp-tablet  : 1024px
+// $bp-mobile  : 390px
+// ============================================================
+
+// ------------------------------------------------------------
+// Conteneur — centré avec marges latérales
+// ------------------------------------------------------------
+
+.container {
+    width: 100%;
+    max-width: $max-width;              // 1440px
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: $grid-margin-desk;    // 80px
+    padding-right: $grid-margin-desk;
+
+    @media (max-width: $bp-tablet) {
+        padding-left: $grid-margin-mob; // 20px
+        padding-right: $grid-margin-mob;
+    }
+}
+
+// ------------------------------------------------------------
+// Section — espacement vertical entre les sections
+// ------------------------------------------------------------
+
+.section {
+    padding-top: $spacing-section;      // 100px
+    padding-bottom: $spacing-section;
+
+    // Section compacte — FAQ, processus
+    &--sm {
+        padding-top: $spacing-section-sm;   // 80px
+        padding-bottom: $spacing-section-sm;
+    }
+
+    // Fond beige — alterné avec le blanc
+    &--beige {
+        background-color: $color-beige;
+    }
+
+    // Fond blanc
+    &--white {
+        background-color: $color-white;
+    }
+
+    // Fond sombre — section processus et footer
+    &--dark {
+        background-color: $color-dark;
+    }
+}
+
+// ------------------------------------------------------------
+// En-tête de section — titre + sous-titre centré
+// ------------------------------------------------------------
+
+.section-header {
+    text-align: center;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: $spacing-section-xs; // 60px
+
+    // Surtitle — label uppercase
+    &__label {
+        font-family: $font-body;
+        font-size: $font-size-label;    // 11px
+        font-weight: $font-weight-regular;
+        letter-spacing: $ls-label;     // 4px
+        text-transform: uppercase;
+        color: $color-grey;
+        display: block;
+        margin-bottom: $spacing-sm;
+    }
+
+    // Titre H2
+    &__title {
+        font-family: $font-title;
+        font-size: $font-size-h2;       // 50px
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        line-height: $lh-tight;
+        margin-bottom: $spacing-md;
+    }
+
+    // Sous-titre
+    &__subtitle {
+        font-family: $font-body;
+        font-size: $font-size-md;       // 15px
+        font-weight: $font-weight-light;
+        color: $color-grey;
+        line-height: $lh-loose;
+    }
+
+    // Lien aligné à droite — "Voir tous les articles →"
+    &__link {
+        display: block;
+        text-align: right;
+        font-family: $font-body;
+        font-size: $font-size-xs;       // 13px
+        font-weight: $font-weight-medium;
+        color: $color-terra;
+        letter-spacing: $ls-sm;
+        margin-top: $spacing-sm;
+        transition: opacity $transition-fast;
+
+        &:hover { opacity: 0.75; }
+    }
+}
+
+// ------------------------------------------------------------
+// Grilles prédéfinies
+// ------------------------------------------------------------
+
+// Grille 2 colonnes — split 50/50
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $grid-gutter;                  // 24px
+
+    @media (max-width: $bp-tablet) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Grille 3 colonnes — articles, témoignages
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $grid-gutter;
+
+    @media (max-width: $bp-tablet) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: $bp-mobile) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Grille 4 colonnes — footer, voyages
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $grid-gutter;
+
+    @media (max-width: $bp-tablet) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: $bp-mobile) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Grille 5 colonnes — valeurs
+.grid-5 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: $grid-gutter;
+
+    @media (max-width: $bp-tablet) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: $bp-mobile) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+// Grille voyages — 2+2 desktop, scroll horizontal mobile
+.grid-voyages {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $grid-gutter;
+
+    @media (max-width: $bp-tablet) {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: $grid-gutter;
+        padding-bottom: $spacing-sm;
+
+        // Masque la scrollbar
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
+
+        // Chaque card prend 85% de la largeur sur mobile
+        .card-voyage {
+            flex-shrink: 0;
+            width: 85vw;
+            scroll-snap-align: start;
+        }
+    }
+}
+
+// ------------------------------------------------------------
+// Filet décoratif — trait horizontal terracotta
+// Utilisé sous les surtitres et titres
+// ------------------------------------------------------------
+
+.divider {
+    width: 60px;
+    height: 2px;
+    background-color: $color-terra;
+    border: none;
+    margin: $spacing-md 0;
+
+    // Centré
+    &--center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

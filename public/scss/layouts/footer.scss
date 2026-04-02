@@ -1,0 +1,170 @@
+// ============================================================
+// layouts/_footer.scss — Footer Amanéa Voyage
+//
+// Structure 4 colonnes desktop :
+// Col 1 : Brand (logo + baseline + localisation)
+// Col 2 : Navigation du site
+// Col 3 : Contact (email + réseaux sociaux)
+// Col 4 : Mentions légales
+//
+// Fond : $color-dark (#4A3C32)
+// ============================================================
+
+// ------------------------------------------------------------
+// Footer — base
+// ------------------------------------------------------------
+
+.footer {
+    background-color: $color-dark;
+    padding: $spacing-section-xs $grid-margin-desk;
+    color: $color-white;
+}
+
+// ------------------------------------------------------------
+// Footer — grille 4 colonnes
+// ------------------------------------------------------------
+
+.footer__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: $spacing-xl;
+    padding-bottom: $spacing-section-xs;
+    border-bottom: 1px solid $color-blue-grey;
+}
+
+// ------------------------------------------------------------
+// Col 1 — Brand
+// ------------------------------------------------------------
+
+.footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+}
+
+.footer__logo {
+    height: 40px;
+    width: auto;
+}
+
+// Baseline en Cormorant italic
+.footer__baseline {
+    font-family: $font-title;
+    font-size: $font-size-xs;       // 13px
+    font-style: italic;
+    font-weight: $font-weight-light;
+    color: $color-white;
+    line-height: $lh-normal;
+}
+
+// Localisation — Raleway petit
+.footer__location {
+    font-family: $font-body;
+    font-size: $font-size-xs;       // 13px
+    font-weight: $font-weight-regular;
+    color: $color-grey;
+}
+
+// ------------------------------------------------------------
+// Col 2, 3, 4 — Colonnes de liens
+// ------------------------------------------------------------
+
+.footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+}
+
+// Titre de colonne — label tout en majuscules
+.footer__col-title {
+    font-family: $font-body;
+    font-size: $font-size-label;    // 11px
+    font-weight: $font-weight-regular;
+    letter-spacing: $ls-nav;        // 2px
+    text-transform: uppercase;
+    color: $color-grey;
+    margin-bottom: $spacing-xs;
+}
+
+// Liens de navigation
+.footer__link {
+    font-family: $font-body;
+    font-size: $font-size-sm;       // 14px
+    font-weight: $font-weight-regular;
+    color: $color-white;
+    text-decoration: none;
+    transition: color $transition-fast;
+    line-height: $lh-normal;
+
+    &:hover {
+        color: $color-terra;
+    }
+}
+
+// ------------------------------------------------------------
+// Col 3 — Contact et réseaux sociaux
+// ------------------------------------------------------------
+
+.footer__social {
+    display: flex;
+    gap: $spacing-sm;
+    margin-top: $spacing-xs;
+}
+
+.footer__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: $color-white;
+    transition: border-color $transition-fast,
+                color $transition-fast;
+
+    &:hover {
+        border-color: $color-terra;
+        color: $color-terra;
+    }
+
+    svg {
+        width: 16px;
+        height: 16px;
+        stroke-width: 1.5px;  // Icônes ligne fine cohérentes
+    }
+}
+
+// ------------------------------------------------------------
+// Barre bas — copyright
+// ------------------------------------------------------------
+
+.footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: $spacing-lg;
+}
+
+.footer__copyright {
+    font-family: $font-body;
+    font-size: $font-size-xxs;      // 12px
+    font-weight: $font-weight-regular;
+    color: $color-grey;
+    text-align: center;
+}
+
+// ------------------------------------------------------------
+// Mobile — stack vertical
+// ------------------------------------------------------------
+
+@media (max-width: $bp-tablet) {
+    .footer {
+        padding: $spacing-section-xs $grid-margin-mob;
+    }
+
+    .footer__grid {
+        grid-template-columns: 1fr;
+        gap: $spacing-lg;
+    }
+}

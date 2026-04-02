@@ -1,0 +1,66 @@
+// ============================================================
+// abstracts/_mixins.scss — Mixins réutilisables Amanéa Voyage
+// ============================================================
+
+// ------------------------------------------------------------
+// Responsive — media queries
+// Utilisation : @include respond-to('tablet') { ... }
+// ------------------------------------------------------------
+
+@mixin respond-to($breakpoint) {
+    @if $breakpoint == 'tablet' {
+        @media (max-width: $bp-tablet) { @content; }
+    } @else if $breakpoint == 'mobile' {
+        @media (max-width: $bp-mobile) { @content; }
+    }
+}
+
+// ------------------------------------------------------------
+// Flexbox centré — horizontalement et verticalement
+// Utilisation : @include flex-center;
+// ------------------------------------------------------------
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// ------------------------------------------------------------
+// Flexbox entre — éléments aux extrémités
+// Utilisation : @include flex-between;
+// ------------------------------------------------------------
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+// ------------------------------------------------------------
+// Overlay sombre sur image
+// Utilisation : @include overlay(0.5);
+// ------------------------------------------------------------
+
+@mixin overlay($opacity: 0.5) {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-color: rgba(74, 60, 50, $opacity);
+    }
+}
+
+// ------------------------------------------------------------
+// Troncature texte sur plusieurs lignes
+// Utilisation : @include line-clamp(2);
+// ------------------------------------------------------------
+
+@mixin line-clamp($lines: 2) {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

@@ -1,0 +1,102 @@
+// ============================================================
+// base/_reset.scss — Reset CSS Amanéa Voyage
+// Supprime les styles par défaut du navigateur
+// ============================================================
+
+// ------------------------------------------------------------
+// Box-sizing global
+// Toutes les dimensions incluent padding et border
+// ------------------------------------------------------------
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+// ------------------------------------------------------------
+// HTML & Body
+// ------------------------------------------------------------
+
+html {
+    font-size: $font-size-base;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background-color: $color-beige;
+    font-family: $font-body;
+    font-weight: $font-weight-light;
+    color: $color-dark;
+    line-height: $lh-normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// ------------------------------------------------------------
+// Images — responsive par défaut
+// ------------------------------------------------------------
+
+img,
+picture,
+video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+// ------------------------------------------------------------
+// Listes — suppression des puces et marges
+// ------------------------------------------------------------
+
+ul,
+ol {
+    list-style: none;
+}
+
+// ------------------------------------------------------------
+// Liens — suppression du soulignement
+// ------------------------------------------------------------
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+// ------------------------------------------------------------
+// Boutons — suppression des styles natifs
+// ------------------------------------------------------------
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: $font-body;
+}
+
+// ------------------------------------------------------------
+// Formulaires — héritage de la typographie
+// ------------------------------------------------------------
+
+input,
+textarea,
+select {
+    font-family: $font-body;
+    font-size: $font-size-base;
+    color: $color-dark;
+    border: none;
+    outline: none;
+    background: none;
+}
+
+// ------------------------------------------------------------
+// Titres — suppression des marges par défaut
+// Les styles sont définis dans _typography.scss
+// ------------------------------------------------------------
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: $font-weight-light;
+}

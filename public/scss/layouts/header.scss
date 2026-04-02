@@ -1,0 +1,392 @@
+@use 'sass:color';
+
+// ============================================================
+// layouts/_header.scss — Header Amanéa Voyage
+//
+// Deux états :
+// .header           → transparent sur le hero (fixed)
+// .header--scrolled → fond blanc avec shadow au scroll
+//
+// Drawer menu :
+// .drawer           → panneau slide depuis la gauche
+// .drawer--open     → état ouvert
+// ============================================================
+
+// ------------------------------------------------------------
+// Header — base
+// ------------------------------------------------------------
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 $grid-margin-desk;
+    background-color: transparent;
+    transition: background-color $transition-normal,
+                box-shadow $transition-normal;
+
+    // ------------------------------------------------------------
+    // État scrollé — fond blanc + shadow
+    // Classe ajoutée via JavaScript au scroll
+    // ------------------------------------------------------------
+
+    &--scrolled {
+        background-color: $color-white;
+        box-shadow: $shadow-header;
+
+        // Logo version couleur sur fond blanc
+        .header__logo--white {
+            display: none;
+        }
+
+        .header__logo--color {
+            display: block;
+        }
+
+        // Liens texte marron foncé
+        .header__nav-link {
+            color: $color-dark;
+        }
+
+        // Bouton CTA version terracotta
+        .header__cta {
+            background-color: $color-terra;
+            color: $color-white;
+            border-color: $color-terra;
+
+            &:hover {
+                background-color: darken($color-terra, 8%);
+            }
+        }
+
+        // Icônes et texte espace client en marron
+        .header__client,
+        .header__burger-label {
+            color: $color-dark;
+        }
+
+        // Traits du burger en terracotta
+        .header__burger-line {
+            background-color: $color-terra;
+        }
+    }
+}
+
+// ------------------------------------------------------------
+// Header — zone gauche (burger + logo)
+// ------------------------------------------------------------
+
+.header__left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+}
+
+// Bouton burger
+.header__burger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.header__burger-line {
+    display: block;
+    height: 1.5px;
+    background-color: $color-white;
+    transition: background-color $transition-normal;
+
+    // 3 traits — le 3ème plus court (comme dans la charte)
+    &:nth-child(1) { width: 24px; }
+    &:nth-child(2) { width: 24px; }
+    &:nth-child(3) { width: 16px; }
+}
+
+.header__burger-label {
+    font-family: $font-body;
+    font-size: $font-size-label;    // 11px
+    font-weight: $font-weight-regular;
+    letter-spacing: $ls-label;     // 4px
+    text-transform: uppercase;
+    color: $color-white;
+    transition: color $transition-normal;
+}
+
+// Séparateur vertical entre burger et logo
+.header__separator {
+    width: 1px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+// Logo
+.header__logo {
+    height: 36px;
+    width: auto;
+}
+
+.header__logo--color {
+    display: none; // Caché par défaut, affiché au scroll
+}
+
+// ------------------------------------------------------------
+// Header — zone centre (navigation)
+// ------------------------------------------------------------
+
+.header__nav {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xl;
+}
+
+.header__nav-link {
+    font-family: $font-body;
+    font-size: $font-size-xs;       // 13px
+    font-weight: $font-weight-regular; // 400
+    letter-spacing: $ls-sm;         // 0.5px
+    color: $color-white;
+    text-decoration: none;
+    transition: opacity $transition-fast;
+
+    &:hover {
+        opacity: 0.75;
+    }
+}
+
+// ------------------------------------------------------------
+// Header — zone droite (espace client + CTA)
+// ------------------------------------------------------------
+
+.header__right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+}
+
+// Espace client — icône cercle + texte
+.header__client {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: $font-body;
+    font-size: $font-size-xxs;      // 12px
+    font-weight: $font-weight-regular;
+    color: $color-white;
+    text-decoration: none;
+    transition: opacity $transition-fast;
+
+    &:hover {
+        opacity: 0.75;
+    }
+}
+
+.header__client-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid $color-white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// CTA "Créons votre voyage" — version header transparent
+.header__cta {
+    @extend .btn-sm;
+    background-color: transparent;
+    color: $color-white;
+    border: 1px solid $color-white;
+    border-radius: $radius-btn;
+    font-family: $font-body;
+    font-size: $font-size-xxs;
+    font-weight: $font-weight-medium;
+    padding: 8px 20px;
+    text-decoration: none;
+    transition: background-color $transition-normal,
+                color $transition-normal;
+
+    &:hover {
+        background-color: $color-white;
+        color: $color-terra;
+    }
+}
+
+// ------------------------------------------------------------
+// Drawer menu — panneau slide depuis la gauche
+// ------------------------------------------------------------
+
+.drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 360px;
+    z-index: 200;
+    background-color: $color-dark;  // #4A3C32
+    padding: 60px 48px;
+    transform: translateX(-100%);
+    transition: transform $transition-normal;
+    overflow-y: auto;
+}
+
+// État ouvert — classe ajoutée via JavaScript
+.drawer--open {
+    transform: translateX(0);
+}
+
+// Overlay sombre derrière le drawer
+.drawer__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 199;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity $transition-normal;
+
+    &--visible {
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+// Bouton fermeture du drawer
+.drawer__close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $color-white;
+    font-size: 24px;
+    line-height: 1;
+}
+
+// Liens principaux du drawer — Cormorant Garamond italic
+.drawer__nav {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    margin-top: $spacing-xl;
+}
+
+.drawer__nav-link {
+    font-family: $font-title;
+    font-size: 28px;
+    font-weight: $font-weight-light;
+    font-style: italic;
+    color: $color-white;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+        color: $color-terra;
+    }
+}
+
+// Sous-liens du drawer — Raleway
+.drawer__sub-link {
+    font-family: $font-body;
+    font-size: $font-size-sm;       // 14px
+    font-weight: $font-weight-regular;
+    color: $color-grey;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+        color: $color-white;
+    }
+}
+
+// ------------------------------------------------------------
+// Mobile — header adapté
+// ------------------------------------------------------------
+
+@media (max-width: $bp-tablet) {
+    .header {
+        padding: 0 $grid-margin-mob;
+    }
+
+    // Centre le logo sur mobile
+    .header__nav {
+        display: none; // Navigation cachée sur mobile
+    }
+
+    // CTA disparaît sur mobile
+    .header__cta {
+        display: none;
+    }
+}
+
+// ------------------------------------------------------------
+// Drawer — label "Navigation"
+// ------------------------------------------------------------
+
+.drawer__nav-label {
+    font-family: $font-body;
+    font-size: 10px;
+    font-weight: $font-weight-regular;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: $color-grey;
+    display: block;
+    margin-bottom: $spacing-lg;
+}
+
+// ------------------------------------------------------------
+// Drawer — sous-navigation Voyages
+// ------------------------------------------------------------
+
+.drawer__sub-nav {
+    padding-left: $spacing-md;
+    padding-bottom: $spacing-sm;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.drawer__sub-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+}
+
+// ------------------------------------------------------------
+// Drawer — footer (email + baseline)
+// ------------------------------------------------------------
+
+.drawer__footer {
+    margin-top: auto;
+    padding-top: $spacing-xl;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+}
+
+.drawer__email {
+    font-family: $font-body;
+    font-size: $font-size-xxs;     // 12px
+    font-weight: $font-weight-regular;
+    color: $color-grey;
+}
+
+.drawer__baseline {
+    font-family: $font-title;
+    font-size: $font-size-xs;      // 13px
+    font-style: italic;
+    font-weight: $font-weight-light;
+    color: $color-cream;
+    opacity: 0.7;
+}
+

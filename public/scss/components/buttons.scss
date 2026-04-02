@@ -1,0 +1,117 @@
+@use 'sass:color';
+
+// ============================================================
+// components/_buttons.scss — Boutons Amanéa Voyage
+//
+// Trois types de boutons :
+// .btn-primary  → fond terracotta, texte blanc (CTA principal)
+// .btn-outline  → border terracotta, texte terracotta (CTA secondaire)
+// .btn-ghost    → border blanc, texte blanc (sur fond sombre ou photo)
+// ============================================================
+
+// ------------------------------------------------------------
+// Base commune à tous les boutons
+// ------------------------------------------------------------
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: $font-body;
+    font-size: $font-size-xs;       // 13px
+    font-weight: $font-weight-medium; // 500
+    letter-spacing: $ls-sm;
+    line-height: 1;
+    border-radius: $radius-btn;     // 28px
+    padding: 14px 32px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background-color $transition-normal,
+                color $transition-normal,
+                border-color $transition-normal,
+                opacity $transition-normal;
+    white-space: nowrap;
+    text-decoration: none;
+
+    // Bouton désactivé
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+// ------------------------------------------------------------
+// Bouton primaire — CTA principal
+// Fond terracotta, texte blanc
+// Ex : "Créons votre voyage ensemble →"
+// ------------------------------------------------------------
+
+.btn-primary {
+    @extend .btn;
+    background-color: $color-terra;
+    color: $color-white;
+    border-color: $color-terra;
+
+    &:hover:not(:disabled) {
+        background-color: color.adjust($color-terra, $lightness: -8%);
+        border-color: color.adjust($color-terra, $lightness: -8%);
+    }
+}
+
+// ------------------------------------------------------------
+// Bouton outline — CTA secondaire
+// Border terracotta, texte terracotta
+// Hover : fond terracotta, texte blanc
+// Ex : "Voir tous nos voyages"
+// ------------------------------------------------------------
+
+.btn-outline {
+    @extend .btn;
+    background-color: transparent;
+    color: $color-terra;
+    border-color: $color-terra;
+
+    &:hover:not(:disabled) {
+        background-color: $color-terra;
+        color: $color-white;
+    }
+}
+
+// ------------------------------------------------------------
+// Bouton ghost — sur fond sombre ou photo
+// Border blanc, texte blanc
+// Hover : fond blanc, texte terracotta
+// Ex : "Découvrir nos voyages" dans le CTA final
+// ------------------------------------------------------------
+
+.btn-ghost {
+    @extend .btn;
+    background-color: transparent;
+    color: $color-white;
+    border-color: $color-white;
+
+    &:hover:not(:disabled) {
+        background-color: $color-white;
+        color: $color-terra;
+    }
+}
+
+// ------------------------------------------------------------
+// Variante taille large — hero et CTA finaux
+// ------------------------------------------------------------
+
+.btn-lg {
+    padding: 16px 40px;
+    font-size: $font-size-sm;       // 14px
+}
+
+// ------------------------------------------------------------
+// Variante taille petite — nav header
+// Ex : "Créons votre voyage" dans la navigation
+// ------------------------------------------------------------
+
+.btn-sm {
+    padding: 8px 20px;
+    font-size: $font-size-xxs;      // 12px
+}

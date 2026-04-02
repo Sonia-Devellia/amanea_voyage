@@ -1,0 +1,35 @@
+// ============================================================
+// main.scss — Point d'entrée SCSS Amanéa Voyage
+//
+// Ordre d'import important :
+// 1. Abstracts  → variables et mixins (pas de CSS généré)
+// 2. Base       → reset et typographie
+// 3. Layouts    → grille, header, footer
+// 4. Components → boutons, cards, formulaires
+// 5. Pages      → styles spécifiques à chaque page
+// ============================================================
+
+// 1. Abstracts — variables et mixins en premier
+// Doivent être chargés avant tout le reste
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+
+// 2. Base — styles fondamentaux
+@import 'base/reset';
+@import 'base/typographie';
+
+// 3. Layouts — structure des pages
+@import 'layouts/grids';
+@import 'layouts/header';
+@import 'layouts/footer';
+
+// 4. Components — éléments réutilisables
+@import 'components/buttons';
+@import 'components/cards';
+@import 'components/forms';
+
+// 5. Pages — styles spécifiques
+@import 'pages/home';
+@import 'pages/article';
+@import 'pages/destinations';
+@import 'pages/admin';
