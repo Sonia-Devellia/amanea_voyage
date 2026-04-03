@@ -1,6 +1,7 @@
 <?php
-$pageTitle       = 'Accueil';
-$metaDescription = 'Amanéa Voyage — Travel planner , création de voyage éthique et sur mesure.';
+$pageTitle       = 'Travel Planner Éthique & Sur Mesure';
+$metaDescription = 'Amanéa Voyage — Habibi Nora, travel planner éthique et créatrice de voyages sur mesure. Voyages de noces, au féminin, en groupe ou personnalisés. Île Maurice et partout dans le monde.';
+$headExtra       = '<link rel="preload" as="image" href="' . APP_URL . '/public/images/hero-home.webp" fetchpriority="high">';
 require_once APP_ROOT . '/app/views/layouts/header.php';
 ?>
 
@@ -10,10 +11,32 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
 
 <section class="hero">
 
-    <!-- Image de fond — à remplacer par la vidéo -->
-    <img src="<?= APP_URL ?>/public/images/hero-home.jpg"
-        alt="Paysage de dunes dorées au coucher du soleil, Maroc"
-        class="hero__image">
+    <!-- Fallback image — toujours chargée, visible si la vidéo est absente ou désactivée -->
+    <!-- alt="" + aria-hidden : image purement décorative, le contenu est dans hero__content -->
+    <img src="<?= APP_URL ?>/public/images/hero-home.webp"
+         alt=""
+         class="hero__image"
+         aria-hidden="true"
+         fetchpriority="high"
+         width="7360" height="4912">
+
+    <!--
+        Vidéo de fond — positionnée par-dessus l'image.
+        poster  = même URL que l'image → servie depuis le cache navigateur, aucun octet supplémentaire.
+        preload = none → éco-conception : rien chargé avant que l'autoplay démarre.
+        Le JS du footer cache .hero__video (classe is-hidden) si : réseau lent / saveData /
+        prefers-reduced-motion / erreur de chargement → l'image fallback apparaît automatiquement.
+    -->
+    <video class="hero__video"
+           autoplay
+           muted
+           playsinline
+           preload="none"
+           poster="<?= APP_URL ?>/public/images/hero-home.webp"
+           aria-hidden="true">
+        <source src="<?= APP_URL ?>/public/videos/hero-home.webm" type="video/webm">
+        <source src="<?= APP_URL ?>/public/videos/hero-home.mp4"  type="video/mp4">
+    </video>
 
     <!-- Overlay gradient -->
     <div class="hero__overlay"></div>
@@ -35,7 +58,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
         </p>
 
         <a href="<?= APP_URL ?>/contact" class="btn-primary btn-lg">
-            Créons votre voyage ensemble 
+            Créons votre voyage ensemble
         </a>
 
     </div>
@@ -89,16 +112,16 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
             <!-- Photo droite avec cadre arche -->
             <div class="travel-planner__photo-wrap">
                 <div class="travel-planner__arch">
-                    <img src="<?= APP_URL ?>/public/images/nora-portrait.jpg"
+                    <img src="<?= APP_URL ?>/public/images/nora-portrait.webp"
                         alt="Habibi Nora, fondatrice d'Amanéa Voyage, souriante face à l'horizon"
-                        class="travel-planner__photo">
+                        class="travel-planner__photo"
+                        loading="lazy"
+                        width="942" height="2040">
                 </div>
                 <!-- Badge flottant -->
                 <div class="travel-planner__badge">
-                    <span>15 ans · Île Maurice · 3 continents</span>
+                    <span>15 ans de voyages · Île Maurice · 3 continents visités</span>
                 </div>
-                <!-- Accent décoratif -->
-                <div class="travel-planner__accent" aria-hidden="true"></div>
             </div>
 
         </div>
@@ -205,19 +228,31 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
         <div class="grid-voyages">
 
             <?php foreach ($types as $type) : ?>
+                <?php
+                $badgeClass = match (true) {
+                    str_contains($type['slug'], 'groupe')       => 'card-voyage__badge--groupe',
+                    str_contains($type['slug'], 'feminin')      => 'card-voyage__badge--feminin',
+                    str_contains($type['slug'], 'noces')        => 'card-voyage__badge--noces',
+                    str_contains($type['slug'], 'personnalise') => 'card-voyage__badge--perso',
+                    default                                     => 'card-voyage__badge--groupe',
+                };
+                ?>
                 <article class="card-voyage">
                     <img src="<?= APP_URL ?>/public/images/<?= htmlspecialchars($type['file_name']) ?>"
                         alt="<?= htmlspecialchars($type['caption']) ?>"
-                        class="card-voyage__image">
+                        class="card-voyage__image"
+                        loading="lazy"
+                        width="800" height="480">
                     <div class="card-voyage__overlay"></div>
                     <div class="card-voyage__content">
-                        <span class="card-voyage__badge card-voyage__badge--<?= htmlspecialchars($type['slug']) ?>">
+                        <span class="card-voyage__badge <?= $badgeClass ?>">
                             <?= htmlspecialchars($type['title']) ?>
                         </span>
                         <h3 class="card-voyage__title"><?= htmlspecialchars($type['title']) ?></h3>
                         <p class="card-voyage__text"><?= htmlspecialchars($type['description']) ?></p>
                         <a href="<?= APP_URL ?>/formules/show/<?= htmlspecialchars($type['slug']) ?>"
-                            class="card-voyage__link">Explorer →</a>
+                            class="card-voyage__link"
+                            aria-label="Explorer — <?= htmlspecialchars($type['title']) ?>">Explorer →</a>
                     </div>
                 </article>
             <?php endforeach; ?>
@@ -252,23 +287,23 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                 <span class="process__number">01</span>
                 <h3 class="process__step-title">Nous imaginons votre voyage</h3>
                 <p class="process__step-text">C’est souvent le moment que je préfère.
-                Vous me racontez ce qui vous fait rêver : paysages, cultures, rencontres, rythme du voyage… Nous évoquons aussi la durée et le budget afin de construire un projet cohérent. 
-                À partir de là, je commence déjà à imaginer votre itinéraire.</p>
+                    Vous me racontez ce qui vous fait rêver : paysages, cultures, rencontres, rythme du voyage… Nous évoquons aussi la durée et le budget afin de construire un projet cohérent.
+                    À partir de là, je commence déjà à imaginer votre itinéraire.</p>
             </div>
 
             <div class="process__step">
                 <span class="process__number">02</span>
                 <h3 class="process__step-title"> Je conçois votre itinéraire</h3>
                 <p class="process__step-text">Pendant plusieurs jours, je travaille sur votre voyage : je recherche, compare, sélectionne les hébergements et imagine les expériences qui donneront du sens à votre parcours.
-                Chaque étape est pensée pour créer un voyage fluide et équilibré.</p>
+                    Chaque étape est pensée pour créer un voyage fluide et équilibré.</p>
             </div>
 
             <div class="process__step">
                 <span class="process__number">03</span>
                 <h3 class="process__step-title">Nous affinons chaque détail</h3>
                 <p class="process__step-text">Je vous présente l’itinéraire en détail.
-                Nous échangeons sur chaque étape et ajustons si nécessaire : modifier une étape, ajouter une expérience ou adapter le rythme du voyage.
-                Le projet se construit toujours en collaboration.</p>
+                    Nous échangeons sur chaque étape et ajustons si nécessaire : modifier une étape, ajouter une expérience ou adapter le rythme du voyage.
+                    Le projet se construit toujours en collaboration.</p>
             </div>
 
             <div class="process__step">
@@ -310,16 +345,27 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                 <?php foreach ($articles as $article) : ?>
                     <article class="card-article">
                         <div class="card-article__image-wrap">
-                            <img src="<?= APP_URL ?>/public/images/articles/<?= htmlspecialchars($article['file_name'] ?? 'placeholder.jpg') ?>"
-                                alt="<?= htmlspecialchars($article['title']) ?>"
-                                class="card-article__image">
+                            <?php if (!empty($article['file_name'])) : ?>
+                                <img src="<?= APP_URL . '/public/images/articles/' . htmlspecialchars($article['file_name']) ?>"
+                                    alt="<?= htmlspecialchars($article['title']) ?>"
+                                    class="card-article__image"
+                                    loading="lazy"
+                                    width="800" height="240">
+                            <?php else : ?>
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                    alt=""
+                                    class="card-article__image card-article__image--loading"
+                                    data-pexels-keyword="<?= htmlspecialchars(!empty($article['pexels_keyword']) ? $article['pexels_keyword'] : ($article['category_name'] ?? 'travel')) ?>"
+                                    width="800" height="240">
+                            <?php endif; ?>
                         </div>
                         <div class="card-article__content">
                             <span class="card-article__tag"><?= htmlspecialchars($article['category_name'] ?? 'Article') ?></span>
                             <h3 class="card-article__title"><?= htmlspecialchars($article['title']) ?></h3>
                             <p class="card-article__excerpt"><?= htmlspecialchars(substr($article['content'] ?? '', 0, 120)) ?>…</p>
                             <a href="<?= APP_URL ?>/inspirations/show/<?= htmlspecialchars($article['slug']) ?>"
-                                class="card-article__link">Lire l'article →</a>
+                                class="card-article__link"
+                                aria-label="Lire l'article : <?= htmlspecialchars($article['title']) ?>">Lire l'article →</a>
                         </div>
                     </article>
                 <?php endforeach; ?>
@@ -346,13 +392,13 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
             <div class="faq__list">
 
                 <div class="faq__item">
-                    <button class="faq__question" aria-expanded="false">
+                    <button class="faq__question" aria-expanded="false" aria-controls="faq-answer-1">
                         <span>Quelle est la différence entre un travel planner et une agence de voyage ?</span>
                         <svg class="faq__chevron" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#C58A60" stroke-width="1.5" aria-hidden="true">
                             <polyline points="6 9 12 15 18 9" />
                         </svg>
                     </button>
-                    <div class="faq__answer">
+                    <div class="faq__answer" id="faq-answer-1">
                         <p>Une agence de voyage vend directement des prestations touristiques comme des vols, des hôtels ou des circuits organisés.
                             Le travel planner accompagne le voyageur dans la conception de son itinéraire. Son rôle est d’écouter les envies, de comprendre le budget, de proposer un parcours cohérent et de partager son expertise pour construire un voyage véritablement sur mesure.
                             Le voyage devient ainsi une expérience pensée dans les moindres détails, adaptée au rythme et aux attentes de chacun.
@@ -361,28 +407,28 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                 </div>
 
                 <div class="faq__item">
-                    <button class="faq__question" aria-expanded="false">
+                    <button class="faq__question" aria-expanded="false" aria-controls="faq-answer-2">
                         <span>Pourquoi faire appel à un travel planner communément appelée créatrice de voyage ?</span>
                         <svg class="faq__chevron" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#C58A60" stroke-width="1.5" aria-hidden="true">
                             <polyline points="6 9 12 15 18 9" />
                         </svg>
                     </button>
-                    <div class="faq__answer">
+                    <div class="faq__answer" id="faq-answer-2">
                         <p>Aujourd’hui, organiser un voyage peut rapidement devenir complexe. Les informations disponibles en ligne sont nombreuses, parfois contradictoires, et il est souvent difficile d’évaluer la fiabilité des recommandations.
-                        Le travel planner permet de transformer cette phase de recherche en un accompagnement structuré. Grâce à son expérience et à son réseau de partenaires locaux, il construit un itinéraire cohérent, adapté aux saisons, aux distances et aux expériences que le voyageur souhaite vivre.
-                        L’objectif est simple : permettre aux voyageurs de se concentrer sur l’essentiel, l’expérience du voyage.
+                            Le travel planner permet de transformer cette phase de recherche en un accompagnement structuré. Grâce à son expérience et à son réseau de partenaires locaux, il construit un itinéraire cohérent, adapté aux saisons, aux distances et aux expériences que le voyageur souhaite vivre.
+                            L’objectif est simple : permettre aux voyageurs de se concentrer sur l’essentiel, l’expérience du voyage.
                         </p>
                     </div>
                 </div>
 
                 <div class="faq__item">
-                    <button class="faq__question" aria-expanded="false">
+                    <button class="faq__question" aria-expanded="false" aria-controls="faq-answer-3">
                         <span>Combien coûte un travel planner ?</span>
                         <svg class="faq__chevron" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#C58A60" stroke-width="1.5" aria-hidden="true">
                             <polyline points="6 9 12 15 18 9" />
                         </svg>
                     </button>
-                    <div class="faq__answer">
+                    <div class="faq__answer" id="faq-answer-3">
                         <p>Le coût d’un travel planner dépend généralement du niveau d’accompagnement proposé et de la complexité du voyage.
                             Chez Amanéa, l’approche est volontairement simple et transparente. Plutôt que de proposer des forfaits standardisés, chaque projet de voyage commence par une discussion approfondie afin de définir les envies, les priorités et surtout un budget réaliste.
                             À partir de ces éléments, l’itinéraire est construit de manière cohérente afin que chaque expérience s’inscrive naturellement dans l’enveloppe prévue.
@@ -393,13 +439,13 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                 </div>
 
                 <div class="faq__item">
-                    <button class="faq__question" aria-expanded="false">
+                    <button class="faq__question" aria-expanded="false" aria-controls="faq-answer-4">
                         <span>Est-ce que faire appel à un travel planner coûte plus cher qu’une agence de voyage ?</span>
                         <svg class="faq__chevron" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#C58A60" stroke-width="1.5" aria-hidden="true">
                             <polyline points="6 9 12 15 18 9" />
                         </svg>
                     </button>
-                    <div class="faq__answer">
+                    <div class="faq__answer" id="faq-answer-4">
                         <p>Un voyage sur mesure n’est pas une question de prix, mais d’expérience.
                             Lorsque l’on imagine un itinéraire avec un travel planner, l’objectif n’est pas de choisir un catalogue d’offres toutes faites. Il s’agit plutôt de construire un voyage qui correspond réellement à une envie, à un moment de vie, à une manière particulière de découvrir le monde.
                             Certaines personnes rêvent de naviguer doucement sur le Nil à bord d’une dahabieh traditionnelle, d’autres d’explorer les paysages sauvages de Madagascar ou de s’éveiller au lever du soleil face à une réserve africaine.
@@ -410,28 +456,28 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                 </div>
 
                 <div class="faq__item">
-                    <button class="faq__question" aria-expanded="false">
+                    <button class="faq__question" aria-expanded="false" aria-controls="faq-answer-5">
                         <span>Pour quels types de voyages faire appel à une créatrice de voyage ?</span>
                         <svg class="faq__chevron" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#C58A60" stroke-width="1.5" aria-hidden="true">
                             <polyline points="6 9 12 15 18 9" />
                         </svg>
                     </button>
-                    <div class="faq__answer">
+                    <div class="faq__answer" id="faq-answer-5">
                         <p>Le travel planner est particulièrement pertinent lorsque les voyageurs souhaitent créer une expérience personnalisée : un voyage de noces, un itinéraire immersif, un circuit sur plusieurs pays ou régions ou encore la découverte de destinations moins connues.
-                        Dans ces situations, l’expertise d’un professionnel permet de construire un parcours équilibré et de révéler des expériences souvent difficiles à identifier seul.
+                            Dans ces situations, l’expertise d’un professionnel permet de construire un parcours équilibré et de révéler des expériences souvent difficiles à identifier seul.
                         </p>
                     </div>
                 </div>
 
                 <div class="faq__item">
-                    <button class="faq__question" aria-expanded="false">
+                    <button class="faq__question" aria-expanded="false" aria-controls="faq-answer-6">
                         <span>Puis-je modifier mon voyage une fois la conception lancée ?</span>
                         <svg class="faq__chevron" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#C58A60" stroke-width="1.5" aria-hidden="true">
                             <polyline points="6 9 12 15 18 9" />
                         </svg>
                     </button>
-                    <div class="faq__answer">
-                        <p>Absolument. La validation se fait en plusieurs allers-retours jusqu'à 2 afin  vous soyez totalement satisfait(e).</p>
+                    <div class="faq__answer" id="faq-answer-6">
+                        <p>Absolument. La validation se fait en plusieurs allers-retours jusqu’à 2 afin vous soyez totalement satisfait(e).</p>
                     </div>
                 </div>
 
@@ -446,9 +492,11 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
 
 <section class="cta-final" id="contact">
 
-    <img src="<?= APP_URL ?>/public/images/cta-aerial.jpg"
+    <img src="<?= APP_URL ?>/public/images/cta-aerial.webp"
         alt="Vue aérienne d'une île tropicale entourée d'un océan turquoise"
-        class="cta-final__image">
+        class="cta-final__image"
+        loading="lazy"
+        width="4020" height="3015">
 
     <div class="cta-final__overlay"></div>
 
@@ -459,7 +507,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
             Un échange découverte gratuit, sans engagement. 30 minutes pour co-créer quelque chose d'unique.
         </p>
         <div class="cta-final__buttons">
-            <a href="<?= APP_URL ?>/contact" class="btn-primary btn-lg">Créons votre voyage →</a>
+            <a href="<?= APP_URL ?>/contact" class="btn-primary btn-lg">Créons votre voyage</a>
             <a href="<?= APP_URL ?>/voyages" class="btn-ghost btn-lg">Découvrir nos voyages</a>
         </div>
     </div>
@@ -487,6 +535,98 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
             }
         });
     });
+
+    // Chargement asynchrone des images Pexels
+    document.querySelectorAll('img[data-pexels-keyword]').forEach(function (img) {
+        var keyword = img.dataset.pexelsKeyword;
+        fetch('<?= APP_URL ?>/api/pexels-photo?keyword=' + encodeURIComponent(keyword))
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                if (data.url) {
+                    img.src = data.url;
+                    img.classList.remove('card-article__image--loading');
+                }
+            })
+            .catch(function () { /* silencieux si l'API est indisponible */ });
+    });
+</script>
+
+<!-- Schema.org JSON-LD — TravelAgency + FAQPage -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "TravelAgency",
+            "name": "Amanéa Voyage",
+            "description": "Travel planner éthique et créatrice de voyages sur mesure. Voyages de noces, au féminin, en groupe ou personnalisés.",
+            "url": "<?= APP_URL ?>",
+            "email": "contact@amaneavoyage.fr",
+            "founder": {
+                "@type": "Person",
+                "name": "Habibi Nora"
+            },
+            "areaServed": "World",
+            "sameAs": [
+                "https://www.instagram.com/amanea_voyage/",
+                "https://www.facebook.com/Amanea.voyage"
+            ]
+        },
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Quelle est la différence entre un travel planner et une agence de voyage ?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Une agence de voyage vend directement des prestations touristiques comme des vols, des hôtels ou des circuits organisés. Le travel planner accompagne le voyageur dans la conception de son itinéraire, en écoutant les envies, comprenant le budget et proposant un parcours sur mesure adapté au rythme et aux attentes de chacun."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Pourquoi faire appel à un travel planner communément appelée créatrice de voyage ?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Le travel planner transforme la phase de recherche en un accompagnement structuré. Grâce à son expérience et à son réseau de partenaires locaux, il construit un itinéraire cohérent, adapté aux saisons, aux distances et aux expériences souhaitées. L'objectif : permettre aux voyageurs de se concentrer sur l'essentiel — l'expérience du voyage."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Combien coûte un travel planner ?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Chez Amanéa, l'approche est simple et transparente. Chaque projet commence par une discussion approfondie sur les envies, priorités et budget. Une ligne dédiée à la planification apparaît clairement dans le devis global du voyage, sans surcoût inattendu."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Est-ce que faire appel à un travel planner coûte plus cher qu'une agence de voyage ?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Un voyage sur mesure n'est pas une question de prix, mais d'expérience. Le travel planner construit un voyage qui correspond réellement à une envie, à un moment de vie, de manière cohérente et profondément personnelle."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Pour quels types de voyages faire appel à une créatrice de voyage ?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Le travel planner est particulièrement pertinent pour les voyages de noces, itinéraires immersifs, circuits sur plusieurs pays ou la découverte de destinations moins connues. L'expertise d'un professionnel permet de construire un parcours équilibré et de révéler des expériences difficiles à identifier seul."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Puis-je modifier mon voyage une fois la conception lancée ?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Absolument. La validation se fait en plusieurs allers-retours jusqu'à 2 afin que vous soyez totalement satisfait(e)."
+                    }
+                }
+            ]
+        }
+    ]
+}
 </script>
 
 <?php require_once APP_ROOT . '/app/views/layouts/footer.php'; ?>

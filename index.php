@@ -18,7 +18,7 @@ session_start();
 header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: strict-origin-when-cross-origin');
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'");
+// header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'");
 
 // On définit le chemin racine du projet
 define('APP_ROOT', __DIR__);

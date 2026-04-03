@@ -1,3 +1,5 @@
+</main>
+
 <!-- =====================================================
      FOOTER
      4 colonnes desktop / 1 colonne mobile
@@ -13,7 +15,7 @@
             <!-- Col 1 — Brand -->
             <div class="footer__brand">
                 <a href="<?= APP_URL ?>/home">
-                    <img src="<?= APP_URL ?>/public/images/logo-white.svg"
+                    <img src="<?= APP_URL ?>/public/images/LOGO_AMANEA.webp"
                          alt="Amanéa Voyage — Création de voyage éthique et sur mesure"
                          class="footer__logo">
                 </a>
@@ -35,13 +37,14 @@
             <div class="footer__col">
                 <h3 class="footer__col-title">Contact</h3>
                 <a href="mailto:contact@amaneavoyage.fr" class="footer__link">
-                    amaneavoyages@gmail.com                </a>
+                    amaneavoyages@gmail.com
+                </a>
 
                 <!-- Réseaux sociaux -->
                 <div class="footer__social">
 
                     <!-- Instagram -->
-                    <a href="#"
+                    <a href="https://www.instagram.com/amanea_voyage/"
                        class="footer__social-link"
                        aria-label="Suivre Amanéa Voyage sur Instagram"
                        target="_blank"
@@ -54,7 +57,7 @@
                     </a>
 
                     <!-- Facebook -->
-                    <a href="#"
+                    <a href="https://www.facebook.com/Amanea.voyage"
                        class="footer__social-link"
                        aria-label="Suivre Amanéa Voyage sur Facebook"
                        target="_blank"
@@ -87,5 +90,31 @@
     </div>
 </footer>
 
+
+<script>
+(function () {
+    var video = document.querySelector('.hero__video');
+    if (!video) return;
+
+    // --- Fallback : cache la vidéo, révèle l'image en dessous ---
+    function hideVideo() {
+        video.removeAttribute('autoplay');
+        video.pause();
+        video.classList.add('is-hidden');
+    }
+
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var conn          = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    var slowConn      = conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g');
+
+    if (reducedMotion || slowConn) { hideVideo(); return; }
+    video.addEventListener('error', hideVideo);
+
+    // --- Fin de vidéo : figée sur la dernière frame, repart au rechargement de page ---
+    video.addEventListener('ended', function () {
+        video.pause();
+    });
+})();
+</script>
 </body>
 </html>

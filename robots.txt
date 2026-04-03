@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Zones privées — accès interdit aux crawlers
+Disallow: /admin/
+Disallow: /client/
+Disallow: /api/
+
+Sitemap: https://www.amaneavoyage.fr/sitemap.xml

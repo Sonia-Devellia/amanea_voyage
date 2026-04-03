@@ -23,6 +23,10 @@
 html {
     font-size: $font-size-base;
     scroll-behavior: smooth;
+
+    @media (prefers-reduced-motion: reduce) {
+        scroll-behavior: auto;
+    }
 }
 
 body {
@@ -88,8 +92,49 @@ select {
     font-size: $font-size-base;
     color: $color-dark;
     border: none;
-    outline: none;
     background: none;
+}
+
+// ------------------------------------------------------------
+// Focus visible — ring terracotta pour la navigation clavier
+// :focus:not(:focus-visible) supprime le ring au clic souris
+// ------------------------------------------------------------
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid $color-terra;
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+// ------------------------------------------------------------
+// Skip link — lien d'évitement (WCAG 2.4.1 — Level A)
+// Visible uniquement au focus clavier, sinon hors écran
+// ------------------------------------------------------------
+
+.skip-link {
+    position: absolute;
+    top: -200%;
+    left: 16px;
+    z-index: 9999;
+    padding: 12px 24px;
+    background-color: $color-terra;
+    color: $color-white;
+    font-family: $font-body;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    border-radius: 0 0 $radius-card $radius-card;
+    text-decoration: none;
+    transition: top 0.15s ease;
+
+    &:focus-visible {
+        top: 0;
+        outline: 2px solid $color-white;
+        outline-offset: -4px;
+    }
 }
 
 // ------------------------------------------------------------

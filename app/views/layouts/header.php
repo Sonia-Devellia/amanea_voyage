@@ -18,9 +18,12 @@
     <meta property="og:url"         content="<?= APP_URL . strtok($_SERVER['REQUEST_URI'], '?') ?>">
     <meta property="og:image"       content="<?= APP_URL ?>/public/images/og-default.jpg">
     <meta name="theme-color"        content="#4A3C32">
+    <?php if (isset($headExtra)) echo $headExtra; ?>
 </head>
 <body>
 
+<!-- Skip link — lien d'évitement clavier (WCAG 2.4.1 Level A) -->
+<a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
 <!-- =====================================================
      HEADER
@@ -53,7 +56,7 @@
     <div class="header__right">
         <a href="<?= APP_URL ?>/client/login" class="header__client">
             <div class="header__client-icon">
-                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="#C58A60" stroke-width="1.5">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#C58A60" stroke-width="1.5">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                     <circle cx="12" cy="7" r="4"/>
                 </svg>
@@ -200,3 +203,5 @@
     drawerClose.addEventListener('click', closeDrawer);
     drawerOverlay.addEventListener('click', closeDrawer);
 </script>
+
+<main id="main-content">

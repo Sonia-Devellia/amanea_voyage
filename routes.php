@@ -11,6 +11,7 @@
 // directement en (int $id) au contrôleur, ce qui conserve le typage.
 // ============================================================
 
+use App\Controllers\ApiController;
 use App\Controllers\HomeController;
 use App\Controllers\AproposController;
 use App\Controllers\VoyagesController;
@@ -26,6 +27,12 @@ use App\Controllers\Admin\AdminMediaController;
 use App\Controllers\Admin\AdminClientController;
 use App\Controllers\Admin\AdminProjectController;
 use App\Controllers\Admin\AdminMessageController;
+
+// ---------------------------------------------------------------------
+// API JSON — endpoints consommés par le frontend
+// ---------------------------------------------------------------------
+
+$router->get('api/pexels-photo', [ApiController::class, 'pexelsPhoto']);
 
 // ---------------------------------------------------------------------
 // ESPACE PUBLIC

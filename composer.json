@@ -20,6 +20,7 @@
         "psr-4": {
             "Config\\":                   "config/",
             "App\\Models\\":              "app/models/",
+            "App\\Services\\":             "app/services/",
             "App\\Controllers\\":         "app/controllers/",
             "App\\Controllers\\Admin\\":  "app/controllers/admin/",
             "App\\Controllers\\Client\\": "app/controllers/client/"

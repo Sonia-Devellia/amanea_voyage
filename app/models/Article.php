@@ -43,7 +43,7 @@ class Article extends Model
         ]);
     }
 
-   
+
     // MAJ un article existant
     public function update(int $id, array $data): bool
     {
@@ -67,9 +67,9 @@ class Article extends Model
         ]);
     }
 
-   
+
     // Publie un article : passe le statut à 'publie' et enregistre la date de publication
-   public function publish(int $id): bool
+    public function publish(int $id): bool
     {
         $stmt = $this->db->prepare("
             UPDATE {$this->table}
@@ -91,15 +91,20 @@ class Article extends Model
     public function findPublished(): array
     {
         $stmt = $this->db->query("
-            SELECT * FROM {$this->table}
-            WHERE status = 'publie'
-            ORDER BY publication_date DESC
+            SELECT a.*, m.file_name, c.name AS category_name, d.pexels_keyword
+            FROM {$this->table} a
+            LEFT JOIN MEDIA m ON m.Id_MEDIA = a.Id_MEDIA
+            LEFT JOIN BELONGS_TO bt ON bt.Id_ARTICLE = a.Id_ARTICLE
+            LEFT JOIN CATEGORY c ON c.Id_CATEGORY = bt.Id_CATEGORY
+            LEFT JOIN DESTINATION d ON d.Id_DESTINATION = a.Id_DESTINATION
+            WHERE a.status = 'publie'
+            ORDER BY a.publication_date DESC
         ");
 
         return $stmt->fetchAll();
     }
 
-   
+
     // Récupère un article par son slug
     public function findBySlug(string $slug): array|false
     {
@@ -193,14 +198,14 @@ class Article extends Model
             SET Id_MEDIA = :id_media
             WHERE {$this->primaryKey} = :id
         ");
- 
+
         return $stmt->execute([
             ':id_media' => $idMedia,
             ':id'       => $idArticle,
         ]);
     }
 
- 
+
 
     // -------------------------------------------------------------------------
     // Ajoute une catégorie à un article

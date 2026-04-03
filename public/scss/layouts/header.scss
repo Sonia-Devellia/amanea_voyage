@@ -101,7 +101,7 @@
 
 .header__burger-line {
     display: block;
-    height: 1.5px;
+    height: 2px;
     background-color: $color-white;
     transition: background-color $transition-normal;
 
@@ -113,7 +113,7 @@
 
 .header__burger-label {
     font-family: $font-body;
-    font-size: $font-size-label;    // 11px
+    font-size: 14px;    
     font-weight: $font-weight-regular;
     letter-spacing: $ls-label;     // 4px
     text-transform: uppercase;
@@ -150,7 +150,7 @@
 
 .header__nav-link {
     font-family: $font-body;
-    font-size: $font-size-xs;       // 13px
+    font-size: $font-size-sm;       // 14px
     font-weight: $font-weight-regular; // 400
     letter-spacing: $ls-sm;         // 0.5px
     color: $color-white;
@@ -178,7 +178,7 @@
     align-items: center;
     gap: 8px;
     font-family: $font-body;
-    font-size: $font-size-xxs;      // 12px
+    font-size: $font-size-sm;      // 14px
     font-weight: $font-weight-regular;
     color: $color-white;
     text-decoration: none;
@@ -190,8 +190,8 @@
 }
 
 .header__client-icon {
-    width: 28px;
-    height: 28px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     border: 1px solid $color-white;
     display: flex;
@@ -207,7 +207,7 @@
     border: 1px solid $color-white;
     border-radius: $radius-btn;
     font-family: $font-body;
-    font-size: $font-size-xxs;
+    font-size: $font-size-sm;
     font-weight: $font-weight-medium;
     padding: 8px 20px;
     text-decoration: none;

@@ -17,8 +17,8 @@ class HomeController extends Controller
     // Le constructeur instancie les Models dont on a besoin
     public function __construct()
     {
-        $this->articleModel     = new Article();
-        $this->typeModel        = new Type();
+        $this->articleModel = new Article();
+        $this->typeModel    = new Type();
     }
 
     // -------------------------------------------------------------------------
@@ -30,7 +30,6 @@ class HomeController extends Controller
         $articles = $this->articleModel->findPublished();
         $articles = array_slice($articles, 0, 3);
 
-        // On récupère toutes les formules avec leur image pour la section formules
         $types = $this->typeModel->findAllWithMedia();
 
         // On envoie les données à la vue
