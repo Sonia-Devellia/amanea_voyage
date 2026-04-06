@@ -26,9 +26,18 @@ class HomeController extends Controller
     // -------------------------------------------------------------------------
     public function index(): void
     {
-        // On récupère les 3 derniers articles publiés pour la section blog
-        $articles = $this->articleModel->findPublished();
-        $articles = array_slice($articles, 0, 3);
+        // On récupère les derniers articles publiés, 1 par catégorie (max 3)
+        $allArticles = $this->articleModel->findPublished();
+        $articles = [];
+        $seenCategories = [];
+        foreach ($allArticles as $article) {
+            $cat = $article['category_name'] ?? 'sans-categorie';
+            if (!in_array($cat, $seenCategories)) {
+                $seenCategories[] = $cat;
+                $articles[] = $article;
+            }
+            if (count($articles) === 3) break;
+        }
 
         $types = $this->typeModel->findAllWithMedia();
 

@@ -20,6 +20,7 @@ class ApiController extends Controller
         header('Content-Type: application/json');
 
         $keyword = trim($_GET['keyword'] ?? '');
+        $seed    = abs((int)($_GET['seed'] ?? 0));
 
         if (empty($keyword)) {
             echo json_encode(['url' => null]);
@@ -27,7 +28,7 @@ class ApiController extends Controller
         }
 
         $pexels = new PexelsService();
-        $url    = $pexels->getPhoto($keyword);
+        $url    = $pexels->getPhoto($keyword, 'large', $seed);
 
         echo json_encode(['url' => $url]);
     }

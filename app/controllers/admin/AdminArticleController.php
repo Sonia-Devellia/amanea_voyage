@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Destination;
 use App\Models\Media;
 
 // AdminArticleController gère la création et la modification des articles du blog
@@ -16,14 +17,16 @@ class AdminArticleController extends Controller
     // Les Models utilisés dans ce Controller
     private Article $articleModel;
     private Category $categoryModel;
+    private Destination $destinationModel;
     private Media $mediaModel;
 
     // Le constructeur instancie les Models dont on a besoin
     public function __construct()
     {
-        $this->articleModel  = new Article();
-        $this->categoryModel = new Category();
-        $this->mediaModel    = new Media();
+        $this->articleModel     = new Article();
+        $this->categoryModel    = new Category();
+        $this->destinationModel = new Destination();
+        $this->mediaModel       = new Media();
     }
 
 
@@ -36,7 +39,7 @@ class AdminArticleController extends Controller
         // On récupère tous les articles
         $articles = $this->articleModel->findAll();
 
-        $this->render('admin/blog/index', [
+        $this->render('admin/blog/articles', [
             'articles' => $articles,
         ]);
     }
@@ -47,13 +50,10 @@ class AdminArticleController extends Controller
         // On vérifie que l'admin est bien connecté
         $this->requireAdmin();
 
-        // On récupère les catégories et médias pour les listes déroulantes
-        $categories = $this->categoryModel->findAll();
-        $medias     = $this->mediaModel->findAll();
-
         $this->render('admin/blog/create', [
-            'categories' => $categories,
-            'medias'     => $medias,
+            'categories'   => $this->categoryModel->findAll(),
+            'destinations' => $this->destinationModel->findAll(),
+            'medias'       => $this->mediaModel->findAll(),
         ]);
     }
 
@@ -74,14 +74,14 @@ class AdminArticleController extends Controller
 
         // On récupère et nettoie les données du formulaire
         $data = [
-            'title'          => htmlspecialchars(trim($_POST['title']       ?? '')),
-            'content'        => trim($_POST['content']                      ?? ''),
-            'slug'           => htmlspecialchars(trim($_POST['slug']        ?? '')),
-            'id_media'       => !empty($_POST['id_media'])       ? (int) $_POST['id_media']       : null,
-            'id_admin'       => $_SESSION['admin']['id'],
-            // id_destination est renseigné uniquement si la catégorie est "Destination"
-            // Il est saisi manuellement et sert à alimenter l'API Pexels
-            'id_destination' => !empty($_POST['id_destination']) ? (int) $_POST['id_destination'] : null,
+            'title'           => htmlspecialchars(trim($_POST['title']          ?? '')),
+            'content'         => trim($_POST['content']                         ?? ''),
+            'slug'            => htmlspecialchars(trim($_POST['slug']           ?? '')),
+            'id_media'        => !empty($_POST['id_media'])        ? (int) $_POST['id_media']        : null,
+            'id_admin'        => $_SESSION['admin']['id'],
+            'id_destination'  => !empty($_POST['id_destination'])  ? (int) $_POST['id_destination']  : null,
+            // Mot-clé Pexels défini par l'admin — prioritaire sur destination et catégorie
+            'pexels_keyword'  => trim($_POST['pexels_keyword'] ?? ''),
         ];
 
         // Validation des champs obligatoires
@@ -126,14 +126,11 @@ class AdminArticleController extends Controller
             return;
         }
 
-        // On récupère les catégories et médias pour les listes déroulantes
-        $categories = $this->categoryModel->findAll();
-        $medias     = $this->mediaModel->findAll();
-
         $this->render('admin/blog/edit', [
-            'article'    => $article,
-            'categories' => $categories,
-            'medias'     => $medias,
+            'article'      => $article,
+            'categories'   => $this->categoryModel->findAll(),
+            'destinations' => $this->destinationModel->findAll(),
+            'medias'       => $this->mediaModel->findAll(),
         ]);
     }
 
@@ -152,11 +149,12 @@ class AdminArticleController extends Controller
 
         // On récupère et nettoie les données du formulaire
         $data = [
-            'title'          => htmlspecialchars(trim($_POST['title']       ?? '')),
-            'content'        => trim($_POST['content']                      ?? ''),
-            'slug'           => htmlspecialchars(trim($_POST['slug']        ?? '')),
+            'title'          => htmlspecialchars(trim($_POST['title']         ?? '')),
+            'content'        => trim($_POST['content']                        ?? ''),
+            'slug'           => htmlspecialchars(trim($_POST['slug']          ?? '')),
             'id_media'       => !empty($_POST['id_media'])       ? (int) $_POST['id_media']       : null,
             'id_destination' => !empty($_POST['id_destination']) ? (int) $_POST['id_destination'] : null,
+            'pexels_keyword' => trim($_POST['pexels_keyword'] ?? ''),
         ];
 
         // Validation des champs obligatoires

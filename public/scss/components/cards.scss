@@ -184,7 +184,7 @@
         padding: $spacing-sm $spacing-xs;
         display: flex;
         flex-direction: column;
-        gap: $spacing-xs;
+        gap: $spacing-sm;
     }
 
     // Badge catégorie
@@ -199,6 +199,14 @@
         border-radius: $radius-badge;
         background-color: $color-sage;
         color: $color-white;
+
+        // Variantes de couleur selon la catégorie
+        &--destination   { background-color: $color-terra;     color: $color-white; }
+        &--inspiration   { background-color: $color-blue-grey; color: $color-white; }
+        &--conseil       { background-color: $color-sage;      color: $color-white; }
+        &--coup-de-coeur { background-color: $color-rose;      color: $color-white; }
+        &--actualite     { background-color: $color-grey;      color: $color-white; }
+        &--experience    { background-color: $color-cream;     color: $color-dark;  }
     }
 
     // Titre article
@@ -217,10 +225,6 @@
         font-weight: $font-weight-light;
         color: $color-grey;
         line-height: $lh-normal;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
     }
 
     // Lien "Lire l'article →"

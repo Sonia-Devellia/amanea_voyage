@@ -34,8 +34,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
            preload="none"
            poster="<?= APP_URL ?>/public/images/hero-home.webp"
            aria-hidden="true">
-        <source src="<?= APP_URL ?>/public/videos/hero-home.webm" type="video/webm">
-        <source src="<?= APP_URL ?>/public/videos/hero-home.mp4"  type="video/mp4">
+        <source src="<?= APP_URL ?>/public/videos/hero-home.mp4" type="video/mp4">
     </video>
 
     <!-- Overlay gradient -->
@@ -355,14 +354,30 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                                 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                                     alt=""
                                     class="card-article__image card-article__image--loading"
-                                    data-pexels-keyword="<?= htmlspecialchars(!empty($article['pexels_keyword']) ? $article['pexels_keyword'] : ($article['category_name'] ?? 'travel')) ?>"
+                                    data-pexels-keyword="<?= htmlspecialchars(
+                                        !empty($article['article_pexels_keyword'])      ? $article['article_pexels_keyword']
+                                        : (!empty($article['destination_pexels_keyword']) ? $article['destination_pexels_keyword']
+                                        : trim(($article['category_name'] ?? 'voyage') . ' voyage'))
+                                    ) ?>"
+                                    data-article-id="<?= (int)$article['Id_ARTICLE'] ?>"
                                     width="800" height="240">
                             <?php endif; ?>
                         </div>
                         <div class="card-article__content">
-                            <span class="card-article__tag"><?= htmlspecialchars($article['category_name'] ?? 'Article') ?></span>
+                            <?php
+                            $tagClass = match (true) {
+                                str_contains($article['category_slug'] ?? '', 'destination')  => 'card-article__tag--destination',
+                                str_contains($article['category_slug'] ?? '', 'inspiration')  => 'card-article__tag--inspiration',
+                                str_contains($article['category_slug'] ?? '', 'conseil')      => 'card-article__tag--conseil',
+                                str_contains($article['category_slug'] ?? '', 'coup')         => 'card-article__tag--coup-de-coeur',
+                                str_contains($article['category_slug'] ?? '', 'actualite')    => 'card-article__tag--actualite',
+                                str_contains($article['category_slug'] ?? '', 'experience')   => 'card-article__tag--experience',
+                                default                                                        => '',
+                            };
+                            ?>
+                            <span class="card-article__tag <?= $tagClass ?>"><?= htmlspecialchars($article['category_name'] ?? 'Article') ?></span>
                             <h3 class="card-article__title"><?= htmlspecialchars($article['title']) ?></h3>
-                            <p class="card-article__excerpt"><?= htmlspecialchars(substr($article['content'] ?? '', 0, 120)) ?>…</p>
+                            <p class="card-article__excerpt"><?= htmlspecialchars(substr($article['content'] ?? '', 0, 200)) ?>…</p>
                             <a href="<?= APP_URL ?>/inspirations/show/<?= htmlspecialchars($article['slug']) ?>"
                                 class="card-article__link"
                                 aria-label="Lire l'article : <?= htmlspecialchars($article['title']) ?>">Lire l'article →</a>
@@ -539,7 +554,8 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
     // Chargement asynchrone des images Pexels
     document.querySelectorAll('img[data-pexels-keyword]').forEach(function (img) {
         var keyword = img.dataset.pexelsKeyword;
-        fetch('<?= APP_URL ?>/api/pexels-photo?keyword=' + encodeURIComponent(keyword))
+        var seed    = img.dataset.articleId || '0';
+        fetch('<?= APP_URL ?>/api/pexels-photo?keyword=' + encodeURIComponent(keyword) + '&seed=' + encodeURIComponent(seed))
             .then(function (res) { return res.json(); })
             .then(function (data) {
                 if (data.url) {

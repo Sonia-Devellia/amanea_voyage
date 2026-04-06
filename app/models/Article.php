@@ -26,9 +26,9 @@ class Article extends Model
     {
         $stmt = $this->db->prepare("
             INSERT INTO {$this->table}
-                (title, content, status, publication_date, slug, Id_MEDIA, Id_ADMIN, Id_DESTINATION)
+                (title, content, status, publication_date, slug, Id_MEDIA, Id_ADMIN, Id_DESTINATION, pexels_keyword)
             VALUES
-                (:title, :content, :status, :publication_date, :slug, :id_media, :id_admin, :id_destination)
+                (:title, :content, :status, :publication_date, :slug, :id_media, :id_admin, :id_destination, :pexels_keyword)
         ");
 
         return $stmt->execute([
@@ -37,9 +37,10 @@ class Article extends Model
             ':status'           => 'brouillon',
             ':publication_date' => null,
             ':slug'             => $data['slug'],
-            ':id_media'         => $data['id_media']       ?? null,
+            ':id_media'         => $data['id_media']        ?? null,
             ':id_admin'         => $data['id_admin'],
-            ':id_destination'   => $data['id_destination'] ?? null,
+            ':id_destination'   => $data['id_destination']  ?? null,
+            ':pexels_keyword'   => !empty($data['pexels_keyword']) ? trim($data['pexels_keyword']) : null,
         ]);
     }
 
@@ -49,11 +50,12 @@ class Article extends Model
     {
         $stmt = $this->db->prepare("
             UPDATE {$this->table}
-            SET title          = :title,
-                content        = :content,
-                slug           = :slug,
-                Id_MEDIA       = :id_media,
-                Id_DESTINATION = :id_destination
+            SET title           = :title,
+                content         = :content,
+                slug            = :slug,
+                Id_MEDIA        = :id_media,
+                Id_DESTINATION  = :id_destination,
+                pexels_keyword  = :pexels_keyword
             WHERE {$this->primaryKey} = :id
         ");
 
@@ -63,6 +65,7 @@ class Article extends Model
             ':slug'           => $data['slug'],
             ':id_media'       => $data['id_media']       ?? null,
             ':id_destination' => $data['id_destination'] ?? null,
+            ':pexels_keyword' => !empty($data['pexels_keyword']) ? trim($data['pexels_keyword']) : null,
             ':id'             => $id,
         ]);
     }
@@ -91,7 +94,12 @@ class Article extends Model
     public function findPublished(): array
     {
         $stmt = $this->db->query("
-            SELECT a.*, m.file_name, c.name AS category_name, d.pexels_keyword
+            SELECT a.*,
+                   m.file_name,
+                   c.name AS category_name,
+                   c.slug AS category_slug,
+                   a.pexels_keyword AS article_pexels_keyword,
+                   d.pexels_keyword AS destination_pexels_keyword
             FROM {$this->table} a
             LEFT JOIN MEDIA m ON m.Id_MEDIA = a.Id_MEDIA
             LEFT JOIN BELONGS_TO bt ON bt.Id_ARTICLE = a.Id_ARTICLE
@@ -123,9 +131,17 @@ class Article extends Model
     public function findByCategory(int $idCategory): array
     {
         $stmt = $this->db->prepare("
-            SELECT a.*
+            SELECT a.*,
+                   m.file_name,
+                   c.name AS category_name,
+                   c.slug AS category_slug,
+                   a.pexels_keyword AS article_pexels_keyword,
+                   d.pexels_keyword AS destination_pexels_keyword
             FROM {$this->table} a
+            LEFT JOIN MEDIA m ON m.Id_MEDIA = a.Id_MEDIA
             INNER JOIN BELONGS_TO bt ON bt.Id_ARTICLE = a.Id_ARTICLE
+            LEFT JOIN CATEGORY c ON c.Id_CATEGORY = bt.Id_CATEGORY
+            LEFT JOIN DESTINATION d ON d.Id_DESTINATION = a.Id_DESTINATION
             WHERE bt.Id_CATEGORY = :id_category
             AND a.status = 'publie'
             ORDER BY a.publication_date DESC

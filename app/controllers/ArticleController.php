@@ -3,9 +3,10 @@
 // On déclare le namespace 
 namespace App\Controllers;
 
-// On importe les Models 
+// On importe les Models
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Destination;
 use App\Models\Media;
 
 // ArticleController gère le blog public
@@ -14,14 +15,16 @@ class ArticleController extends Controller
     // Les Models utilisés dans ce Controller
     private Article $articleModel;
     private Category $categoryModel;
+    private Destination $destinationModel;
     private Media $mediaModel;
 
     // Le constructeur instancie les Models dont on a besoin
     public function __construct()
     {
-        $this->articleModel  = new Article();
-        $this->categoryModel = new Category();
-        $this->mediaModel    = new Media();
+        $this->articleModel     = new Article();
+        $this->categoryModel    = new Category();
+        $this->destinationModel = new Destination();
+        $this->mediaModel       = new Media();
     }
 
     
@@ -29,14 +32,29 @@ class ArticleController extends Controller
     public function index(): void
     {
         // Récupère tous les articles publiés
-        $articles = $this->articleModel->findPublished();
+        $allArticles = $this->articleModel->findPublished();
 
-        // récupère toutes les catégories pour le menu de filtrage
-        $categories = $this->categoryModel->findAll();
+        // Article à la une = le premier, retiré du pool paginé
+        $featured = !empty($allArticles) ? array_shift($allArticles) : null;
 
-        $this->render('public/articles', [
-            'articles'   => $articles,
-            'categories' => $categories,
+        // Pagination — 6 articles par page
+        $perPage     = 6;
+        $totalItems  = count($allArticles);
+        $totalPages  = (int) ceil($totalItems / $perPage);
+        $currentPage = max(1, (int) ($_GET['page'] ?? 1));
+        $offset      = ($currentPage - 1) * $perPage;
+
+        $articles = array_slice($allArticles, $offset, $perPage);
+
+        $this->render('public/inspirations', [
+            'featured'        => $featured,
+            'articles'        => $articles,
+            'categories'      => $this->categoryModel->findAll(),
+            'destinations'    => $this->destinationModel->findAll(),
+            'currentCategory' => null,
+            'currentPage'     => $currentPage,
+            'totalPages'      => $totalPages,
+            'totalItems'      => $totalItems,
         ]);
     }
 
@@ -84,10 +102,15 @@ class ArticleController extends Controller
         // On récupère tous les articles publiés de cette catégorie
         $articles = $this->articleModel->findByCategory($category['Id_CATEGORY']);
 
-        $this->render('public/articles', [
+        $this->render('public/inspirations', [
             'articles'        => $articles,
-            'currentCategory' => $category,
+            'featured'        => null,
             'categories'      => $this->categoryModel->findAll(),
+            'destinations'    => $this->destinationModel->findAll(),
+            'currentCategory' => $category['slug'],
+            'currentPage'     => 1,
+            'totalPages'      => 1,
+            'totalItems'      => count($articles),
         ]);
     }
 }

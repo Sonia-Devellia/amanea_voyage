@@ -39,18 +39,20 @@ class PexelsService
     //                           - aucune photo trouvée
     //                           - taille demandée inexistante dans la réponse
     // -------------------------------------------------------------------------
-    public function getPhoto(string $keyword, string $size = 'large'): ?string
+    public function getPhoto(string $keyword, string $size = 'large', int $seed = 0): ?string
     {
         // Garde-fou : inutile d'appeler l'API sans clé ou sans mot-clé
         if (empty($this->apiKey) || empty($keyword)) {
             return null;
         }
 
-        // http_build_query() encode proprement les paramètres en query string
-        // per_page=1 → on ne veut qu'une seule photo pour limiter la réponse
+        // per_page=15 → on récupère un pool de photos pour varier selon le seed
+        // Le seed (Id_ARTICLE) permet de choisir une photo différente par article
+        // même quand plusieurs articles partagent le même mot-clé
+        $perPage = 15;
         $url = self::API_URL . '?' . http_build_query([
             'query'    => $keyword,
-            'per_page' => 1,
+            'per_page' => $perPage,
             'size'     => $size,
         ]);
 
@@ -84,23 +86,16 @@ class PexelsService
         // Décodage du JSON : Pexels retourne { page, per_page, photos: [...], ... }
         $data = json_decode($response, true);
 
-        // photos[0] peut être absent si le mot-clé ne correspond à rien
-        if (empty($data['photos'][0])) {
+        if (empty($data['photos'])) {
             return null;
         }
 
-        // Structure d'un objet photo Pexels :
-        //   $photo['src'] = [
-        //     'original'  => '...',
-        //     'large2x'   => '...',
-        //     'large'     => '...',   ← défaut
-        //     'medium'    => '...',
-        //     'small'     => '...',
-        //     'portrait'  => '...',
-        //     'landscape' => '...',
-        //     'tiny'      => '...',
-        //   ]
-        return $data['photos'][0]['src'][$size] ?? null;
+        // Sélection de la photo via le seed : Id_ARTICLE % nombre de résultats
+        // → articles différents = photos différentes, même avec le même mot-clé
+        // → résultat déterministe (pas de changement au refresh)
+        $index = $seed % count($data['photos']);
+
+        return $data['photos'][$index]['src'][$size] ?? null;
     }
 
     // -------------------------------------------------------------------------
