@@ -1,0 +1,536 @@
+// ============================================================
+// pages/_apropos.scss — Page L'Histoire d'Amanéa
+// ============================================================
+
+// ------------------------------------------------------------
+// Hero
+// ------------------------------------------------------------
+
+.apropos-hero {
+    position: relative;
+    width: 100%;
+    height: 92vh;
+    min-height: 560px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 40%;
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to bottom,
+            rgba(74, 60, 50, 0.55) 0%,
+            rgba(74, 60, 50, 0.35) 50%,
+            rgba(74, 60, 50, 0.65) 100%
+        );
+    }
+
+    &__content {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        padding: 0 $spacing-md;
+    }
+
+    &__scroll {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__scroll-line {
+        width: 1px;
+        height: 48px;
+        background-color: $color-white;
+        animation: scrollLine 2s ease-in-out infinite;
+    }
+
+    &__label {
+        font-family: $font-body;
+        font-size: $font-size-label;
+        font-weight: $font-weight-regular;
+        letter-spacing: $ls-label;
+        text-transform: uppercase;
+        color: $color-cream;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__title {
+        display: flex;
+        flex-direction: column;
+        font-family: $font-title;
+        font-weight: $font-weight-light;
+        font-size: clamp(52px, 7vw, 88px);
+        line-height: $lh-tight;
+        margin-bottom: $spacing-lg;
+        letter-spacing: 2px;
+
+        &--italic { font-style: italic; color: $color-white; }
+        &--terra   { color: $color-terra; }
+    }
+
+    &__subtitle {
+        font-family: $font-body;
+        font-size: $font-size-base;
+        font-weight: $font-weight-light;
+        color: rgba(255, 255, 255, 0.88);
+        line-height: 1.8;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+}
+
+@keyframes scrollLine {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50%       { opacity: 0.9; transform: scaleY(0.7); }
+}
+
+// ------------------------------------------------------------
+// Intro Nora
+// ------------------------------------------------------------
+
+.apropos-nora {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+
+    @include respond-to('tablet') {
+        grid-template-columns: 1fr;
+        gap: $spacing-xl;
+    }
+
+    &__photo-wrap {
+        position: relative;
+    }
+
+    &__arch {
+        border-radius: 50% 50% 0 0;
+        overflow: hidden;
+        max-width: 460px;
+        aspect-ratio: 3/4;
+    }
+
+    &__photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        display: block;
+    }
+
+    &__badge {
+        position: absolute;
+        bottom: -20px;
+        right: -10px;
+        background-color: $color-dark;
+        padding: 20px 28px;
+        border-radius: 4px;
+        max-width: 200px;
+    }
+
+    &__badge-year {
+        display: block;
+        font-family: $font-title;
+        font-size: 40px;
+        font-weight: $font-weight-light;
+        color: $color-terra;
+        line-height: 1;
+    }
+
+    &__badge-label {
+        display: block;
+        font-family: $font-body;
+        font-size: $font-size-label;
+        letter-spacing: $ls-nav;
+        color: $color-cream;
+        text-transform: uppercase;
+        margin-top: 6px;
+        font-weight: $font-weight-regular;
+    }
+
+    &__title {
+        font-family: $font-title;
+        font-size: clamp(36px, 4vw, 52px);
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        line-height: 1.1;
+        margin-bottom: $spacing-md;
+
+        &--italic {
+            display: block;
+            font-style: italic;
+            color: $color-terra;
+        }
+    }
+
+    &__body {
+        font-family: $font-body;
+        font-size: $font-size-md;
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        line-height: $lh-loose;
+        margin-bottom: $spacing-md;
+    }
+
+    &__quote {
+        border-left: 3px solid $color-terra;
+        padding-left: $spacing-md;
+        margin: 0;
+
+        p {
+            font-family: $font-title;
+            font-size: 21px;
+            font-style: italic;
+            font-weight: $font-weight-light;
+            color: $color-dark;
+            line-height: 1.55;
+        }
+    }
+
+    &__quote-footer {
+        font-family: $font-body;
+        font-size: $font-size-xxs;
+        color: $color-grey;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-top: $spacing-sm;
+        display: block;
+    }
+}
+
+// ------------------------------------------------------------
+// Timeline
+// ------------------------------------------------------------
+
+.apropos-timeline {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 0;
+
+    @include respond-to('tablet') {
+        grid-template-columns: 1fr;
+        gap: $spacing-xl;
+    }
+
+    &__item {
+        padding-right: 60px;
+        padding-bottom: 60px;
+
+        &--right {
+            padding-right: 0;
+            padding-left: 60px;
+            grid-column: 3;
+
+            @include respond-to('tablet') {
+                padding-left: 0;
+                grid-column: 1;
+            }
+        }
+
+        @include respond-to('tablet') {
+            padding-right: 0;
+        }
+    }
+
+    &__number {
+        display: block;
+        font-family: $font-title;
+        font-size: 72px;
+        font-weight: $font-weight-light;
+        color: $color-cream;
+        line-height: 1;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__step-title {
+        font-family: $font-title;
+        font-size: 28px;
+        font-weight: $font-weight-light;
+        font-style: italic;
+        color: $color-dark;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__step-text {
+        font-family: $font-body;
+        font-size: $font-size-md;
+        font-weight: $font-weight-light;
+        color: #6B5C4E;
+        line-height: $lh-loose;
+    }
+
+    &__line {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        @include respond-to('tablet') { display: none; }
+    }
+
+    &__line-top,
+    &__line-mid,
+    &__line-bot {
+        width: 1px;
+        flex: 1;
+        background-color: $color-cream;
+    }
+
+    &__dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+
+        &--terra { background-color: $color-terra; }
+        &--sage  { background-color: $color-sage; }
+    }
+
+    &__image-wrap {
+        padding-left: 60px;
+        padding-bottom: 60px;
+
+        &--right {
+            padding-left: 0;
+            padding-right: 60px;
+            padding-top: 40px;
+            grid-column: 1;
+
+            @include respond-to('tablet') {
+                padding-right: 0;
+            }
+        }
+
+        @include respond-to('tablet') {
+            padding-left: 0;
+        }
+    }
+
+    &__image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: $radius-card;
+        display: block;
+    }
+}
+
+// ------------------------------------------------------------
+// Engagements
+// ------------------------------------------------------------
+
+.apropos-engagements__title {
+    font-family: $font-title;
+    font-size: clamp(34px, 4vw, 52px);
+    font-weight: $font-weight-light;
+    font-style: italic;
+    color: $color-cream;
+    margin: 0;
+    line-height: 1.15;
+}
+
+.apropos-engagement {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: $spacing-md;
+    padding: $spacing-lg $spacing-sm;
+    border-top: 1px solid rgba(163, 158, 147, 0.2);
+
+    &__icon { margin-bottom: 4px; }
+
+    &__title {
+        font-family: $font-title;
+        font-size: 22px;
+        font-weight: $font-weight-light;
+        color: $color-cream;
+        line-height: 1.25;
+    }
+
+    &__text {
+        font-family: $font-body;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-light;
+        color: $color-grey;
+        line-height: 1.8;
+    }
+}
+
+// ------------------------------------------------------------
+// Philosophie — photo plein largeur
+// ------------------------------------------------------------
+
+.apropos-philosophie {
+    position: relative;
+    overflow: hidden;
+
+    &__image {
+        width: 100%;
+        height: 600px;
+        object-fit: cover;
+        object-position: center 30%;
+        display: block;
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            135deg,
+            rgba(74, 60, 50, 0.85) 0%,
+            rgba(74, 60, 50, 0.4) 60%,
+            transparent 100%
+        );
+    }
+
+    &__content {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    &__label {
+        font-family: $font-body;
+        font-size: $font-size-label;
+        letter-spacing: $ls-label;
+        color: $color-cream;
+        text-transform: uppercase;
+        margin-bottom: $spacing-lg;
+        font-weight: $font-weight-regular;
+    }
+
+    &__title {
+        font-family: $font-title;
+        font-size: clamp(36px, 5vw, 64px);
+        font-weight: $font-weight-light;
+        font-style: italic;
+        color: $color-white;
+        margin-bottom: $spacing-lg;
+        line-height: 1.1;
+        max-width: 640px;
+    }
+
+    &__text {
+        font-family: $font-body;
+        font-size: $font-size-base;
+        font-weight: $font-weight-light;
+        color: rgba(255, 255, 255, 0.88);
+        line-height: 1.85;
+        max-width: 560px;
+        margin-bottom: $spacing-sm;
+    }
+}
+
+// ------------------------------------------------------------
+// Chiffres clés — fond terracotta
+// ------------------------------------------------------------
+
+.apropos-chiffres {
+    background-color: $color-terra;
+    padding: 80px 0;
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        text-align: center;
+
+        @include respond-to('tablet') {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    &__item {
+        padding: 20px 32px;
+        border-right: 1px solid rgba(255, 255, 255, 0.25);
+
+        &:last-child { border-right: none; }
+
+        @include respond-to('tablet') {
+            &:nth-child(2) { border-right: none; }
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+    }
+
+    &__number {
+        display: block;
+        font-family: $font-title;
+        font-size: 64px;
+        font-weight: $font-weight-light;
+        color: $color-white;
+        line-height: 1;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__label {
+        display: block;
+        font-family: $font-body;
+        font-size: $font-size-xxs;
+        letter-spacing: 1.5px;
+        color: rgba(255, 255, 255, 0.8);
+        text-transform: uppercase;
+        font-weight: $font-weight-regular;
+    }
+}
+
+// ------------------------------------------------------------
+// CTA Final
+// ------------------------------------------------------------
+
+.apropos-cta {
+    max-width: 680px;
+    margin: 0 auto;
+
+    &__arch {
+        margin: 0 auto $spacing-xl;
+        display: block;
+        width: fit-content;
+    }
+
+    &__title {
+        font-family: $font-title;
+        font-size: clamp(36px, 5vw, 58px);
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        line-height: 1.1;
+        margin-bottom: $spacing-md;
+
+        &--italic {
+            display: block;
+            font-style: italic;
+            color: $color-terra;
+        }
+    }
+
+    &__text {
+        font-family: $font-body;
+        font-size: $font-size-base;
+        font-weight: $font-weight-light;
+        color: #6B5C4E;
+        line-height: 1.8;
+        margin-bottom: $spacing-xl;
+    }
+
+    &__buttons {
+        display: flex;
+        gap: $spacing-sm;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}

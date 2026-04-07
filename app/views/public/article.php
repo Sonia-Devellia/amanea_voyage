@@ -115,16 +115,16 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                     <p class="article-sidebar__value">
                         <?= htmlspecialchars($article['destination_name']) ?>
                     </p>
-                    <p class="article-sidebar__country">
-                        <?= htmlspecialchars($article['country'] ?? '') ?>
-                    </p>
+                    <a href="<?= APP_URL ?>/voyages" class="article-sidebar__link">
+                        Voir nos voyages &amp; expériences
+                    </a>
                 </div>
                 <?php endif; ?>
 
                 <!-- CTA sidebar -->
                 <div class="article-sidebar__cta">
                     <p class="article-sidebar__cta-text">
-                        Ce voyage vous inspire ?
+                        Cette article vous inspire ?
                     </p>
                     <a href="<?= APP_URL ?>/contact" class="btn-primary">
                         Créons votre voyage 
@@ -133,7 +133,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
 
                 <!-- Partager -->
                 <div class="article-sidebar__block">
-                    <h3 class="article-sidebar__title">Partager</h3>
+                    <h3 class="article-sidebar__title">Partagez-le</h3>
                     <div class="article-sidebar__share">
                         <a href="https://www.facebook.com/sharer/sharer.php?u=<?= urlencode(APP_URL . '/inspirations/show/' . $article['slug']) ?>"
                            class="article-sidebar__share-link"
