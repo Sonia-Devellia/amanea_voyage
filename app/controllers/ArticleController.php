@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\Destination;
 use App\Models\Media;
+use App\Services\PexelsService;
 
 // ArticleController gère le blog public
 class ArticleController extends Controller
@@ -62,7 +63,7 @@ class ArticleController extends Controller
 
     public function show(string $slug): void
     {
-        // On récupère l'article par son slug
+        // On récupère l'article par son slug (avec catégorie et destination via JOIN)
         $article = $this->articleModel->findBySlug($slug);
 
         // Si l'article n'existe pas on redirige vers la page Inspirations et Conseils
@@ -70,20 +71,42 @@ class ArticleController extends Controller
             $this->redirect('article');
         }
 
-        // On récupère l'image de couverture de l'article
+        // On récupère l'image de couverture de l'article depuis la BDD
         $cover = $this->mediaModel->findCoverByArticle($article['Id_ARTICLE']);
 
-        // On récupère les photos via media du contenu de l'article
+        // On récupère les photos de contenu de l'article depuis la BDD
         $medias = $this->mediaModel->findContentsByArticle($article['Id_ARTICLE']);
 
-        // On récupère les catégories de l'article
-        $categories = $this->categoryModel->findByArticle($article['Id_ARTICLE']);
+        // Mot-clé Pexels : article > destination > titre de l'article (3 niveaux de fallback)
+        $keyword = $article['pexels_keyword']
+            ?? $article['destination_pexels_keyword']
+            ?? $article['title'];
+
+        $pexels = new PexelsService();
+
+        // Image de couverture : BDD prioritaire, Pexels en fallback
+        // getPhotoSrcset() retourne ['src' => large2x_url, 'srcset' => "large2x 1880w, large 940w"]
+        // → hero full-width net à toutes résolutions, un seul appel API
+        $pexelsHero = null;
+        if (empty($cover['file_name'])) {
+            $pexelsHero = $pexels->getPhotoSrcset($keyword, (int) $article['Id_ARTICLE']);
+        }
+
+        // Galerie : BDD prioritaire, Pexels en fallback (6 photos)
+        if (!empty($medias)) {
+            $gallery = array_map(
+                fn($m) => APP_URL . '/public/images/' . $m['file_name'],
+                $medias
+            );
+        } else {
+            $gallery = $pexels->getPhotos($keyword, 6, 'large');
+        }
 
         $this->render('public/article', [
             'article'    => $article,
             'cover'      => $cover,
-            'medias'     => $medias,
-            'categories' => $categories,
+            'pexelsHero' => $pexelsHero,
+            'gallery'    => $gallery,
         ]);
     }
 

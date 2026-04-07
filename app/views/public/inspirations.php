@@ -1,6 +1,6 @@
 <?php
-$pageTitle       = 'Inspirations & Conseils';
-$metaDescription = 'Les carnets de voyage de Nora — destinations, conseils pratiques et coups de cœur pour vous inspirer et vous guider.';
+$pageTitle       = 'Blog Voyage : Destinations, Conseils & Carnets de Nora';
+$metaDescription = 'Explorez les carnets de voyage de Habibi Nora : destinations éthiques, conseils pratiques et coups de cœur pour préparer votre voyage sur mesure — Île Maurice, Afrique et partout dans le monde.';
 require_once APP_ROOT . '/app/views/layouts/header.php';
 ?>
 
@@ -61,7 +61,8 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                     <img src="<?= APP_URL . '/public/images/articles/' . htmlspecialchars($featured['file_name']) ?>"
                          alt="<?= htmlspecialchars($featured['title']) ?>"
                          class="inspi-featured__image"
-                         loading="lazy">
+                         fetchpriority="high"
+                         width="800" height="480">
                 <?php else : ?>
                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                          alt=""
@@ -71,7 +72,8 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                              : (!empty($featured['destination_pexels_keyword']) ? $featured['destination_pexels_keyword']
                              : trim(($featured['category_name'] ?? 'voyage') . ' voyage'))
                          ) ?>"
-                         data-article-id="<?= (int)$featured['Id_ARTICLE'] ?>">
+                         data-article-id="<?= (int)$featured['Id_ARTICLE'] ?>"
+                         width="800" height="480">
                 <?php endif; ?>
             </div>
 
@@ -119,7 +121,8 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                 </div>
 
                 <a href="<?= APP_URL ?>/inspirations/show/<?= htmlspecialchars($featured['slug']) ?>"
-                   class="btn-primary btn-lg">
+                   class="btn-primary btn-lg"
+                   aria-label="Lire l'article : <?= htmlspecialchars($featured['title']) ?>">
                     Lire l'article →
                 </a>
 
@@ -144,12 +147,14 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
 
             <nav class="inspi-filters" aria-label="Filtrer par catégorie">
                 <a href="<?= APP_URL ?>/inspirations"
-                   class="inspi-filter <?= empty($currentCategory) ? 'inspi-filter--active' : '' ?>">
+                   class="inspi-filter <?= empty($currentCategory) ? 'inspi-filter--active' : '' ?>"
+                   <?= empty($currentCategory) ? 'aria-current="page"' : '' ?>>
                     Tous
                 </a>
                 <?php foreach ($categories as $cat) : ?>
                 <a href="<?= APP_URL ?>/inspirations/category/<?= htmlspecialchars($cat['slug']) ?>"
-                   class="inspi-filter inspi-filter--<?= htmlspecialchars($cat['slug']) ?> <?= ($currentCategory === $cat['slug']) ? 'inspi-filter--active' : '' ?>">
+                   class="inspi-filter inspi-filter--<?= htmlspecialchars($cat['slug']) ?> <?= ($currentCategory === $cat['slug']) ? 'inspi-filter--active' : '' ?>"
+                   <?= ($currentCategory === $cat['slug']) ? 'aria-current="page"' : '' ?>>
                     <?= htmlspecialchars($cat['name']) ?>
                 </a>
                 <?php endforeach; ?>
@@ -165,7 +170,8 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                         <img src="<?= APP_URL . '/public/images/articles/' . htmlspecialchars($article['file_name']) ?>"
                              alt="<?= htmlspecialchars($article['title']) ?>"
                              class="card-article__image"
-                             loading="lazy">
+                             loading="lazy"
+                             width="800" height="240">
                     <?php else : ?>
                         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                              alt=""
@@ -175,7 +181,8 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                                  : (!empty($article['destination_pexels_keyword']) ? $article['destination_pexels_keyword']
                                  : trim(($article['category_name'] ?? 'voyage') . ' voyage'))
                              ) ?>"
-                             data-article-id="<?= (int)$article['Id_ARTICLE'] ?>">
+                             data-article-id="<?= (int)$article['Id_ARTICLE'] ?>"
+                             width="800" height="240">
                     <?php endif; ?>
                 </div>
                 <div class="card-article__content">
@@ -185,7 +192,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                             str_contains($article['category_slug'] ?? '', 'destination')  => 'card-article__tag--destination',
                             str_contains($article['category_slug'] ?? '', 'inspiration')  => 'card-article__tag--inspiration',
                             str_contains($article['category_slug'] ?? '', 'conseil')      => 'card-article__tag--conseil',
-                            str_contains($article['category_slug'] ?? '', 'coup de coeur')=> 'card-article__tag--coup-de-coeur',
+                            str_contains($article['category_slug'] ?? '', 'coup')          => 'card-article__tag--coup-de-coeur',
                             str_contains($article['category_slug'] ?? '', 'actualite')    => 'card-article__tag--actualite',
                             str_contains($article['category_slug'] ?? '', 'experience')   => 'card-article__tag--experience',
                             default => '',
@@ -201,7 +208,8 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                         <?= htmlspecialchars(substr($article['content'] ?? '', 0, 120)) ?>…
                     </p>
                     <a href="<?= APP_URL ?>/inspirations/show/<?= htmlspecialchars($article['slug']) ?>"
-                       class="card-article__link">Lire l'article →</a>
+                       class="card-article__link"
+                       aria-label="Lire l'article : <?= htmlspecialchars($article['title']) ?>">Lire l'article →</a>
                 </div>
             </article>
             <?php endforeach; ?>
@@ -264,7 +272,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
             <p class="inspi-newsletter__label">La lettre de Nora</p>
             <h2 class="inspi-newsletter__title">Ne manquez aucune inspiration</h2>
             <p class="inspi-newsletter__text">
-                Chaque mois, les meilleures adresses, les destinations à découvrir et les conseils de Nora — directement dans votre boîte mail.
+                Chaque mois, les meilleures adresses, les destinations à découvrir et les conseils de Nora. Directement dans votre boîte mail.
             </p>
 
             <form class="inspi-newsletter__form" method="POST" action="<?= APP_URL ?>/contact/send">
@@ -272,10 +280,10 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                 <input type="email"
                        name="email"
                        class="inspi-newsletter__input"
-                       placeholder="votre@email.fr"
+                       placeholder="  indiquez-votre@email.fr  "
                        aria-label="Votre adresse email"
                        required>
-                <button type="submit" class="btn-primary">S'abonner →</button>
+                <button type="submit" class="btn-primary">S'abonner</button>
             </form>
 
             <p class="inspi-newsletter__mention">Pas de spam. Désinscription possible à tout moment.</p>
@@ -318,6 +326,48 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
             })
             .catch(function () { /* silencieux si l'API est indisponible */ });
     });
+</script>
+
+<!-- Schema.org JSON-LD — Blog + BreadcrumbList -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Blog",
+            "name": "Inspirations & Conseils — Les carnets de Nora",
+            "description": "Destinations éthiques, conseils pratiques et coups de cœur pour préparer un voyage sur mesure — par Habibi Nora, travel planner.",
+            "url": "<?= APP_URL ?>/inspirations",
+            "inLanguage": "fr-FR",
+            "author": {
+                "@type": "Person",
+                "name": "Habibi Nora"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "Amanéa Voyage",
+                "url": "<?= APP_URL ?>"
+            }
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Accueil",
+                    "item": "<?= APP_URL ?>"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Inspirations & Conseils",
+                    "item": "<?= APP_URL ?>/inspirations"
+                }
+            ]
+        }
+    ]
+}
 </script>
 
 <?php require_once APP_ROOT . '/app/views/layouts/footer.php'; ?>

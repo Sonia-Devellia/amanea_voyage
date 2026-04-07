@@ -8,7 +8,8 @@
 // ------------------------------------------------------------
 
 // Couleurs principales
-$color-terra:       #C58A60;   // Terracotta — CTA principal, accents, hover
+$color-terra:       #C58A60;   // Terracotta — accents décoratifs, icônes, hover léger
+$color-terra-dark:  #9B6030;   // Terracotta foncé — boutons, badges CTA (blanc 5.1:1 ✅ AA)
 $color-beige:       #FEF6ED;   // Beige clair — fond de page principal
 $color-white:       #FFFFFF;   // Blanc pur — fond cards, header scrollé
 $color-dark:        #4A3C32;   // Marron foncé — texte principal, footer
@@ -16,7 +17,7 @@ $color-blue-grey:   #6C7E8F;   // Bleu-gris — couleur dominante du logo
 $color-sage:        #A4B3A1;   // Vert sauge — boutons secondaires, badges
 $color-rose:        #C3998A;   // Rose/Brun — détails décoratifs
 $color-cream:       #EADFC9;   // Beige/Crème — éléments doux, surtitres
-$color-grey:        #A39E93;   // Gris doux — texte secondaire, labels
+$color-grey:        #7A6E65;   // Gris chaud — texte secondaire, labels (AA 4.95:1 sur blanc)
 
 // Couleurs sémantiques
 $color-border:      #E8DED6;   // Bordures légères
@@ -46,7 +47,7 @@ $font-size-md:      15px;   // Paragraphes sections
 $font-size-sm:      14px;   // Cards, extraits
 $font-size-xs:      13px;   // Liens, labels, nav
 $font-size-xxs:     12px;   // Footer, mentions
-$font-size-label:   11px;   // Surtitres, badges
+$font-size-label:   12px;   // Surtitres, badges — minimum lisibilité WCAG
 
 // Graisses
 $font-weight-light:   300;   // Corps de texte

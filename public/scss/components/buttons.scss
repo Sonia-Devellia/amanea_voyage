@@ -44,36 +44,34 @@
 // ------------------------------------------------------------
 // Bouton primaire — CTA principal
 // Fond terracotta, texte blanc
-// Ex : "Créons votre voyage ensemble →"
 // ------------------------------------------------------------
 
 .btn-primary {
     @extend .btn;
-    background-color: $color-terra;
+    background-color: $color-terra-dark;
     color: $color-white;
-    border-color: $color-terra;
+    border-color: $color-terra-dark;
 
     &:hover:not(:disabled) {
-        background-color: color.adjust($color-terra, $lightness: -8%);
-        border-color: color.adjust($color-terra, $lightness: -8%);
+        background-color: color.adjust($color-terra-dark, $lightness: -8%);
+        border-color: color.adjust($color-terra-dark, $lightness: -8%);
     }
 }
 
 // ------------------------------------------------------------
 // Bouton outline — CTA secondaire
-// Border terracotta, texte terracotta
-// Hover : fond terracotta, texte blanc
-// Ex : "Voir tous nos voyages"
+// Border terracotta foncé, texte terracotta foncé
+// Hover : fond terracotta foncé, texte blanc
 // ------------------------------------------------------------
 
 .btn-outline {
     @extend .btn;
     background-color: transparent;
-    color: $color-terra;
-    border-color: $color-terra;
+    color: $color-terra-dark;
+    border-color: $color-terra-dark;
 
     &:hover:not(:disabled) {
-        background-color: $color-terra;
+        background-color: $color-terra-dark;
         color: $color-white;
     }
 }
@@ -81,8 +79,7 @@
 // ------------------------------------------------------------
 // Bouton ghost — sur fond sombre ou photo
 // Border blanc, texte blanc
-// Hover : fond blanc, texte terracotta
-// Ex : "Découvrir nos voyages" dans le CTA final
+// Hover : fond blanc, texte terracotta foncé
 // ------------------------------------------------------------
 
 .btn-ghost {
@@ -93,7 +90,7 @@
 
     &:hover:not(:disabled) {
         background-color: $color-white;
-        color: $color-terra;
+        color: $color-terra-dark;
     }
 }
 

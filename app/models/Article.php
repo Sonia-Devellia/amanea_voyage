@@ -113,12 +113,23 @@ class Article extends Model
     }
 
 
-    // Récupère un article par son slug
+    // Récupère un article par son slug avec catégorie et destination associées
     public function findBySlug(string $slug): array|false
     {
-        $stmt = $this->db->prepare(
-            "SELECT * FROM {$this->table} WHERE slug = :slug"
-        );
+        $stmt = $this->db->prepare("
+            SELECT a.*,
+                   c.name  AS category_name,
+                   c.slug  AS category_slug,
+                   d.name  AS destination_name,
+                   d.country AS country,
+                   d.pexels_keyword AS destination_pexels_keyword
+            FROM {$this->table} a
+            LEFT JOIN BELONGS_TO bt  ON bt.Id_ARTICLE    = a.Id_ARTICLE
+            LEFT JOIN CATEGORY c     ON c.Id_CATEGORY    = bt.Id_CATEGORY
+            LEFT JOIN DESTINATION d  ON d.Id_DESTINATION = a.Id_DESTINATION
+            WHERE a.slug = :slug
+            LIMIT 1
+        ");
 
         $stmt->execute([':slug' => $slug]);
         return $stmt->fetch();

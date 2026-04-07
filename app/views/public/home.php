@@ -34,7 +34,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
            preload="none"
            poster="<?= APP_URL ?>/public/images/hero-home.webp"
            aria-hidden="true">
-        <source src="<?= APP_URL ?>/public/videos/hero-home.mp4" type="video/mp4">
+        <source src="<?= APP_URL ?>/public/videos/hero-home.webm" type="video/webm">
     </video>
 
     <!-- Overlay gradient -->

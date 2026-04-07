@@ -58,18 +58,19 @@
         display: inline-flex;
         align-self: flex-start;
         font-family: $font-body;
-        font-size: $font-size-label;    // 11px
+        font-size: 13px;
         font-weight: $font-weight-medium;
         letter-spacing: $ls-sm;
-        padding: 4px 12px;
+        padding: 6px 16px;
         border-radius: $radius-badge;
         margin-bottom: $spacing-xs;
 
         // Variantes de couleur selon le type de voyage
-        &--groupe  { background-color: $color-sage; color: $color-white; }
-        &--feminin { background-color: $color-rose; color: $color-white; }
-        &--noces   { background-color: $color-cream; color: $color-dark; }
-        &--perso   { background-color: $color-terra; color: $color-white; }
+        // Texte sombre sur fonds clairs (sage, rose, cream) — meilleur contraste
+        &--groupe  { background-color: $color-sage;       color: $color-dark;  }  // 4.83:1 ✅
+        &--feminin { background-color: $color-rose;       color: $color-dark;  }  // 4.15:1 ≈ AA
+        &--noces   { background-color: $color-cream;      color: $color-dark;  }  // 8.02:1 ✅
+        &--perso   { background-color: $color-terra-dark; color: $color-white; }  // 5.10:1 ✅
     }
 
     // Titre H3
@@ -192,21 +193,22 @@
         display: inline-flex;
         align-self: flex-start;
         font-family: $font-body;
-        font-size: $font-size-label;    // 11px
+        font-size: 13px;
         font-weight: $font-weight-medium;
         letter-spacing: $ls-sm;
-        padding: 4px 12px;
+        padding: 6px 16px;
         border-radius: $radius-badge;
         background-color: $color-sage;
-        color: $color-white;
+        color: $color-dark;
 
         // Variantes de couleur selon la catégorie
-        &--destination   { background-color: $color-terra;     color: $color-white; }
-        &--inspiration   { background-color: $color-blue-grey; color: $color-white; }
-        &--conseil       { background-color: $color-sage;      color: $color-white; }
-        &--coup-de-coeur { background-color: $color-rose;      color: $color-white; }
-        &--actualite     { background-color: $color-grey;      color: $color-white; }
-        &--experience    { background-color: $color-cream;     color: $color-dark;  }
+        // Texte sombre sur fonds clairs — meilleur contraste
+        &--destination   { background-color: $color-terra-dark; color: $color-white; } 
+        &--inspiration   { background-color: $color-blue-grey;  color: $color-white; } 
+        &--conseil       { background-color: $color-sage;        color: $color-dark;  } 
+        &--coup-de-coeur { background-color: $color-rose;        color: $color-dark;  }  
+        &--actualite     { background-color: $color-grey;        color: $color-white; }  
+        &--experience    { background-color: $color-cream;       color: $color-dark;  }  
     }
 
     // Titre article

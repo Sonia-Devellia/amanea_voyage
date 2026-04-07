@@ -99,7 +99,72 @@ class PexelsService
     }
 
     // -------------------------------------------------------------------------
-    // Récupère plusieurs photos correspondant au mot-cléU pour alimenter les contneus des articles
+    // Récupère l'URL principale + un srcset pour un hero full-width
+    //
+    // Retourne un tableau :
+    //   'src'    → URL large2x (1880 px) — fallback <img src>
+    //   'srcset' → chaîne srcset "large2x 1880w, large 940w"
+    //
+    // Un seul appel API, deux tailles extraites du même objet photo Pexels.
+    // -------------------------------------------------------------------------
+    public function getPhotoSrcset(string $keyword, int $seed = 0): ?array
+    {
+        if (empty($this->apiKey) || empty($keyword)) {
+            return null;
+        }
+
+        $perPage = 15;
+        $url = self::API_URL . '?' . http_build_query([
+            'query'    => $keyword,
+            'per_page' => $perPage,
+        ]);
+
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER     => ['Authorization: ' . $this->apiKey],
+            CURLOPT_TIMEOUT        => 5,
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($httpCode !== 200 || !$response) {
+            return null;
+        }
+
+        $data = json_decode($response, true);
+
+        if (empty($data['photos'])) {
+            return null;
+        }
+
+        $index = $seed % count($data['photos']);
+        $src   = $data['photos'][$index]['src'] ?? [];
+
+        $large2x = $src['large2x'] ?? null;
+        $large   = $src['large']   ?? null;
+
+        if (!$large2x && !$large) {
+            return null;
+        }
+
+        // srcset : le navigateur choisit large2x sur écrans larges/Retina,
+        // large sur mobile — un seul appel réseau côté serveur.
+        $srcset = implode(', ', array_filter([
+            $large2x ? $large2x . ' 1880w' : null,
+            $large   ? $large   . ' 940w'  : null,
+        ]));
+
+        return [
+            'src'    => $large2x ?? $large,
+            'srcset' => $srcset,
+        ];
+    }
+
+    // -------------------------------------------------------------------------
+    // Récupère plusieurs photos correspondant au mot-clé pour alimenter les contenus des articles
     //
     // @param string $keyword  Mot-clé de recherche
     // @param int    $count    Nombre de photos souhaitées (max 80 selon l'API)
