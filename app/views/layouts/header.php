@@ -16,7 +16,7 @@
     <meta property="og:title"       content="<?= isset($pageTitle) ? htmlspecialchars($pageTitle) . ' — Amanéa Voyage' : 'Amanéa Voyage' ?>">
     <meta property="og:description" content="<?= isset($metaDescription) ? htmlspecialchars($metaDescription) : 'Amanéa Voyage — Création de voyage éthique et sur mesure par Habibi Nora.' ?>">
     <meta property="og:url"         content="<?= APP_URL . strtok($_SERVER['REQUEST_URI'], '?') ?>">
-    <meta property="og:image"       content="<?= APP_URL ?>/public/images/og-default.jpg">
+    <meta property="og:image"       content="<?= isset($ogImage) ? htmlspecialchars($ogImage) : APP_URL . '/public/images/og-default.jpg' ?>">
     <meta name="theme-color"        content="#4A3C32">
     <?php if (isset($headExtra)) echo $headExtra; ?>
 </head>

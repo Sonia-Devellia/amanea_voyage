@@ -1,0 +1,153 @@
+// ============================================================
+// components/_modal.scss — Modale Amanéa
+// ============================================================
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-md;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity $transition-normal;
+
+    &--open {
+        pointer-events: all;
+        opacity: 1;
+
+        .modal__container {
+            transform: translateY(0);
+        }
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(74, 60, 50, 0.7);
+        cursor: pointer;
+    }
+
+    &__container {
+        position: relative;
+        z-index: 1;
+        background-color: $color-white;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 680px;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+        transform: translateY(24px);
+        transition: transform $transition-normal;
+        box-shadow: 0 20px 60px rgba(74, 60, 50, 0.2);
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: $spacing-lg $spacing-xl;
+        border-bottom: 1px solid $color-border;
+        flex-shrink: 0;
+    }
+
+    &__label {
+        font-family: $font-body;
+        font-size: $font-size-label;
+        font-weight: $font-weight-regular;
+        letter-spacing: $ls-label;
+        text-transform: uppercase;
+        color: $color-terra;
+        margin-bottom: 4px;
+    }
+
+    &__title {
+        font-family: $font-title;
+        font-size: 28px;
+        font-weight: $font-weight-light;
+        font-style: italic;
+        color: $color-dark;
+    }
+
+    &__close {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: $color-grey;
+        padding: 4px;
+        flex-shrink: 0;
+        transition: color $transition-fast;
+
+        &:hover { color: $color-terra; }
+    }
+
+    &__body {
+        padding: $spacing-xl;
+        overflow-y: auto;
+        flex: 1;
+        scrollbar-width: thin;
+        scrollbar-color: $color-border transparent;
+    }
+
+    &__intro {
+        font-family: $font-title;
+        font-size: 20px;
+        font-weight: $font-weight-light;
+        font-style: italic;
+        color: $color-terra;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__block-title {
+        font-family: $font-title;
+        font-size: 20px;
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        margin: $spacing-lg 0 $spacing-sm;
+        padding-top: $spacing-lg;
+        border-top: 1px solid $color-border;
+    }
+
+    &__text {
+        font-family: $font-body;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        line-height: $lh-loose;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__quote {
+        font-family: $font-title;
+        font-size: 18px;
+        font-weight: $font-weight-light;
+        font-style: italic;
+        color: $color-dark;
+        border-left: 3px solid $color-terra;
+        padding-left: $spacing-md;
+        margin: $spacing-md 0;
+        line-height: $lh-loose;
+    }
+
+    &__final {
+        font-family: $font-title;
+        font-size: 18px;
+        font-weight: $font-weight-light;
+        font-style: italic;
+        color: $color-terra;
+        margin-top: $spacing-lg;
+        text-align: center;
+    }
+
+    &__footer {
+        display: flex;
+        gap: $spacing-sm;
+        padding: $spacing-lg $spacing-xl;
+        border-top: 1px solid $color-border;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+    }
+}

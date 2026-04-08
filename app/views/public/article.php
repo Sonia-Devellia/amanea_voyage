@@ -1,4 +1,28 @@
 <?php
+// ------------------------------------------------------------------
+// SEO — titre, description, image OG dynamiques selon l'article
+// ------------------------------------------------------------------
+
+// Image de couverture (même logique que dans le corps, pour preload + og:image)
+if (!empty($cover['file_name'])) {
+    $seoImage = APP_URL . '/public/images/' . $cover['file_name'];
+} elseif (!empty($pexelsHero['src'])) {
+    $seoImage = $pexelsHero['src'];
+} else {
+    $seoImage = APP_URL . '/public/images/og-default.jpg';
+}
+
+// Extrait de 155 caractères pour la meta description
+$seoExcerpt = trim(preg_replace('/\s+/', ' ', $article['content'] ?? ''));
+$seoExcerpt = mb_strlen($seoExcerpt) > 155
+    ? mb_substr($seoExcerpt, 0, 152) . '…'
+    : $seoExcerpt;
+
+$pageTitle       = htmlspecialchars($article['title']);
+$metaDescription = $seoExcerpt;
+$ogImage         = $seoImage;
+$headExtra       = '<link rel="preload" as="image" href="' . htmlspecialchars($seoImage) . '" fetchpriority="high">';
+
 require_once APP_ROOT . '/app/views/layouts/header.php';
 ?>
 
@@ -218,5 +242,41 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
     </div>
 
 </section>
+
+<!-- Schema.org JSON-LD — BlogPosting -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": <?= json_encode($article['title']) ?>,
+    "description": <?= json_encode($seoExcerpt) ?>,
+    "image": <?= json_encode($seoImage) ?>,
+    "datePublished": "<?= date('c', strtotime($article['publication_date'])) ?>",
+    "author": {
+        "@type": "Person",
+        "name": "Habibi Nora",
+        "url": "<?= APP_URL ?>/a-propos"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Amanéa Voyage",
+        "url": "<?= APP_URL ?>",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "<?= APP_URL ?>/public/images/og-default.jpg"
+        }
+    },
+    "url": "<?= APP_URL ?>/inspirations/show/<?= htmlspecialchars($article['slug']) ?>",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "<?= APP_URL ?>/inspirations/show/<?= htmlspecialchars($article['slug']) ?>"
+    }<?php if (!empty($article['category_name'])) : ?>,
+    "articleSection": <?= json_encode($article['category_name']) ?><?php endif; ?><?php if (!empty($article['destination_name'])) : ?>,
+    "about": {
+        "@type": "Place",
+        "name": <?= json_encode($article['destination_name']) ?>
+    }<?php endif; ?>
+}
+</script>
 
 <?php require_once APP_ROOT . '/app/views/layouts/footer.php'; ?>

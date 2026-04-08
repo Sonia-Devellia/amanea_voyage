@@ -161,6 +161,11 @@
             line-height: 1.9;
             margin-bottom: $spacing-lg;
 
+            @include respond-to('mobile') {
+                font-size: 16px;
+                line-height: 1.75;
+            }
+
             // Lettrine sur le premier paragraphe
             &:first-child::first-letter {
                 font-family: $font-title;
@@ -170,6 +175,11 @@
                 float: left;
                 line-height: 0.8;
                 margin: 8px 12px 0 0;
+
+                @include respond-to('mobile') {
+                    font-size: 48px;
+                    margin: 6px 8px 0 0;
+                }
             }
         }
     }
