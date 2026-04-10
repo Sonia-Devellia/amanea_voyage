@@ -121,7 +121,6 @@ class Article extends Model
                    c.name  AS category_name,
                    c.slug  AS category_slug,
                    d.name  AS destination_name,
-                   d.country AS country,
                    d.pexels_keyword AS destination_pexels_keyword
             FROM {$this->table} a
             LEFT JOIN BELONGS_TO bt  ON bt.Id_ARTICLE    = a.Id_ARTICLE

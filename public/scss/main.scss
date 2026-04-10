@@ -30,9 +30,11 @@
 
 // 5. Pages — styles spécifiques
 @import 'pages/home';
+@import 'pages/apropos';
+@import 'pages/voyages';
 @import 'pages/inspirations';
 @import 'pages/article';
-@import 'pages/apropos';
 @import 'components/modal';
 @import 'pages/destinations';
+@import 'pages/contact';
 @import 'pages/admin';

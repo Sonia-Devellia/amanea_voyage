@@ -1,0 +1,309 @@
+// ============================================================
+// pages/_contact.scss — Page Créons votre voyage
+// ============================================================
+
+// ------------------------------------------------------------
+// Hero
+// ------------------------------------------------------------
+
+.contact-hero {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    min-height: 440px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+
+    @include respond-to('mobile') {
+        min-height: 320px;
+        height: 50vh;
+    }
+
+    &__image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 60%;
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to bottom,
+            rgba(34, 28, 23, 0.8) 0%,
+            rgba(74, 60, 50, 0.45) 50%,
+            rgba(74, 60, 50, 0.42) 100%
+        );
+    }
+
+    &__content {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        padding-bottom: 80px;
+
+        @include respond-to('mobile') {
+            padding-bottom: 48px;
+        }
+    }
+
+    &__label {
+        font-family: $font-body;
+        font-size: $font-size-label;
+        font-weight: $font-weight-regular;
+        letter-spacing: $ls-label;
+        text-transform: uppercase;
+        color: $color-beige;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__title {
+        display: flex;
+        flex-direction: column;
+        font-family: $font-title;
+        font-weight: $font-weight-light;
+        font-size: clamp(40px, 5.5vw, 68px);
+        line-height: $lh-tight;
+        margin-bottom: $spacing-lg;
+
+        &--white { color: $color-terra; }
+        &--terra  { font-style: italic; color: $color-white; margin-top: 4px; }
+    }
+}
+
+// ------------------------------------------------------------
+// Grille intro + formulaire
+// ------------------------------------------------------------
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+
+    @include respond-to('tablet') {
+        grid-template-columns: 1fr;
+        gap: $spacing-xl;
+    }
+}
+
+// ------------------------------------------------------------
+// Colonne gauche — intro
+// ------------------------------------------------------------
+
+.contact-intro {
+    &__hook {
+        font-family: $font-title;
+        font-size: clamp(26px, 3vw, 38px);
+        font-weight: $font-weight-light;
+        font-style: italic;
+        color: $color-dark;
+        line-height: 1.35;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__text {
+        font-family: $font-body;
+        font-size: $font-size-md;
+        font-weight: $font-weight-light;
+        color: #6B5C4E;
+        line-height: $lh-loose;
+        margin-bottom: $spacing-xl;
+    }
+}
+
+// Promesses
+.contact-promises {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 $spacing-xl;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+
+        span:last-child {
+            font-family: $font-body;
+            font-size: $font-size-sm;
+            font-weight: $font-weight-regular;
+            color: $color-dark;
+        }
+    }
+
+    &__icon {
+        font-family: $font-title;
+        font-size: 18px;
+        color: $color-terra;
+        flex-shrink: 0;
+    }
+}
+
+// Contact direct
+.contact-direct {
+    padding-top: $spacing-xl;
+    border-top: 1px solid rgba(74, 60, 50, 0.1);
+
+    &__label {
+        font-family: $font-body;
+        font-size: $font-size-xxs;
+        letter-spacing: $ls-nav;
+        color: $color-grey;
+        text-transform: uppercase;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__email {
+        display: block;
+        font-family: $font-title;
+        font-size: 22px;
+        font-style: italic;
+        color: $color-terra;
+        text-decoration: none;
+        margin-bottom: $spacing-xs;
+        transition: opacity $transition-fast;
+
+        &:hover { opacity: 0.75; }
+    }
+
+    &__phone {
+        display: block;
+        font-family: $font-body;
+        font-size: $font-size-sm;
+        color: #6B5C4E;
+        text-decoration: none;
+        transition: color $transition-fast;
+
+        &:hover { color: $color-terra; }
+    }
+}
+
+// ------------------------------------------------------------
+// Formulaire
+// ------------------------------------------------------------
+
+.contact-form-wrap {
+    position: sticky;
+    top: 100px;
+
+    @include respond-to('tablet') {
+        position: static;
+    }
+}
+
+.contact-form {
+    background-color: $color-white;
+    border-radius: 12px;
+    padding: 48px;
+    box-shadow: 0 4px 40px rgba(74, 60, 50, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    @include respond-to('tablet') {
+        padding: $spacing-lg;
+    }
+
+    &__footer {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-sm;
+        align-items: flex-start;
+    }
+
+    &__mention {
+        font-family: $font-body;
+        font-size: $font-size-xxs;
+        font-weight: $font-weight-light;
+        color: $color-grey;
+        margin: 0;
+    }
+}
+
+// Message de succès
+.contact-success {
+    background-color: $color-white;
+    border-radius: 12px;
+    padding: 64px 48px;
+    text-align: center;
+    box-shadow: 0 4px 40px rgba(74, 60, 50, 0.08);
+
+    &__icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background-color: rgba(197, 138, 96, 0.12);
+        @include flex-center;
+        margin: 0 auto $spacing-lg;
+    }
+
+    &__title {
+        font-family: $font-title;
+        font-size: 34px;
+        font-weight: $font-weight-light;
+        font-style: italic;
+        color: $color-dark;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__text {
+        font-family: $font-body;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-light;
+        color: #6B5C4E;
+        line-height: $lh-loose;
+        margin-bottom: $spacing-lg;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+// ------------------------------------------------------------
+// Garanties
+// ------------------------------------------------------------
+
+.contact-garanties {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-xl;
+    padding-top: $spacing-section-xs;
+    border-top: 1px solid rgba(74, 60, 50, 0.1);
+    text-align: center;
+
+    @include respond-to('tablet') {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contact-garantie {
+    padding: 0 $spacing-sm;
+
+    &__icon {
+        @include flex-center;
+        margin-bottom: $spacing-md;
+    }
+
+    &__title {
+        font-family: $font-title;
+        font-size: 22px;
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        margin-bottom: $spacing-xs;
+    }
+
+    &__text {
+        font-family: $font-body;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-light;
+        color: #6B5C4E;
+        line-height: 1.7;
+    }
+}

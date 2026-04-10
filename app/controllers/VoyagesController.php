@@ -3,32 +3,46 @@
 // On déclare le namespace 
 namespace App\Controllers;
 
-// On importe le Model dont on a besoin
+// On importe les Models dont on a besoin
 use App\Models\Type;
+use App\Models\Destination;
+use App\Models\Travel;
 
 // VoyagesController gère la page Voyages & Expériences et les 4 pages de formules de voyage
 class VoyagesController extends Controller
 {
-    // Le Model utilisé dans ce Controller
+    // Les Models utilisés dans ce Controller
     private Type $typeModel;
+    private Destination $destinationModel;
+    private Travel $travelModel;
 
-    // Le constructeur instancie le Model dont on a besoin
+    // Le constructeur instancie les Models dont on a besoin
     public function __construct()
     {
-        $this->typeModel = new Type();
+        $this->typeModel        = new Type();
+        $this->destinationModel = new Destination();
+        $this->travelModel      = new Travel();
     }
 
     // -------------------------------------------------------------------------
     // Page principale Voyages & Expériences
-    // Affiche les 4 formules de voyage avec leurs images de couverture et de contenu
+    // Affiche les 4 formules de voyage et les destinations phares depuis la BDD
     // -------------------------------------------------------------------------
     public function index(): void
     {
         // On récupère toutes les formules avec leur image associée
         $types = $this->typeModel->findAllWithMedia();
 
+        // On récupère uniquement les destinations phares (is_featured = 1)
+        $destinations = $this->destinationModel->getFeatured();
+
+        // On récupère les voyages publiés avec leurs étapes (depuis TRAVEL_STEP)
+        $travels = $this->travelModel->getPublished();
+
         $this->render('public/voyages', [
-            'types' => $types,
+            'types'        => $types,
+            'destinations' => $destinations,
+            'travels'      => $travels,
         ]);
     }
 

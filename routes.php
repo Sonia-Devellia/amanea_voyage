@@ -27,6 +27,8 @@ use App\Controllers\Admin\AdminMediaController;
 use App\Controllers\Admin\AdminClientController;
 use App\Controllers\Admin\AdminProjectController;
 use App\Controllers\Admin\AdminMessageController;
+use App\Controllers\Admin\AdminDestinationController;
+use App\Controllers\Admin\AdminTravelController;
 
 // ---------------------------------------------------------------------
 // API JSON — endpoints consommés par le frontend
@@ -117,3 +119,9 @@ $router->post('admin/projects/updateStatus/{id}', [AdminProjectController::class
 // Messages : lecture et suppression seulement (pas de create/edit/store/update)
 $router->resource('admin/messages', AdminMessageController::class, ['index', 'show', 'delete']);
 $router->post('admin/messages/markAnswered/{id}', [AdminMessageController::class, 'markAnswered']);
+
+// Destinations : CRUD complet (page Voyages)
+$router->resource('admin/destinations', AdminDestinationController::class, ['index', 'create', 'store', 'edit', 'update', 'delete']);
+
+// Catalogue voyages : CRUD complet (itinéraires avec prix)
+$router->resource('admin/travels', AdminTravelController::class, ['index', 'create', 'store', 'edit', 'update', 'delete']);

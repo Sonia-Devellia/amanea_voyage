@@ -24,7 +24,7 @@ class ContactController extends Controller
         $this->render('public/contact');
     }
 
-    
+
     // Traite l'envoi du formulaire de contact appelé quand le visiteur soumet le formulaire
     public function send(): void
     {
@@ -37,18 +37,19 @@ class ContactController extends Controller
         // On récupère et nettoie les données du formulaire
         // trim() supprime les espaces en début et fin de chaîne
         // htmlspecialchars() protège contre les injections XSS
+        // Les clés correspondent aux colonnes BDD ; les valeurs lisent les name HTML du formulaire
         $data = [
-            'firstname'      => htmlspecialchars(trim($_POST['firstname']      ?? '')),
-            'lastname'       => htmlspecialchars(trim($_POST['lastname']       ?? '')),
-            'email'          => htmlspecialchars(trim($_POST['email']          ?? '')),
-            'phone'          => htmlspecialchars(trim($_POST['phone']          ?? '')),
-            'travel_type'    => htmlspecialchars(trim($_POST['travel_type']    ?? '')),
-            'destination'    => htmlspecialchars(trim($_POST['destination']    ?? '')),
-            'duration'       => htmlspecialchars(trim($_POST['duration']       ?? '')),
-            'budget'         => htmlspecialchars(trim($_POST['budget']         ?? '')),
-            'travelers'      => htmlspecialchars(trim($_POST['travelers']      ?? '')),
-            'departure_date' => htmlspecialchars(trim($_POST['departure_date'] ?? '')),
-            'project'        => htmlspecialchars(trim($_POST['project']        ?? '')),
+            'firstname'      => htmlspecialchars(trim($_POST['prenom']       ?? '')),
+            'lastname'       => htmlspecialchars(trim($_POST['nom']          ?? '')),
+            'email'          => htmlspecialchars(trim($_POST['email']        ?? '')),
+            'phone'          => htmlspecialchars(trim($_POST['telephone']    ?? '')),
+            'travel_type'    => htmlspecialchars(trim($_POST['type_voyage']  ?? '')),
+            'destination'    => htmlspecialchars(trim($_POST['destination']  ?? '')),
+            'duration'       => htmlspecialchars(trim($_POST['duree']        ?? '')),
+            'budget'         => htmlspecialchars(trim($_POST['budget']       ?? '')),
+            'travelers'      => htmlspecialchars(trim($_POST['nb_voyageurs'] ?? '')),
+            'departure_date' => htmlspecialchars(trim($_POST['date_depart']  ?? '')),
+            'project'        => htmlspecialchars(trim($_POST['message']      ?? '')),
         ];
 
 
@@ -96,7 +97,7 @@ class ContactController extends Controller
         // Validation du téléphone si renseigné
         // preg_match vérifie que le téléphone contient chiffres, espaces, +, -, () pour les formats internationaux
         // ---------------------------------------------------------------------
-        if (!empty($data['phone']) && !preg_match('/^\+?[0-9\s\-().]{7,20}$/', trim($_POST['phone'] ?? ''))) {
+        if (!empty($data['phone']) && !preg_match('/^\+?[0-9\s\-().]{7,20}$/', trim($_POST['telephone'] ?? ''))) {
             $this->render('public/contact', [
                 'error' => 'Le numéro de téléphone n\'est pas valide.',
                 'data'  => $data,
@@ -104,16 +105,13 @@ class ContactController extends Controller
             return;
         }
 
-        // Validation du budget si renseigné
-        // On valide le budget brut (avant htmlspecialchars) car is_numeric échoue sur les entités HTML
-        if (!empty($data['budget']) && !is_numeric($_POST['budget'] ?? '')) {
+        if (empty($_POST['rgpd'])) {
             $this->render('public/contact', [
-                'error' => 'Le budget doit être un nombre.',
-                'data'  => $data,
+                'error' => 'Vous devez accepter la politique de confidentialité pour envoyer votre demande.',
             ]);
             return;
         }
-
+        
         // ---------------------------------------------------------------------
         // Les vérifications sont passées,on enregistre le message en bdd
         // PDO avec paramètres nommés protège contre les injections SQL
@@ -130,5 +128,7 @@ class ContactController extends Controller
                 'data'  => $data,
             ]);
         }
+
+        
     }
 }

@@ -1,0 +1,735 @@
+// ============================================================
+// pages/_voyages.scss — Page Voyages & Expériences
+// ============================================================
+
+// ------------------------------------------------------------
+// Hero
+// ------------------------------------------------------------
+
+.voyages-hero {
+    position: relative;
+    width: 100%;
+    height: 90vh;
+    min-height: 560px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+
+    &__image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 40%;
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to bottom,
+            rgba(74, 60, 50, 0.30) 0%,
+            rgba(74, 60, 50, 0.50) 60%,
+            rgba(74, 60, 50, 0.82) 100%
+        );
+    }
+
+    &__content {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        padding-bottom: 100px;
+    }
+
+    &__label {
+        font-family: $font-body;
+        font-size: $font-size-label;
+        font-weight: $font-weight-regular;
+        letter-spacing: $ls-label;
+        text-transform: uppercase;
+        color: $color-cream;
+        margin-bottom: $spacing-md;
+    }
+
+    &__title {
+        display: flex;
+        flex-direction: column;
+        font-family: $font-title;
+        font-weight: $font-weight-light;
+        font-size: clamp(48px, 6.5vw, 80px);
+        line-height: $lh-tight;
+        margin-bottom: $spacing-lg;
+
+        &--white { color: $color-white; }
+        &--terra  { font-style: italic; color: $color-terra; margin-top: 4px; }
+    }
+
+    &__subtitle {
+        font-family: $font-body;
+        font-size: $font-size-base;
+        font-weight: $font-weight-light;
+        color: rgba(255, 255, 255, 0.88);
+        line-height: 1.75;
+        max-width: 560px;
+        margin-bottom: $spacing-xl;
+    }
+
+    &__pills {
+        display: flex;
+        gap: $spacing-sm;
+        flex-wrap: wrap;
+    }
+}
+
+// Pills hero
+.voyages-pill {
+    font-family: $font-body;
+    font-size: 12px;
+    font-weight: $font-weight-medium;
+    padding: 8px 20px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: $color-white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(6px);
+    transition: all $transition-fast;
+
+    &:hover {
+        background-color: $color-terra;
+        border-color: $color-terra;
+    }
+}
+
+// ------------------------------------------------------------
+// Sticky tabs
+// ------------------------------------------------------------
+
+.voyages-tabs {
+    position: sticky;
+    top: 80px;
+    z-index: 50;
+    background-color: $color-beige;
+    border-bottom: 1px solid rgba(163, 158, 147, 0.2);
+    transition: background-color $transition-normal, box-shadow $transition-normal;
+
+    &--stuck {
+        background-color: $color-white;
+        box-shadow: 0 2px 20px rgba(74, 60, 50, 0.08);
+    }
+
+    &__inner {
+        display: flex;
+        gap: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
+
+        @include respond-to('mobile') { padding: 0 $spacing-md; }
+    }
+}
+
+.voyages-tab {
+    font-family: $font-body;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    padding: 18px 28px;
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    color: $color-grey;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: color $transition-fast, border-color $transition-fast;
+    white-space: nowrap;
+
+    &:hover { color: $color-dark; }
+
+    &--active {
+        color: $color-dark;
+        border-bottom-color: $color-terra;
+    }
+}
+
+// ------------------------------------------------------------
+// Sections catégories
+// ------------------------------------------------------------
+
+.voyages-cat {
+    scroll-margin-top: 130px;
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: center;
+
+        &--reverse {
+            direction: rtl;
+            > * { direction: ltr; }
+        }
+
+        @include respond-to('tablet') {
+            grid-template-columns: 1fr;
+            gap: $spacing-xl;
+            direction: ltr !important;
+            > * { direction: ltr !important; }
+        }
+    }
+
+    &__image-wrap { position: relative; }
+
+    &__image-frame {
+        border-radius: $radius-card;
+        overflow: hidden;
+        height: 540px;
+        position: relative;
+    }
+
+    &__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.7s ease;
+
+        &:hover { transform: scale(1.04); }
+    }
+
+    &__mood-tag {
+        position: absolute;
+        bottom: 24px;
+        left: 24px;
+        background-color: rgba(74, 60, 50, 0.85);
+        backdrop-filter: blur(8px);
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-family: $font-body;
+        font-size: $font-size-label;
+        letter-spacing: $ls-nav;
+        color: $color-cream;
+        text-transform: uppercase;
+    }
+
+    &__badge {
+        position: absolute;
+        top: -16px;
+        right: -16px;
+        padding: 12px 20px;
+        border-radius: 4px;
+        font-family: $font-body;
+        font-size: 12px;
+        font-weight: $font-weight-medium;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+
+        &--left {
+            right: auto;
+            left: -16px;
+        }
+    }
+
+    &__title {
+        font-family: $font-title;
+        font-size: clamp(34px, 4vw, 52px);
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        line-height: 1.1;
+        margin-bottom: $spacing-xs;
+    }
+
+    &__body {
+        font-family: $font-body;
+        font-size: $font-size-md;
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        line-height: $lh-loose;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__detail {
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+
+        .voyages-cat__dot { margin-top: 0; }
+        span:last-child {
+            font-family: $font-body;
+            font-size: $font-size-xs;
+            font-weight: $font-weight-light;
+            color: #6B5C4E;
+            line-height: 1.5;
+        }
+    }
+
+    // Accordéon inclus
+    &__accordion {
+        border-top: 1px solid rgba(163, 158, 147, 0.3);
+        padding-top: $spacing-md;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__accordion-btn {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px 0;
+
+        span:first-child {
+            font-family: $font-body;
+            font-size: $font-size-xs;
+            font-weight: $font-weight-medium;
+            color: $color-dark;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    &__accordion-icon {
+        font-size: 18px;
+        transition: transform $transition-normal;
+        display: inline-block;
+    }
+
+    &__accordion-btn.is-open &__accordion-icon {
+        transform: rotate(45deg);
+    }
+
+    &__included {
+        list-style: none;
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease, margin-top 0.3s ease;
+
+        .is-open + & {
+            max-height: 200px;
+            margin-top: $spacing-sm;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+            margin-bottom: $spacing-xs;
+
+            span {
+                font-family: $font-body;
+                font-size: $font-size-xs;
+                font-weight: $font-weight-light;
+                color: #6B5C4E;
+            }
+        }
+    }
+
+    &__dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: $color-terra;
+        flex-shrink: 0;
+    }
+
+    &__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: $spacing-md;
+    }
+
+    &__price-label {
+        display: block;
+        font-family: $font-body;
+        font-size: $font-size-label;
+        letter-spacing: $ls-nav;
+        color: $color-grey;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+
+    &__price-value {
+        display: block;
+        font-family: $font-title;
+        font-size: 22px;
+        font-weight: $font-weight-light;
+        color: $color-dark;
+    }
+}
+
+// ------------------------------------------------------------
+// Destinations phares
+// ------------------------------------------------------------
+
+.voyages-destinations__title {
+    font-family: $font-title;
+    font-size: clamp(34px, 4vw, 52px);
+    font-weight: $font-weight-light;
+    font-style: italic;
+    color: $color-cream;
+    margin-bottom: $spacing-sm;
+    line-height: 1.1;
+}
+
+.voyages-destinations__subtitle {
+    font-family: $font-body;
+    font-size: $font-size-md;
+    font-weight: $font-weight-light;
+    color: $color-grey;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.75;
+}
+
+.voyages-dest-card {
+    position: relative;
+    height: 340px;
+    border-radius: $radius-card;
+    overflow: hidden;
+    cursor: pointer;
+
+    &__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.65s ease;
+    }
+
+    &:hover &__image { transform: scale(1.06); }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to top,
+            rgba(74, 60, 50, 0.75) 0%,
+            rgba(74, 60, 50, 0.15) 60%,
+            transparent 100%
+        );
+        transition: background $transition-normal;
+    }
+
+    &:hover &__overlay {
+        background: linear-gradient(
+            to top,
+            rgba(74, 60, 50, 0.90) 0%,
+            rgba(74, 60, 50, 0.40) 60%,
+            transparent 100%
+        );
+    }
+
+    &__content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 24px 28px;
+    }
+
+    &__tag {
+        display: inline-block;
+        color: $color-dark;
+        font-family: $font-body;
+        font-size: 10px;
+        font-weight: $font-weight-medium;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 3px 10px;
+        border-radius: 12px;
+        margin-bottom: $spacing-xs;
+    }
+
+    &__country {
+        font-family: $font-body;
+        font-size: $font-size-label;
+        letter-spacing: 3px;
+        color: rgba(255, 255, 255, 0.65);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+
+    &__name {
+        font-family: $font-title;
+        font-size: 26px;
+        font-weight: $font-weight-light;
+        color: $color-white;
+        line-height: 1.15;
+    }
+
+    &__link {
+        display: block;
+        font-family: $font-body;
+        font-size: 12px;
+        color: $color-terra;
+        font-weight: $font-weight-medium;
+        margin-top: $spacing-sm;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height $transition-normal;
+    }
+
+    &:hover &__link { max-height: 40px; }
+}
+
+// ------------------------------------------------------------
+// Itinéraires
+// ------------------------------------------------------------
+
+.voyages-itineraires__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: $spacing-xl;
+    flex-wrap: wrap;
+    gap: $spacing-lg;
+
+    @include respond-to('tablet') { flex-direction: column; align-items: flex-start; }
+}
+
+.voyages-itineraires__title {
+    font-family: $font-title;
+    font-size: clamp(34px, 4vw, 52px);
+    font-weight: $font-weight-light;
+    color: $color-dark;
+    line-height: 1.1;
+}
+
+.voyages-itineraires__subtitle {
+    font-family: $font-body;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-light;
+    color: $color-grey;
+    max-width: 360px;
+    line-height: 1.7;
+    text-align: right;
+
+    @include respond-to('tablet') { text-align: left; }
+}
+
+.voyages-iti-card {
+    background-color: $color-white;
+    border-radius: $radius-card;
+    overflow: hidden;
+    box-shadow: $shadow-card;
+
+    &__image-wrap {
+        height: 220px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    &__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+
+        &:hover { transform: scale(1.05); }
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(74, 60, 50, 0.5) 0%, transparent 50%);
+    }
+
+    &__badge {
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        font-family: $font-body;
+        font-size: 10px;
+        font-weight: $font-weight-medium;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 12px;
+    }
+
+    &__content { padding: 28px; }
+
+    &__meta {
+        display: flex;
+        gap: $spacing-md;
+        margin-bottom: $spacing-md;
+        flex-wrap: wrap;
+
+        span {
+            font-family: $font-body;
+            font-size: 12px;
+            color: $color-grey;
+            font-weight: $font-weight-light;
+        }
+    }
+
+    &__title {
+        font-family: $font-title;
+        font-size: 28px;
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        margin-bottom: $spacing-sm;
+        line-height: 1.15;
+    }
+
+    &__desc {
+        font-family: $font-body;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-light;
+        color: #6B5C4E;
+        line-height: 1.75;
+        margin-bottom: $spacing-md;
+    }
+
+    &__accordion { margin-bottom: $spacing-md; }
+
+    &__accordion-btn {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: none;
+        border: none;
+        border-top: 1px solid rgba(163, 158, 147, 0.2);
+        cursor: pointer;
+        padding: $spacing-sm 0 0;
+
+        span:first-child {
+            font-family: $font-body;
+            font-size: 12px;
+            font-weight: $font-weight-medium;
+            color: $color-dark;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    &__accordion-arrow {
+        color: $color-terra;
+        transition: transform $transition-normal;
+        display: inline-block;
+    }
+
+    &__accordion-btn.is-open &__accordion-arrow { transform: rotate(180deg); }
+
+    &__steps {
+        list-style: none;
+        padding: $spacing-sm 0 $spacing-md;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+
+        .is-open + & { max-height: 200px; }
+    }
+
+    &__step {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-xs;
+
+        span {
+            font-family: $font-body;
+            font-size: 12px;
+            color: #6B5C4E;
+            font-weight: $font-weight-light;
+        }
+    }
+
+    &__step-num {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background-color: rgba(197, 138, 96, 0.12);
+        border: 1px solid $color-terra;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-family: $font-title;
+        font-size: 12px;
+        color: $color-terra;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: $spacing-md;
+        border-top: 1px solid rgba(163, 158, 147, 0.2);
+    }
+
+    &__price-label {
+        display: block;
+        font-family: $font-body;
+        font-size: $font-size-label;
+        letter-spacing: 1.5px;
+        color: $color-grey;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+
+    &__price-value {
+        font-family: $font-title;
+        font-size: 24px;
+        font-weight: $font-weight-light;
+        color: $color-dark;
+
+        em {
+            font-size: 13px;
+            font-style: normal;
+            font-family: $font-body;
+            color: $color-grey;
+        }
+    }
+}
+
+// ------------------------------------------------------------
+// CTA final
+// ------------------------------------------------------------
+
+.voyages-cta {
+    max-width: 680px;
+    margin: 0 auto;
+    background-color: $color-white;
+
+    &__title {
+        font-family: $font-title;
+        font-size: clamp(36px, 5vw, 58px);
+        font-weight: $font-weight-light;
+        color: $color-dark;
+        line-height: 1.1;
+        margin-bottom: $spacing-md;
+
+        &--italic {
+            display: block;
+            font-style: italic;
+            color: $color-terra;
+        }
+    }
+
+    &__text {
+        font-family: $font-body;
+        font-size: $font-size-base;
+        font-weight: $font-weight-light;
+        color: #6B5C4E;
+        line-height: 1.8;
+        margin-bottom: $spacing-xl;
+    }
+
+    &__buttons {
+        display: flex;
+        gap: $spacing-sm;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
