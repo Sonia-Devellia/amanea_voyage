@@ -9,7 +9,7 @@ if (!empty($cover['file_name'])) {
 } elseif (!empty($pexelsHero['src'])) {
     $seoImage = $pexelsHero['src'];
 } else {
-    $seoImage = APP_URL . '/public/images/og-default.jpg';
+    $seoImage = APP_URL . '/public/images/og-default.webp';
 }
 
 // Extrait de 155 caractères pour la meta description
@@ -96,7 +96,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
             $coverSrc    = $pexelsHero['src'];
             $coverSrcset = $pexelsHero['srcset'];
         } else {
-            $coverSrc    = APP_URL . '/public/images/placeholderegypt.jpg';
+            $coverSrc    = APP_URL . '/public/images/placeholderegypt.webp';
             $coverSrcset = null;
         }
         ?>
@@ -263,7 +263,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
         "url": "<?= APP_URL ?>",
         "logo": {
             "@type": "ImageObject",
-            "url": "<?= APP_URL ?>/public/images/og-default.jpg"
+            "url": "<?= APP_URL ?>/public/images/og-default.webp"
         }
     },
     "url": "<?= APP_URL ?>/inspirations/show/<?= htmlspecialchars($article['slug']) ?>",

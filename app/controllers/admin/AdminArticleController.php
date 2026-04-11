@@ -77,7 +77,6 @@ class AdminArticleController extends Controller
             'title'           => htmlspecialchars(trim($_POST['title']          ?? '')),
             'content'         => trim($_POST['content']                         ?? ''),
             'slug'            => htmlspecialchars(trim($_POST['slug']           ?? '')),
-            'id_media'        => !empty($_POST['id_media'])        ? (int) $_POST['id_media']        : null,
             'id_admin'        => $_SESSION['admin']['id'],
             'id_destination'  => !empty($_POST['id_destination'])  ? (int) $_POST['id_destination']  : null,
             // Mot-clé Pexels défini par l'admin — prioritaire sur destination et catégorie
@@ -131,6 +130,8 @@ class AdminArticleController extends Controller
             'categories'   => $this->categoryModel->findAll(),
             'destinations' => $this->destinationModel->findAll(),
             'medias'       => $this->mediaModel->findAll(),
+            'contents'     => $this->mediaModel->findContentsByArticle($id),
+            'cover'        => $this->mediaModel->findCoverByArticle($id),
         ]);
     }
 
@@ -152,7 +153,6 @@ class AdminArticleController extends Controller
             'title'          => htmlspecialchars(trim($_POST['title']         ?? '')),
             'content'        => trim($_POST['content']                        ?? ''),
             'slug'           => htmlspecialchars(trim($_POST['slug']          ?? '')),
-            'id_media'       => !empty($_POST['id_media'])       ? (int) $_POST['id_media']       : null,
             'id_destination' => !empty($_POST['id_destination']) ? (int) $_POST['id_destination'] : null,
             'pexels_keyword' => trim($_POST['pexels_keyword'] ?? ''),
         ];

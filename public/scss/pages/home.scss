@@ -26,10 +26,14 @@
     }
 
     // La vidéo est au-dessus de l'image ; le fallback la masque si besoin
+    // opacity 0 → 1 via JS (canplay) pour éviter le flash brutal poster→vidéo
     &__video {
         z-index: 1;
+        opacity: 0;
+        transition: opacity 1s ease;
 
-        &.is-hidden { display: none; }
+        &.is-playing { opacity: 1; }
+        &.is-hidden  { display: none; }
     }
 
     &__overlay {

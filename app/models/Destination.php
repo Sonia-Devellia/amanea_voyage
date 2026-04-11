@@ -86,7 +86,8 @@ class Destination extends Model
                 label          = :label,
                 tag            = :tag,
                 tag_color      = :tag_color,
-                cover_image    = :cover_image
+                cover_image    = :cover_image,
+                is_featured    = :is_featured
             WHERE {$this->primaryKey} = :id
         ");
 
@@ -99,6 +100,7 @@ class Destination extends Model
             ':tag'            => $data['tag']             ?? null,
             ':tag_color'      => $data['tag_color']       ?? null,
             ':cover_image'    => $data['cover_image']     ?? null,
+            ':is_featured'    => isset($data['is_featured']) ? 1 : 0,
             ':id'             => $id,
         ]);
     }

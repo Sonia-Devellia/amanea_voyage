@@ -59,7 +59,7 @@ class Media extends Model
     }
 
     // ---------------------------------------------------------------------------------------------------------
-    // Récupère l'image de couverture d'un article ,fait une jointure sur la clé étrangère Id_MEDIA dans ARTICLE
+    // Récupère l'image de couverture d'un article via CONTAINS_CONTENTS (is_cover = 1)
     // Retourne le média ou false si l'article n'a pas de couverture
     // ----------------------------------------------------------------------------------------------------------
     public function findCoverByArticle(int $idArticle): array|false
@@ -67,8 +67,9 @@ class Media extends Model
         $stmt = $this->db->prepare("
             SELECT m.*
             FROM {$this->table} m
-            INNER JOIN ARTICLE a ON a.Id_MEDIA = m.Id_MEDIA
-            WHERE a.Id_ARTICLE = :id_article
+            JOIN CONTAINS_CONTENTS cc ON cc.Id_MEDIA = m.Id_MEDIA
+            WHERE cc.Id_ARTICLE = :id_article
+              AND cc.is_cover = 1
         ");
 
         $stmt->execute([':id_article' => $idArticle]);

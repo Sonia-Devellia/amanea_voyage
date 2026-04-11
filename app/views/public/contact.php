@@ -1,8 +1,8 @@
 <?php
 $pageTitle       = 'Créons votre voyage';
 $metaDescription = 'Contactez Habibi Nora pour créer votre voyage sur mesure. Échange découverte gratuit, sans engagement.';
-$ogImage         = APP_URL . '/public/images/cta-aerial.jpg';
-$headExtra       = '<link rel="preload" as="image" href="' . APP_URL . '/public/images/cta-aerial.jpg" fetchpriority="high">';
+$ogImage         = APP_URL . '/public/images/cta-aerial.webp';
+$headExtra       = '<link rel="preload" as="image" href="' . APP_URL . '/public/images/cta-aerial.webp" fetchpriority="high">';
 require_once APP_ROOT . '/app/views/layouts/header.php';
 ?>
 
@@ -12,7 +12,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
 
 <section class="contact-hero">
 
-    <img src="<?= APP_URL ?>/public/images/cta-aerial.jpg"
+    <img src="<?= APP_URL ?>/public/images/cta-aerial3.webp"
         alt="Vue aérienne d'une île tropicale — Créons votre voyage Amanéa"
         class="contact-hero__image"
         fetchpriority="high"
@@ -342,7 +342,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
     "name": "Créons votre voyage — Contact Amanéa",
     "description": "Contactez Habibi Nora pour créer votre voyage sur mesure. Échange découverte gratuit, sans engagement.",
     "url": "<?= APP_URL ?>/contact",
-    "image": "<?= APP_URL ?>/public/images/cta-aerial.jpg",
+    "image": "<?= APP_URL ?>/public/images/cta-aerial.webp",
     "inLanguage": "fr-FR",
     "isPartOf": {
         "@type": "WebSite",

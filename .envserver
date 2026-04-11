@@ -1,0 +1,12 @@
+APP_NAME="Amanéa Voyage"
+APP_URL=https://kercode10.greta-bretagne-sud.org/sonia-habibi/amaneav/
+APP_ENV=production
+APP_DEBUG=false
+
+DB_HOST=localhost
+DB_NAME=tima6358_sonia-habibi
+DB_USERNAME=tima6358_sonia-habibi
+DB_PASSWORD=HabibiS2025
+DB_CHARSET=utf8mb4
+
+PEXELS_API_KEY= FcxsWWjI1JQJYhpa6YRYgTT6wuVXAOe9ph8LVopBo2q3rFLZWzfSZgaj

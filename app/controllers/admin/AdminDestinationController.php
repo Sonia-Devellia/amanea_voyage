@@ -167,6 +167,7 @@ class AdminDestinationController extends Controller
             'tag_color'      => in_array($tag_color, $allowed_colors) ? $tag_color : null,
             'cover_image'    => htmlspecialchars(trim($_POST['cover_image']    ?? '')),
             'pexels_keyword' => trim($_POST['pexels_keyword']                  ?? ''),
+            'is_featured'    => isset($_POST['is_featured']),
         ];
     }
 }

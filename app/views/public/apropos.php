@@ -1,8 +1,8 @@
 <?php
 $pageTitle       = "L'Histoire d'Amanéa";
 $metaDescription = "Découvrez l'histoire de Habibi Nora, fondatrice d'Amanéa Voyage — travel planning éthique et sur mesure depuis l'Île Maurice.";
-$ogImage         = APP_URL . '/public/images/apropos-hero.jpg';
-$headExtra       = '<link rel="preload" as="image" href="' . APP_URL . '/public/images/apropos-hero.jpg" fetchpriority="high">';
+$ogImage         = APP_URL . '/public/images/apropos-hero.webp';
+$headExtra       = '<link rel="preload" as="image" href="' . APP_URL . '/public/images/apropos-hero.webp" fetchpriority="high">';
 require_once APP_ROOT . '/app/views/layouts/header.php';
 ?>
 
@@ -12,7 +12,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
 
 <section class="apropos-hero">
 
-    <img src="<?= APP_URL ?>/public/images/apropos-hero.jpg"
+    <img src="<?= APP_URL ?>/public/images/apropos-hero.webp"
         alt="Dunes dorées au coucher du soleil — Amanéa Voyage"
         class="apropos-hero__image"
         fetchpriority="high"
@@ -55,7 +55,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
             <!-- Photo arche gauche -->
             <div class="apropos-nora__photo-wrap">
                 <div class="apropos-nora__arch">
-                    <img src="<?= APP_URL ?>/public/images/nora-portrait2.jpg"
+                    <img src="<?= APP_URL ?>/public/images/nora-portrait2.webp"
                         alt="Habibi Nora, fondatrice d'Amanéa Voyage"
                         class="apropos-nora__photo"
                         loading="lazy"
@@ -131,7 +131,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
 
             <!-- Image paysage droite -->
             <div class="apropos-timeline__image-wrap">
-                <img src="<?= APP_URL ?>/public/images/louxor.jpg"
+                <img src="<?= APP_URL ?>/public/images/louxor.webp"
                     alt="Egypt Louxor — inspiration fondatrice d'Amanéa Voyage"
                     class="apropos-timeline__image"
                     loading="lazy"
@@ -140,7 +140,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
 
             <!-- Image nora gauche -->
             <div class="apropos-timeline__image-wrap apropos-timeline__image-wrap--right">
-                <img src="<?= APP_URL ?>/public/images/portrait-nora3.jpg"
+                <img src="<?= APP_URL ?>/public/images/portrait-nora3.webp"
                     alt="Nora en Voyage en Egypt"
                     class="apropos-timeline__image"
                     loading="lazy"
@@ -259,7 +259,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
 
 <section class="apropos-philosophie">
 
-    <img src="<?= APP_URL ?>/public/images/egypt.jpg"
+    <img src="<?= APP_URL ?>/public/images/egypt.webp"
         alt="Paysage vue du ciel du désert Egyptien — philosophie Amanéa Voyage"
         class="apropos-philosophie__image"
         loading="lazy"
@@ -493,7 +493,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                 </div>
 
                 <div class="apropos-coulisses__photo-frame">
-                    <img src="<?= APP_URL ?>/public/images/carnet-de-voyage.jpg"
+                    <img src="<?= APP_URL ?>/public/images/carnet-de-voyage.webp"
                         alt="Bureau de Habibi Nora — planification de voyages sur mesure"
                         class="apropos-coulisses__photo"
                         loading="lazy"
@@ -542,7 +542,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                 "name": "L'Histoire d'Amanéa",
                 "description": "Découvrez l'histoire de Habibi Nora, fondatrice d'Amanéa Voyage — travel planning éthique et sur mesure depuis l'Île Maurice.",
                 "url": "<?= APP_URL ?>/a-propos",
-                "image": "<?= APP_URL ?>/public/images/apropos-hero.jpg",
+                "image": "<?= APP_URL ?>/public/images/apropos-hero.webp",
                 "inLanguage": "fr-FR",
                 "isPartOf": {
                     "@type": "WebSite",
@@ -556,7 +556,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
                 "jobTitle": "Travel planner & créatrice de voyages sur mesure",
                 "description": "Fondatrice d'Amanéa Voyage, Habibi Nora conçoit des voyages éthiques et sur mesure depuis l'Île Maurice — voyages de noces, au féminin, en groupe et personnalisés.",
                 "url": "<?= APP_URL ?>/a-propos",
-                "image": "<?= APP_URL ?>/public/images/nora-portrait2.jpg",
+                "image": "<?= APP_URL ?>/public/images/nora-portrait2.webp",
                 "worksFor": {
                     "@type": "TravelAgency",
                     "name": "Amanéa Voyage",

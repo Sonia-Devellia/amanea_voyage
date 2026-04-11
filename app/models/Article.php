@@ -26,9 +26,9 @@ class Article extends Model
     {
         $stmt = $this->db->prepare("
             INSERT INTO {$this->table}
-                (title, content, status, publication_date, slug, Id_MEDIA, Id_ADMIN, Id_DESTINATION, pexels_keyword)
+                (title, content, status, publication_date, slug, Id_ADMIN, Id_DESTINATION, pexels_keyword)
             VALUES
-                (:title, :content, :status, :publication_date, :slug, :id_media, :id_admin, :id_destination, :pexels_keyword)
+                (:title, :content, :status, :publication_date, :slug, :id_admin, :id_destination, :pexels_keyword)
         ");
 
         return $stmt->execute([
@@ -37,7 +37,6 @@ class Article extends Model
             ':status'           => 'brouillon',
             ':publication_date' => null,
             ':slug'             => $data['slug'],
-            ':id_media'         => $data['id_media']        ?? null,
             ':id_admin'         => $data['id_admin'],
             ':id_destination'   => $data['id_destination']  ?? null,
             ':pexels_keyword'   => !empty($data['pexels_keyword']) ? trim($data['pexels_keyword']) : null,
@@ -53,7 +52,6 @@ class Article extends Model
             SET title           = :title,
                 content         = :content,
                 slug            = :slug,
-                Id_MEDIA        = :id_media,
                 Id_DESTINATION  = :id_destination,
                 pexels_keyword  = :pexels_keyword
             WHERE {$this->primaryKey} = :id
@@ -63,7 +61,6 @@ class Article extends Model
             ':title'          => $data['title'],
             ':content'        => $data['content'],
             ':slug'           => $data['slug'],
-            ':id_media'       => $data['id_media']       ?? null,
             ':id_destination' => $data['id_destination'] ?? null,
             ':pexels_keyword' => !empty($data['pexels_keyword']) ? trim($data['pexels_keyword']) : null,
             ':id'             => $id,
@@ -101,7 +98,8 @@ class Article extends Model
                    a.pexels_keyword AS article_pexels_keyword,
                    d.pexels_keyword AS destination_pexels_keyword
             FROM {$this->table} a
-            LEFT JOIN MEDIA m ON m.Id_MEDIA = a.Id_MEDIA
+            LEFT JOIN CONTAINS_CONTENTS cc ON cc.Id_ARTICLE = a.Id_ARTICLE AND cc.is_cover = 1
+            LEFT JOIN MEDIA m  ON m.Id_MEDIA = cc.Id_MEDIA
             LEFT JOIN BELONGS_TO bt ON bt.Id_ARTICLE = a.Id_ARTICLE
             LEFT JOIN CATEGORY c ON c.Id_CATEGORY = bt.Id_CATEGORY
             LEFT JOIN DESTINATION d ON d.Id_DESTINATION = a.Id_DESTINATION
@@ -148,7 +146,8 @@ class Article extends Model
                    a.pexels_keyword AS article_pexels_keyword,
                    d.pexels_keyword AS destination_pexels_keyword
             FROM {$this->table} a
-            LEFT JOIN MEDIA m ON m.Id_MEDIA = a.Id_MEDIA
+            LEFT JOIN CONTAINS_CONTENTS cc ON cc.Id_ARTICLE = a.Id_ARTICLE AND cc.is_cover = 1
+            LEFT JOIN MEDIA m  ON m.Id_MEDIA = cc.Id_MEDIA
             INNER JOIN BELONGS_TO bt ON bt.Id_ARTICLE = a.Id_ARTICLE
             LEFT JOIN CATEGORY c ON c.Id_CATEGORY = bt.Id_CATEGORY
             LEFT JOIN DESTINATION d ON d.Id_DESTINATION = a.Id_DESTINATION
@@ -185,8 +184,8 @@ class Article extends Model
     public function addMedia(int $idArticle, int $idMedia): bool
     {
         $stmt = $this->db->prepare("
-            INSERT INTO CONTAINS_CONTENTS (Id_ARTICLE, Id_MEDIA)
-            VALUES (:id_article, :id_media)
+            INSERT IGNORE INTO CONTAINS_CONTENTS (Id_ARTICLE, Id_MEDIA, is_cover)
+            VALUES (:id_article, :id_media, 0)
         ");
 
         return $stmt->execute([
@@ -214,20 +213,28 @@ class Article extends Model
     }
 
     // -------------------------------------------------------------------------
-    // MAJ uniquement l'image de couverture d'un article
-    // Modifie la colonne Id_MEDIA directement dans la table ARTICLE
+    // Définit l'image de couverture d'un article via CONTAINS_CONTENTS.is_cover
+    // S'assure que le média est lié à l'article, puis le marque comme couverture
     // -------------------------------------------------------------------------
     public function updateCover(int $idArticle, int $idMedia): bool
     {
+        // S'assure que le média est bien dans CONTAINS_CONTENTS (upsert)
+        $this->db->prepare("
+            INSERT INTO CONTAINS_CONTENTS (Id_ARTICLE, Id_MEDIA, is_cover)
+            VALUES (:id_article, :id_media, 0)
+            ON DUPLICATE KEY UPDATE Id_ARTICLE = Id_ARTICLE
+        ")->execute([':id_article' => $idArticle, ':id_media' => $idMedia]);
+
+        // Définit is_cover : 1 pour ce média, 0 pour tous les autres de cet article
         $stmt = $this->db->prepare("
-            UPDATE {$this->table}
-            SET Id_MEDIA = :id_media
-            WHERE {$this->primaryKey} = :id
+            UPDATE CONTAINS_CONTENTS
+            SET is_cover = (Id_MEDIA = :id_media)
+            WHERE Id_ARTICLE = :id_article
         ");
 
         return $stmt->execute([
-            ':id_media' => $idMedia,
-            ':id'       => $idArticle,
+            ':id_media'   => $idMedia,
+            ':id_article' => $idArticle,
         ]);
     }
 

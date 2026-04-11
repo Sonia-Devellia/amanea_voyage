@@ -25,13 +25,14 @@ class Notebook extends Model
     public function create(array $data): bool
     {
         $stmt = $this->db->prepare("
-            INSERT INTO {$this->table} (pdf_file, upload_date)
-            VALUES (:pdf_file, :upload_date)
+            INSERT INTO {$this->table} (pdf_file, upload_date, Id_TRAVEL_PROJECT)
+            VALUES (:pdf_file, :upload_date, :id_travel_project)
         ");
 
         return $stmt->execute([
-            ':pdf_file'    => $data['pdf_file'],
-            ':upload_date' => date('Y-m-d H:i:s'),
+            ':pdf_file'          => $data['pdf_file'],
+            ':upload_date'       => date('Y-m-d H:i:s'),
+            ':id_travel_project' => $data['id_travel_project'],
         ]);
     }
 
@@ -62,9 +63,8 @@ class Notebook extends Model
     public function findByTravelProject(int $idTravelProject): array|false
     {
         $stmt = $this->db->prepare("
-            SELECT n.* FROM {$this->table} n
-            INNER JOIN TRAVEL_PROJECT tp ON tp.Id_NOTEBOOK = n.Id_NOTEBOOK
-            WHERE tp.Id_TRAVEL_PROJECT = :id_travel_project
+            SELECT * FROM {$this->table}
+            WHERE Id_TRAVEL_PROJECT = :id_travel_project
         ");
 
         $stmt->execute([':id_travel_project' => $idTravelProject]);

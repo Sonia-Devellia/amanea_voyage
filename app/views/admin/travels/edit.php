@@ -4,182 +4,180 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
 $t         = $travel;
 $steps_raw = $steps_raw ?? '';
 
-$badge_colors = [
-    '#C58A60' => 'Terracotta',
-    '#9B6030' => 'Terracotta foncé',
-    '#4A3C32' => 'Marron foncé',
-    '#6C7E8F' => 'Bleu-gris',
-    '#A4B3A1' => 'Vert sauge',
-    '#C3998A' => 'Rose/Brun',
-    '#EADFC9' => 'Beige crème',
+$months = [
+    1 => 'Janvier', 2 => 'Février', 3 => 'Mars', 4 => 'Avril',
+    5 => 'Mai', 6 => 'Juin', 7 => 'Juillet', 8 => 'Août',
+    9 => 'Septembre', 10 => 'Octobre', 11 => 'Novembre', 12 => 'Décembre',
 ];
 ?>
 
 <section class="section section--beige">
-    <div class="container" style="max-width:760px;">
+    <div class="container at-form-container">
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-            <h1 style="font-family:var(--font-title,serif); font-size:2rem; font-weight:300;">
+        <div class="at-page-header">
+            <h1 class="at-page-title">
                 Modifier — <?= htmlspecialchars($t['title']) ?>
             </h1>
             <a href="<?= APP_URL ?>/admin/travels" class="btn-outline">← Retour</a>
         </div>
 
         <?php if (!empty($error)) : ?>
-            <p style="color:#dc3545; margin-bottom:1.5rem; font-family:var(--font-body,sans-serif);">
-                <?= htmlspecialchars($error) ?>
-            </p>
+            <p class="at-error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
-        <form method="POST" action="<?= APP_URL ?>/admin/travels/update/<?= $t['Id_TRAVEL'] ?>"
-              style="font-family:var(--font-body,sans-serif); display:flex; flex-direction:column; gap:1.5rem;">
+        <form method="POST" action="<?= APP_URL ?>/admin/travels/update/<?= $t['Id_TRAVEL'] ?>" class="at-form">
 
             <!-- Titre -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
-                    Titre <span style="color:#dc3545;">*</span>
+                <label class="at-label">
+                    Titre <span class="at-label__required">*</span>
                 </label>
                 <input type="text" name="title" required
                        value="<?= htmlspecialchars($t['title']) ?>"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:1rem; font-family:inherit;">
+                       class="at-input at-input--title">
             </div>
 
             <!-- Destination liée -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Destination liée
-                    <span style="font-weight:400; color:#888;"> (facultatif)</span>
+                    <span class="at-label__hint"> (facultatif)</span>
                 </label>
-                <select name="id_destination"
-                        style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
+                <select name="id_destination" class="at-select">
                     <option value="">— Aucune destination —</option>
                     <?php foreach ($destinations as $dest) : ?>
                         <option value="<?= $dest['Id_DESTINATION'] ?>"
-                            <?= ($t['id_destination'] ?? null) == $dest['Id_DESTINATION'] ? 'selected' : '' ?>>
+                            <?= ($t['Id_DESTINATION'] ?? null) == $dest['Id_DESTINATION'] ? 'selected' : '' ?>>
                             <?= htmlspecialchars($dest['name']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
             </div>
 
-            <hr style="border:none; border-top:1px solid #e0d6ce;">
-            <p style="font-size:0.85rem; color:#888; margin:0;">Badge — type de voyage</p>
+            <!-- Formule de voyage (TYPE) -->
+            <div>
+                <label class="at-label">
+                    Formule de voyage
+                </label>
+                <select name="id_type" class="at-select">
+                    <option value="">— Aucune formule —</option>
+                    <?php foreach ($types as $type) : ?>
+                        <option value="<?= $type['Id_TYPE'] ?>"
+                            <?= ($t['Id_TYPE'] ?? null) == $type['Id_TYPE'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($type['title']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-            <!-- Badge -->
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
+            <!-- Image de couverture (MEDIA) -->
+            <div>
+                <label class="at-label">
+                    Image de couverture
+                    <span class="at-label__hint"> (média du backoffice)</span>
+                </label>
+                <select name="id_media" class="at-select">
+                    <option value="">— Aucune image —</option>
+                    <?php foreach ($medias as $media) : ?>
+                        <option value="<?= $media['Id_MEDIA'] ?>"
+                            <?= ($t['Id_MEDIA'] ?? null) == $media['Id_MEDIA'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($media['file_name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <?php if (!empty($t['file_name'])) : ?>
+                    <img src="<?= APP_URL ?>/public/images/<?= htmlspecialchars($t['file_name']) ?>"
+                         alt="Aperçu"
+                         class="at-img-preview"
+                         onerror="this.style.display='none'">
+                <?php endif; ?>
+            </div>
+
+            <hr class="at-divider">
+            <p class="at-section-hint">Informations pratiques</p>
+
+            <!-- Durée + Voyageurs -->
+            <div class="at-grid-3">
                 <div>
-                    <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Libellé</label>
-                    <input type="text" name="badge"
-                           value="<?= htmlspecialchars($t['badge'] ?? '') ?>"
-                           style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
+                    <label class="at-label">Durée (jours)</label>
+                    <input type="number" name="duration_days" min="1" max="365"
+                           value="<?= htmlspecialchars($t['duration_days'] ?? '') ?>"
+                           class="at-input">
                 </div>
                 <div>
-                    <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Couleur fond</label>
-                    <select name="badge_color"
-                            style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
-                        <?php foreach ($badge_colors as $hex => $label) : ?>
-                            <option value="<?= $hex ?>" <?= ($t['badge_color'] ?? '#C58A60') === $hex ? 'selected' : '' ?>>
+                    <label class="at-label">Voyageurs min</label>
+                    <input type="number" name="min_persons" min="1" max="99"
+                           value="<?= htmlspecialchars($t['min_persons'] ?? '') ?>"
+                           class="at-input">
+                </div>
+                <div>
+                    <label class="at-label">Voyageurs max</label>
+                    <input type="number" name="max_persons" min="1" max="99"
+                           value="<?= htmlspecialchars($t['max_persons'] ?? '') ?>"
+                           class="at-input">
+                </div>
+            </div>
+
+            <!-- Saison -->
+            <div class="at-grid-3">
+                <div>
+                    <label class="at-label">Saison — mois de début</label>
+                    <select name="season_start" class="at-select">
+                        <option value="">—</option>
+                        <?php foreach ($months as $num => $label) : ?>
+                            <option value="<?= $num ?>" <?= ($t['season_start'] ?? null) == $num ? 'selected' : '' ?>>
                                 <?= $label ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div>
-                    <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Couleur texte</label>
-                    <select name="badge_text"
-                            style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
-                        <option value="#ffffff" <?= ($t['badge_text'] ?? '#ffffff') === '#ffffff' ? 'selected' : '' ?>>Blanc</option>
-                        <option value="#4A3C32" <?= ($t['badge_text'] ?? '') === '#4A3C32' ? 'selected' : '' ?>>Marron foncé</option>
+                    <label class="at-label">Saison — mois de fin</label>
+                    <select name="season_end" class="at-select">
+                        <option value="">—</option>
+                        <?php foreach ($months as $num => $label) : ?>
+                            <option value="<?= $num ?>" <?= ($t['season_end'] ?? null) == $num ? 'selected' : '' ?>>
+                                <?= $label ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
-            </div>
-
-            <hr style="border:none; border-top:1px solid #e0d6ce;">
-            <p style="font-size:0.85rem; color:#888; margin:0;">Informations pratiques</p>
-
-            <!-- Infos pratiques -->
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
                 <div>
-                    <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Durée</label>
-                    <input type="text" name="duration"
-                           value="<?= htmlspecialchars($t['duration'] ?? '') ?>"
-                           style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
-                </div>
-                <div>
-                    <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Voyageurs</label>
-                    <input type="text" name="persons"
-                           value="<?= htmlspecialchars($t['persons'] ?? '') ?>"
-                           style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
-                </div>
-                <div>
-                    <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Saison</label>
-                    <input type="text" name="season"
-                           value="<?= htmlspecialchars($t['season'] ?? '') ?>"
-                           style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
+                    <label class="at-label">Prix</label>
+                    <input type="text" name="price"
+                           value="<?= htmlspecialchars($t['price'] ?? '') ?>"
+                           class="at-input">
                 </div>
             </div>
 
-            <!-- Prix -->
-            <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Prix</label>
-                <input type="text" name="price"
-                       value="<?= htmlspecialchars($t['price'] ?? '') ?>"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
-            </div>
-
-            <!-- Image -->
-            <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
-                    Nom du fichier image
-                    <span style="font-weight:400; color:#888;"> (déposé dans public/images/)</span>
-                </label>
-                <input type="text" name="cover_image"
-                       value="<?= htmlspecialchars($t['cover_image'] ?? '') ?>"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace;">
-                <?php if (!empty($t['cover_image'])) : ?>
-                    <img src="<?= APP_URL ?>/public/images/<?= htmlspecialchars($t['cover_image']) ?>"
-                         alt="Aperçu"
-                         style="margin-top:0.5rem; height:80px; border-radius:4px; object-fit:cover;"
-                         onerror="this.style.display='none'">
-                <?php endif; ?>
-            </div>
-
-            <hr style="border:none; border-top:1px solid #e0d6ce;">
+            <hr class="at-divider">
 
             <!-- Description -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Description</label>
-                <textarea name="description" rows="3"
-                          style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.95rem; font-family:inherit; resize:vertical;"><?= htmlspecialchars($t['description'] ?? '') ?></textarea>
+                <label class="at-label">Description</label>
+                <textarea name="description" rows="3" class="at-textarea"><?= htmlspecialchars($t['description'] ?? '') ?></textarea>
             </div>
 
             <!-- Étapes -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Étapes de l'itinéraire
-                    <span style="font-weight:400; color:#888;"> (une étape par ligne)</span>
+                    <span class="at-label__hint"> (une étape par ligne, format : Ville · Nuits — ex : Tokyo · 3)</span>
                 </label>
-                <textarea name="steps" rows="6"
-                          style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace; resize:vertical;"><?= htmlspecialchars($steps_raw) ?></textarea>
+                <textarea name="steps" rows="6" class="at-textarea at-textarea--mono"><?= htmlspecialchars($steps_raw) ?></textarea>
             </div>
 
             <!-- Publié -->
-            <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div class="at-checkbox">
                 <input type="checkbox" name="is_published" id="is_published" value="1"
-                       <?= $t['is_published'] ? 'checked' : '' ?>
-                       style="width:18px; height:18px; cursor:pointer;">
-                <label for="is_published" style="font-size:0.9rem; cursor:pointer;">
-                    Publié — visible sur la page Voyages
-                </label>
+                       <?= $t['is_published'] ? 'checked' : '' ?>>
+                <label for="is_published">Publié — visible sur la page Voyages</label>
             </div>
 
-            <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="at-actions at-actions--between">
                 <form method="POST" action="<?= APP_URL ?>/admin/travels/delete/<?= $t['Id_TRAVEL'] ?>"
-                      onsubmit="return confirm('Supprimer définitivement ce voyage ?')" style="display:inline;">
-                    <button type="submit"
-                            style="padding:10px 20px; background:none; border:1.5px solid #dc3545; color:#dc3545; border-radius:4px; cursor:pointer; font-family:inherit;">
-                        Supprimer
-                    </button>
+                      onsubmit="return confirm('Supprimer définitivement ce voyage ?')" class="at-inline-form">
+                    <button type="submit" class="btn-danger">Supprimer</button>
                 </form>
 
                 <button type="submit" class="btn-primary">Enregistrer les modifications</button>

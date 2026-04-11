@@ -110,6 +110,12 @@
     if (reducedMotion || slowConn) { hideVideo(); return; }
     video.addEventListener('error', hideVideo);
 
+    // --- Fondu d'entrée : révèle la vidéo quand elle peut jouer ---
+    video.addEventListener('canplay', function onCanPlay() {
+        video.classList.add('is-playing');
+        video.removeEventListener('canplay', onCanPlay);
+    });
+
     // --- Fin de vidéo : figée sur la dernière frame, repart au rechargement de page ---
     video.addEventListener('ended', function () {
         video.pause();

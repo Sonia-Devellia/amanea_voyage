@@ -5,81 +5,77 @@ $d = $destination;
 ?>
 
 <section class="section section--beige">
-    <div class="container" style="max-width:760px;">
+    <div class="container at-form-container">
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-            <h1 style="font-family:var(--font-title,serif); font-size:2rem; font-weight:300;">
+        <div class="at-page-header">
+            <h1 class="at-page-title">
                 Modifier — <?= htmlspecialchars($d['name']) ?>
             </h1>
             <a href="<?= APP_URL ?>/admin/destinations" class="btn-outline">← Retour</a>
         </div>
 
         <?php if (!empty($articlesCount)) : ?>
-            <p style="font-size:0.85rem; color:#555; background:#fff8f0; border:1px solid #f0d8b8; border-radius:6px; padding:0.75rem 1rem; margin-bottom:1.5rem; font-family:var(--font-body,sans-serif);">
+            <p class="at-info-notice">
                 <?= $articlesCount ?> article<?= $articlesCount > 1 ? 's sont liés' : ' est lié' ?> à cette destination.
                 La suppression sera bloquée tant qu'ils ne sont pas désassociés.
             </p>
         <?php endif; ?>
 
         <?php if (!empty($error)) : ?>
-            <p style="color:#dc3545; margin-bottom:1.5rem; font-family:var(--font-body,sans-serif);">
-                <?= htmlspecialchars($error) ?>
-            </p>
+            <p class="at-error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
-        <form method="POST" action="<?= APP_URL ?>/admin/destinations/update/<?= $d['Id_DESTINATION'] ?>"
-            style="font-family:var(--font-body,sans-serif); display:flex; flex-direction:column; gap:1.5rem;">
+        <form method="POST" action="<?= APP_URL ?>/admin/destinations/update/<?= $d['Id_DESTINATION'] ?>" class="at-form">
 
             <!-- Nom -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
-                    Nom <span style="color:#dc3545;">*</span>
+                <label class="at-label">
+                    Nom <span class="at-label__required">*</span>
                 </label>
                 <input type="text" name="name" required
                     value="<?= htmlspecialchars($d['name']) ?>"
-                    style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:1rem; font-family:inherit;">
+                    class="at-input at-input--title">
             </div>
 
             <!-- Slug -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
-                    Slug <span style="color:#dc3545;">*</span>
+                <label class="at-label">
+                    Slug <span class="at-label__required">*</span>
                 </label>
                 <input type="text" name="slug" required
                     value="<?= htmlspecialchars($d['slug']) ?>"
-                    style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace;">
+                    class="at-input at-input--mono">
             </div>
 
-            <hr style="border:none; border-top:1px solid #e0d6ce;">
-            <p style="font-size:0.85rem; color:#888; margin:0;">Champs visuels — affichés sur la page Voyages</p>
+            <hr class="at-divider">
+            <p class="at-section-hint">Champs visuels — affichés sur la page Voyages</p>
 
-            <!-- Accroche (label) -->
+            <!-- Accroche -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Accroche
-                    <span style="font-weight:400; color:#888;"> (titre poétique de la card)</span>
+                    <span class="at-label__hint"> (titre poétique de la card)</span>
                 </label>
                 <input type="text" name="label"
                     value="<?= htmlspecialchars($d['label'] ?? '') ?>"
-                    style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.95rem; font-family:inherit;">
+                    class="at-input">
             </div>
 
-            <!-- Badge (tag) -->
+            <!-- Badge -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Badge
-                    <span style="font-weight:400; color:#888;"> (ex : "Spiritualité & Nature")</span>
+                    <span class="at-label__hint"> (ex : "Spiritualité & Nature")</span>
                 </label>
                 <input type="text" name="tag"
                     value="<?= htmlspecialchars($d['tag'] ?? '') ?>"
-                    style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.95rem; font-family:inherit;">
+                    class="at-input">
             </div>
 
             <!-- Couleur du badge -->
             <div>
-                <!-- views/admin/destinations/edit.php -->
-                <label for="tag_color">Couleur du tag</label>
-                <select name="tag_color" id="tag_color">
+                <label for="tag_color" class="at-label">Couleur du tag</label>
+                <select name="tag_color" id="tag_color" class="at-select">
                     <option value="">-- Choisir une couleur --</option>
                     <option value="#C58A60" <?= ($destination['tag_color'] === '#C58A60') ? 'selected' : '' ?>>Terracotta</option>
                     <option value="#9B6030" <?= ($destination['tag_color'] === '#9B6030') ? 'selected' : '' ?>>Terracotta foncé</option>
@@ -90,78 +86,68 @@ $d = $destination;
                     <option value="#C3998A" <?= ($destination['tag_color'] === '#C3998A') ? 'selected' : '' ?>>Rose/Brun</option>
                     <option value="#EADFC9" <?= ($destination['tag_color'] === '#EADFC9') ? 'selected' : '' ?>>Beige crème</option>
                 </select>
-                <!-- Aperçu live de la couleur -->
-                <span id="color-preview" style="
-                    display: inline-block;
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 4px;
-                    margin-left: 8px;
-                    vertical-align: middle;
-                    background-color: <?= htmlspecialchars($destination['tag_color'] ?: '#ccc') ?>;
-                "></span>
+                <span id="color-preview" class="at-color-preview"
+                      style="background-color:<?= htmlspecialchars($destination['tag_color'] ?: '#ccc') ?>;"></span>
 
-                <script>
-                    document.getElementById('tag_color').addEventListener('change', function() {
-                        document.getElementById('color-preview').style.backgroundColor = this.value;
-                    });
-                </script>
-                <div style="display:flex; gap:0.75rem; align-items:center;">
+                <div class="at-color-picker at-color-picker--mt">
                     <input type="color" name="tag_color"
                         value="<?= htmlspecialchars($d['tag_color'] ?? '#A39E93') ?>"
-                        style="height:42px; width:60px; border:1.5px solid #d9cfc7; border-radius:6px; padding:2px; cursor:pointer;">
+                        class="at-color-input">
                     <input type="text" id="tag_color_text"
                         value="<?= htmlspecialchars($d['tag_color'] ?? '#A39E93') ?>"
                         maxlength="7" placeholder="#A39E93"
-                        style="flex:1; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace;"
+                        class="at-input at-input--mono"
                         oninput="document.querySelector('[name=tag_color]').value=this.value">
                 </div>
             </div>
 
-            <!-- Nom du fichier image -->
+            <!-- Image -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Nom du fichier image
-                    <span style="font-weight:400; color:#888;"> (déposé dans public/images/)</span>
+                    <span class="at-label__hint"> (déposé dans public/images/)</span>
                 </label>
                 <input type="text" name="cover_image"
                     value="<?= htmlspecialchars($d['cover_image'] ?? '') ?>"
-                    style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace;">
+                    class="at-input at-input--mono">
                 <?php if (!empty($d['cover_image'])) : ?>
                     <img src="<?= APP_URL ?>/public/images/<?= htmlspecialchars($d['cover_image']) ?>"
                         alt="Aperçu"
-                        style="margin-top:0.5rem; height:80px; border-radius:4px; object-fit:cover;"
+                        class="at-img-preview"
                         onerror="this.style.display='none'">
                 <?php endif; ?>
             </div>
 
-            <hr style="border:none; border-top:1px solid #e0d6ce;">
+            <!-- Destination phare -->
+            <div class="at-checkbox">
+                <input type="checkbox" name="is_featured" id="is_featured" value="1"
+                       <?= !empty($d['is_featured']) ? 'checked' : '' ?>>
+                <label for="is_featured">Destination phare — affichée sur la page Voyages</label>
+            </div>
+
+            <hr class="at-divider">
 
             <!-- Description -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Description</label>
-                <textarea name="description" rows="4"
-                    style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.95rem; font-family:inherit; resize:vertical;"><?= htmlspecialchars($d['description'] ?? '') ?></textarea>
+                <label class="at-label">Description</label>
+                <textarea name="description" rows="4" class="at-textarea"><?= htmlspecialchars($d['description'] ?? '') ?></textarea>
             </div>
 
             <!-- Mot-clé Pexels -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Mot-clé Pexels
-                    <span style="font-weight:400; color:#888;"> (pour les articles liés à cette destination)</span>
+                    <span class="at-label__hint"> (pour les articles liés à cette destination)</span>
                 </label>
                 <input type="text" name="pexels_keyword"
                     value="<?= htmlspecialchars($d['pexels_keyword'] ?? '') ?>"
-                    style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace;">
+                    class="at-input at-input--mono">
             </div>
 
-            <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="at-actions at-actions--between">
                 <form method="POST" action="<?= APP_URL ?>/admin/destinations/delete/<?= $d['Id_DESTINATION'] ?>"
-                    onsubmit="return confirm('Supprimer définitivement cette destination ?')" style="display:inline;">
-                    <button type="submit"
-                        style="padding:10px 20px; background:none; border:1.5px solid #dc3545; color:#dc3545; border-radius:4px; cursor:pointer; font-family:inherit;">
-                        Supprimer
-                    </button>
+                    onsubmit="return confirm('Supprimer définitivement cette destination ?')" class="at-inline-form">
+                    <button type="submit" class="btn-danger">Supprimer</button>
                 </form>
 
                 <button type="submit" class="btn-primary">Enregistrer les modifications</button>
@@ -172,9 +158,12 @@ $d = $destination;
 </section>
 
 <script>
-    document.querySelector('[name=tag_color]').addEventListener('input', function() {
-        document.getElementById('tag_color_text').value = this.value;
-    });
+document.getElementById('tag_color').addEventListener('change', function() {
+    document.getElementById('color-preview').style.backgroundColor = this.value;
+});
+document.querySelector('[name=tag_color]').addEventListener('input', function() {
+    document.getElementById('tag_color_text').value = this.value;
+});
 </script>
 
 <?php require_once APP_ROOT . '/app/views/layouts/footer.php'; ?>

@@ -5,118 +5,67 @@ $a = $article ?? [];
 ?>
 
 <section class="section section--beige">
-    <div class="container" style="max-width:760px;">
+    <div class="container at-form-container">
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-            <h1 style="font-family:var(--font-title,serif); font-size:2rem; font-weight:300;">Modifier l'article</h1>
+        <div class="at-page-header">
+            <h1 class="at-page-title">Modifier l'article</h1>
             <a href="<?= APP_URL ?>/admin/blog" class="btn-outline">← Retour</a>
         </div>
 
         <?php if (!empty($error)) : ?>
-            <p style="color:#dc3545; margin-bottom:1.5rem; font-family:var(--font-body,sans-serif);">
-                <?= htmlspecialchars($error) ?>
-            </p>
+            <p class="at-error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
-        <form method="POST" action="<?= APP_URL ?>/admin/blog/update/<?= $a['Id_ARTICLE'] ?>"
-              style="font-family:var(--font-body,sans-serif); display:flex; flex-direction:column; gap:1.5rem;">
+        <!-- ── Formulaire principal ── -->
+        <form method="POST" action="<?= APP_URL ?>/admin/blog/update/<?= $a['Id_ARTICLE'] ?>" class="at-form">
 
             <!-- Titre -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
-                    Titre <span style="color:#dc3545;">*</span>
+                <label class="at-label">
+                    Titre <span class="at-label__required">*</span>
                 </label>
                 <input type="text" name="title" required
                        value="<?= htmlspecialchars($a['title'] ?? '') ?>"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:1rem; font-family:inherit;">
+                       class="at-input at-input--title">
             </div>
 
             <!-- Slug -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
-                    Slug <span style="color:#dc3545;">*</span>
+                <label class="at-label">
+                    Slug <span class="at-label__required">*</span>
                 </label>
                 <input type="text" name="slug" required
                        value="<?= htmlspecialchars($a['slug'] ?? '') ?>"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace;">
-            </div>
-
-            <!-- Catégorie -->
-            <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Catégorie</label>
-                <select name="id_category"
-                        style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
-                    <option value="">— Aucune catégorie —</option>
-                    <?php foreach ($categories as $cat) : ?>
-                    <option value="<?= $cat['Id_CATEGORY'] ?>"
-                        <?= (($a['id_category'] ?? '') == $cat['Id_CATEGORY']) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($cat['name']) ?>
-                    </option>
-                    <?php endforeach; ?>
-                </select>
+                       class="at-input at-input--mono">
             </div>
 
             <!-- Contenu -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
-                    Contenu <span style="color:#dc3545;">*</span>
+                <label class="at-label">
+                    Contenu <span class="at-label__required">*</span>
                 </label>
-                <textarea name="content" required rows="12"
-                          style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit; resize:vertical; line-height:1.6;"><?= htmlspecialchars($a['content'] ?? '') ?></textarea>
+                <textarea name="content" required rows="12" class="at-textarea"><?= htmlspecialchars($a['content'] ?? '') ?></textarea>
             </div>
 
-            <!-- Photo de couverture -->
-            <fieldset style="border:1.5px solid #d9cfc7; border-radius:8px; padding:1.25rem;">
-                <legend style="font-size:0.85rem; font-weight:600; padding:0 0.5rem;">Photo de couverture</legend>
-
-                <!-- Option 1 : Média backoffice -->
-                <div style="margin-bottom:1rem;">
-                    <label style="display:block; font-size:0.85rem; font-weight:500; margin-bottom:0.4rem; color:#4a3c32;">
-                        Utiliser un média du backoffice
-                    </label>
-                    <select name="id_media"
-                            style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
-                        <option value="">— Aucun média sélectionné —</option>
-                        <?php foreach ($medias as $media) : ?>
-                        <option value="<?= $media['Id_MEDIA'] ?>"
-                            <?= (($a['Id_MEDIA'] ?? '') == $media['Id_MEDIA']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($media['file_name']) ?>
-                        </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <!-- Séparateur -->
-                <div style="display:flex; align-items:center; gap:1rem; margin:1rem 0; color:#aaa; font-size:0.8rem;">
-                    <hr style="flex:1; border:none; border-top:1px solid #e0d6ce;">
-                    OU
-                    <hr style="flex:1; border:none; border-top:1px solid #e0d6ce;">
-                </div>
-
-                <!-- Option 2 : Mot-clé Pexels -->
-                <div>
-                    <label style="display:block; font-size:0.85rem; font-weight:500; margin-bottom:0.4rem; color:#4a3c32;">
-                        Mot-clé Pexels
-                        <span style="font-weight:400; color:#888;"> (ex : Lisbonne, coucher de soleil, sac à dos)</span>
-                    </label>
-                    <input type="text" name="pexels_keyword"
-                           value="<?= htmlspecialchars($a['pexels_keyword'] ?? '') ?>"
-                           placeholder="Si vide : la catégorie + « voyage » sera utilisée automatiquement"
-                           style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
-                    <p style="font-size:0.78rem; color:#aaa; margin-top:0.4rem;">
-                        Ignoré si un média backoffice est sélectionné ci-dessus.
-                    </p>
-                </div>
-            </fieldset>
+            <!-- Mot-clé Pexels -->
+            <div>
+                <label class="at-label">
+                    Mot-clé Pexels
+                    <span class="at-label__hint"> (utilisé si aucune couverture média n'est définie)</span>
+                </label>
+                <input type="text" name="pexels_keyword"
+                       value="<?= htmlspecialchars($a['pexels_keyword'] ?? '') ?>"
+                       placeholder="Si vide : la destination sera utilisée automatiquement"
+                       class="at-input">
+            </div>
 
             <!-- Destination -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Destination liée
-                    <span style="font-weight:400; color:#888;"> (uniquement pour les articles Destination)</span>
+                    <span class="at-label__hint"> (uniquement pour les articles Destination)</span>
                 </label>
-                <select name="id_destination"
-                        style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:inherit;">
+                <select name="id_destination" class="at-select">
                     <option value="">— Aucune destination —</option>
                     <?php foreach ($destinations as $dest) : ?>
                     <option value="<?= $dest['Id_DESTINATION'] ?>"
@@ -127,12 +76,105 @@ $a = $article ?? [];
                 </select>
             </div>
 
-            <div style="display:flex; gap:1rem; justify-content:flex-end; padding-top:0.5rem;">
+            <div class="at-actions at-actions--gap">
                 <a href="<?= APP_URL ?>/admin/blog" class="btn-outline">Annuler</a>
                 <button type="submit" class="btn-primary">Enregistrer les modifications</button>
             </div>
 
         </form>
+
+        <!-- ── Médias — couverture & galerie ── -->
+        <hr class="at-divider">
+        <p class="at-section-hint">Médias liés à cet article</p>
+
+        <?php if (!empty($cover)) : ?>
+        <div class="at-fieldset__group">
+            <p class="at-label">Couverture actuelle</p>
+            <img src="<?= APP_URL ?>/public/images/<?= htmlspecialchars($cover['file_name']) ?>"
+                 alt="Couverture"
+                 class="at-img-preview">
+            <p class="at-table__cell--muted"><?= htmlspecialchars($cover['file_name']) ?></p>
+        </div>
+        <?php endif; ?>
+
+        <!-- Changer la couverture -->
+        <form method="POST" action="<?= APP_URL ?>/admin/blog/cover/<?= $a['Id_ARTICLE'] ?>" class="at-form at-form--inline">
+            <label class="at-label">Définir une nouvelle couverture</label>
+            <div class="at-actions at-actions--gap">
+                <select name="id_media" class="at-select" required>
+                    <option value="">— Choisir un média —</option>
+                    <?php foreach ($medias as $media) : ?>
+                    <option value="<?= $media['Id_MEDIA'] ?>"
+                        <?= (!empty($cover) && $cover['Id_MEDIA'] == $media['Id_MEDIA']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($media['file_name']) ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+                <button type="submit" class="btn-primary">Définir comme couverture</button>
+            </div>
+        </form>
+
+        <!-- Galerie existante -->
+        <?php if (!empty($contents)) : ?>
+        <div class="at-fieldset__group">
+            <p class="at-label">Galerie de l'article</p>
+            <table class="at-table">
+                <thead>
+                    <tr>
+                        <th>Aperçu</th>
+                        <th>Fichier</th>
+                        <th>Couverture</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($contents as $m) : ?>
+                    <tr>
+                        <td>
+                            <img src="<?= APP_URL ?>/public/images/<?= htmlspecialchars($m['file_name']) ?>"
+                                 alt=""
+                                 style="height:48px;width:auto;border-radius:4px;"
+                                 onerror="this.style.display='none'">
+                        </td>
+                        <td class="at-table__cell--muted"><?= htmlspecialchars($m['file_name']) ?></td>
+                        <td>
+                            <?php if (!empty($cover) && $cover['Id_MEDIA'] == $m['Id_MEDIA']) : ?>
+                                <span class="at-status--published">Oui</span>
+                            <?php else : ?>
+                                <span class="at-dash">—</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <form method="POST" action="<?= APP_URL ?>/admin/blog/remove-media/<?= $a['Id_ARTICLE'] ?>"
+                                  onsubmit="return confirm('Retirer ce média de l\'article ?')"
+                                  class="at-inline-form">
+                                <input type="hidden" name="id_media" value="<?= $m['Id_MEDIA'] ?>">
+                                <button type="submit" class="btn-danger btn-danger--sm">Retirer</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php endif; ?>
+
+        <!-- Ajouter un média à la galerie -->
+        <form method="POST" action="<?= APP_URL ?>/admin/blog/add-media/<?= $a['Id_ARTICLE'] ?>" class="at-form at-form--inline">
+            <label class="at-label">Ajouter un média à la galerie</label>
+            <div class="at-actions at-actions--gap">
+                <select name="id_media" class="at-select" required>
+                    <option value="">— Choisir un média —</option>
+                    <?php foreach ($medias as $media) : ?>
+                    <option value="<?= $media['Id_MEDIA'] ?>">
+                        <?= htmlspecialchars($media['file_name']) ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+                <button type="submit" class="btn-primary">Ajouter</button>
+            </div>
+        </form>
+
     </div>
 </section>
 

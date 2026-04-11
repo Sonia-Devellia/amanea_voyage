@@ -5,119 +5,115 @@ $d = $data ?? [];
 ?>
 
 <section class="section section--beige">
-    <div class="container" style="max-width:760px;">
+    <div class="container at-form-container">
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-            <h1 style="font-family:var(--font-title,serif); font-size:2rem; font-weight:300;">Nouvelle destination</h1>
+        <div class="at-page-header">
+            <h1 class="at-page-title">Nouvelle destination</h1>
             <a href="<?= APP_URL ?>/admin/destinations" class="btn-outline">← Retour</a>
         </div>
 
         <?php if (!empty($error)) : ?>
-            <p style="color:#dc3545; margin-bottom:1.5rem; font-family:var(--font-body,sans-serif);">
-                <?= htmlspecialchars($error) ?>
-            </p>
+            <p class="at-error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
-        <form method="POST" action="<?= APP_URL ?>/admin/destinations/store"
-              style="font-family:var(--font-body,sans-serif); display:flex; flex-direction:column; gap:1.5rem;">
+        <form method="POST" action="<?= APP_URL ?>/admin/destinations/store" class="at-form">
 
             <!-- Nom -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
-                    Nom <span style="color:#dc3545;">*</span>
+                <label class="at-label">
+                    Nom <span class="at-label__required">*</span>
                 </label>
                 <input type="text" name="name" required
                        value="<?= htmlspecialchars($d['name'] ?? '') ?>"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:1rem; font-family:inherit;">
+                       class="at-input at-input--title">
             </div>
 
             <!-- Slug -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
-                    Slug <span style="color:#dc3545;">*</span>
-                    <span style="font-weight:400; color:#888;"> (ex : japon)</span>
+                <label class="at-label">
+                    Slug <span class="at-label__required">*</span>
+                    <span class="at-label__hint"> (ex : japon)</span>
                 </label>
                 <input type="text" name="slug" required
                        value="<?= htmlspecialchars($d['slug'] ?? '') ?>"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace;">
+                       class="at-input at-input--mono">
             </div>
 
-            <hr style="border:none; border-top:1px solid #e0d6ce;">
-            <p style="font-size:0.85rem; color:#888; margin:0;">Champs visuels — affichés sur la page Voyages</p>
+            <hr class="at-divider">
+            <p class="at-section-hint">Champs visuels — affichés sur la page Voyages</p>
 
-            <!-- Accroche (label) -->
+            <!-- Accroche -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Accroche
-                    <span style="font-weight:400; color:#888;"> (titre poétique de la card, ex : "L'âme des cerisiers")</span>
+                    <span class="at-label__hint"> (titre poétique de la card, ex : "L'âme des cerisiers")</span>
                 </label>
                 <input type="text" name="label"
                        value="<?= htmlspecialchars($d['label'] ?? '') ?>"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.95rem; font-family:inherit;">
+                       class="at-input">
             </div>
 
-            <!-- Badge (tag) -->
+            <!-- Badge -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Badge
-                    <span style="font-weight:400; color:#888;"> (ex : "Spiritualité & Nature")</span>
+                    <span class="at-label__hint"> (ex : "Spiritualité & Nature")</span>
                 </label>
                 <input type="text" name="tag"
                        value="<?= htmlspecialchars($d['tag'] ?? '') ?>"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.95rem; font-family:inherit;">
+                       class="at-input">
             </div>
 
             <!-- Couleur du badge -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Couleur du badge
-                    <span style="font-weight:400; color:#888;"> (code hexadécimal, ex : #C58A60)</span>
+                    <span class="at-label__hint"> (code hexadécimal, ex : #C58A60)</span>
                 </label>
-                <div style="display:flex; gap:0.75rem; align-items:center;">
+                <div class="at-color-picker">
                     <input type="color" name="tag_color"
                            value="<?= htmlspecialchars($d['tag_color'] ?? '#A39E93') ?>"
-                           style="height:42px; width:60px; border:1.5px solid #d9cfc7; border-radius:6px; padding:2px; cursor:pointer;">
+                           class="at-color-input">
                     <input type="text" id="tag_color_text"
                            value="<?= htmlspecialchars($d['tag_color'] ?? '#A39E93') ?>"
                            maxlength="7" placeholder="#A39E93"
-                           style="flex:1; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace;"
+                           class="at-input at-input--mono"
                            oninput="document.querySelector('[name=tag_color]').value=this.value">
                 </div>
             </div>
 
-            <!-- Nom du fichier image -->
+            <!-- Image -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Nom du fichier image
-                    <span style="font-weight:400; color:#888;"> (ex : japon-traditionnel.jpg — déposé dans public/images/)</span>
+                    <span class="at-label__hint"> (ex : japon-traditionnel.webp — déposé dans public/images/)</span>
                 </label>
                 <input type="text" name="cover_image"
                        value="<?= htmlspecialchars($d['cover_image'] ?? '') ?>"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace;">
+                       class="at-input at-input--mono">
             </div>
 
-            <hr style="border:none; border-top:1px solid #e0d6ce;">
+            <hr class="at-divider">
 
             <!-- Description -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">Description</label>
-                <textarea name="description" rows="4"
-                          style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.95rem; font-family:inherit; resize:vertical;"><?= htmlspecialchars($d['description'] ?? '') ?></textarea>
+                <label class="at-label">Description</label>
+                <textarea name="description" rows="4" class="at-textarea"><?= htmlspecialchars($d['description'] ?? '') ?></textarea>
             </div>
 
             <!-- Mot-clé Pexels -->
             <div>
-                <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem;">
+                <label class="at-label">
                     Mot-clé Pexels
-                    <span style="font-weight:400; color:#888;"> (pour les articles liés à cette destination)</span>
+                    <span class="at-label__hint"> (pour les articles liés à cette destination)</span>
                 </label>
                 <input type="text" name="pexels_keyword"
                        value="<?= htmlspecialchars($d['pexels_keyword'] ?? '') ?>"
                        placeholder="ex : japan temple nature"
-                       style="width:100%; padding:10px 14px; border:1.5px solid #d9cfc7; border-radius:6px; font-size:0.9rem; font-family:monospace;">
+                       class="at-input at-input--mono">
             </div>
 
-            <div style="display:flex; justify-content:flex-end;">
+            <div class="at-actions">
                 <button type="submit" class="btn-primary">Créer la destination</button>
             </div>
 
@@ -126,7 +122,6 @@ $d = $data ?? [];
 </section>
 
 <script>
-// Synchronise le champ texte hexadécimal avec le color picker
 document.querySelector('[name=tag_color]').addEventListener('input', function() {
     document.getElementById('tag_color_text').value = this.value;
 });

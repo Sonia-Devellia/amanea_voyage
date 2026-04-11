@@ -23,7 +23,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
     <!--
         Vidéo de fond — positionnée par-dessus l'image.
         poster  = même URL que l'image → servie depuis le cache navigateur, aucun octet supplémentaire.
-        preload = none → éco-conception : rien chargé avant que l'autoplay démarre.
+        preload = none → éco-conception : rien chargé avant que l'autoplay démarre. (sauf sur 02switch trop lent)
         Le JS du footer cache .hero__video (classe is-hidden) si : réseau lent / saveData /
         prefers-reduced-motion / erreur de chargement → l'image fallback apparaît automatiquement.
     -->
@@ -31,7 +31,7 @@ require_once APP_ROOT . '/app/views/layouts/header.php';
            autoplay
            muted
            playsinline
-           preload="none"
+           preload="auto"
            poster="<?= APP_URL ?>/public/images/hero-home.webp"
            aria-hidden="true">
         <source src="<?= APP_URL ?>/public/videos/hero-home.webm" type="video/webm">
