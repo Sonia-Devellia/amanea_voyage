@@ -98,8 +98,8 @@ class Article extends Model
                    a.pexels_keyword AS article_pexels_keyword,
                    d.pexels_keyword AS destination_pexels_keyword
             FROM {$this->table} a
-            LEFT JOIN CONTAINS_CONTENTS cc ON cc.Id_ARTICLE = a.Id_ARTICLE AND cc.is_cover = 1
-            LEFT JOIN MEDIA m  ON m.Id_MEDIA = cc.Id_MEDIA
+            LEFT JOIN CONTAINS_COVER cv ON cv.Id_ARTICLE = a.Id_ARTICLE
+            LEFT JOIN MEDIA m  ON m.Id_MEDIA = cv.Id_MEDIA
             LEFT JOIN BELONGS_TO bt ON bt.Id_ARTICLE = a.Id_ARTICLE
             LEFT JOIN CATEGORY c ON c.Id_CATEGORY = bt.Id_CATEGORY
             LEFT JOIN DESTINATION d ON d.Id_DESTINATION = a.Id_DESTINATION
@@ -146,8 +146,8 @@ class Article extends Model
                    a.pexels_keyword AS article_pexels_keyword,
                    d.pexels_keyword AS destination_pexels_keyword
             FROM {$this->table} a
-            LEFT JOIN CONTAINS_CONTENTS cc ON cc.Id_ARTICLE = a.Id_ARTICLE AND cc.is_cover = 1
-            LEFT JOIN MEDIA m  ON m.Id_MEDIA = cc.Id_MEDIA
+            LEFT JOIN CONTAINS_COVER cv ON cv.Id_ARTICLE = a.Id_ARTICLE
+            LEFT JOIN MEDIA m  ON m.Id_MEDIA = cv.Id_MEDIA
             INNER JOIN BELONGS_TO bt ON bt.Id_ARTICLE = a.Id_ARTICLE
             LEFT JOIN CATEGORY c ON c.Id_CATEGORY = bt.Id_CATEGORY
             LEFT JOIN DESTINATION d ON d.Id_DESTINATION = a.Id_DESTINATION
@@ -184,8 +184,8 @@ class Article extends Model
     public function addMedia(int $idArticle, int $idMedia): bool
     {
         $stmt = $this->db->prepare("
-            INSERT IGNORE INTO CONTAINS_CONTENTS (Id_ARTICLE, Id_MEDIA, is_cover)
-            VALUES (:id_article, :id_media, 0)
+            INSERT IGNORE INTO CONTAINS_CONTENTS (Id_ARTICLE, Id_MEDIA)
+            VALUES (:id_article, :id_media)
         ");
 
         return $stmt->execute([
@@ -213,28 +213,19 @@ class Article extends Model
     }
 
     // -------------------------------------------------------------------------
-    // Définit l'image de couverture d'un article via CONTAINS_CONTENTS.is_cover
-    // S'assure que le média est lié à l'article, puis le marque comme couverture
+    // Définit l'image de couverture d'un article via CONTAINS_COVER
+    // PK = Id_ARTICLE → REPLACE INTO garantit 1 seule couverture par article
     // -------------------------------------------------------------------------
     public function updateCover(int $idArticle, int $idMedia): bool
     {
-        // S'assure que le média est bien dans CONTAINS_CONTENTS (upsert)
-        $this->db->prepare("
-            INSERT INTO CONTAINS_CONTENTS (Id_ARTICLE, Id_MEDIA, is_cover)
-            VALUES (:id_article, :id_media, 0)
-            ON DUPLICATE KEY UPDATE Id_ARTICLE = Id_ARTICLE
-        ")->execute([':id_article' => $idArticle, ':id_media' => $idMedia]);
-
-        // Définit is_cover : 1 pour ce média, 0 pour tous les autres de cet article
         $stmt = $this->db->prepare("
-            UPDATE CONTAINS_CONTENTS
-            SET is_cover = (Id_MEDIA = :id_media)
-            WHERE Id_ARTICLE = :id_article
+            REPLACE INTO CONTAINS_COVER (Id_ARTICLE, Id_MEDIA)
+            VALUES (:id_article, :id_media)
         ");
 
         return $stmt->execute([
-            ':id_media'   => $idMedia,
             ':id_article' => $idArticle,
+            ':id_media'   => $idMedia,
         ]);
     }
 

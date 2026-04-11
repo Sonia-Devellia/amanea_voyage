@@ -67,9 +67,8 @@ class Media extends Model
         $stmt = $this->db->prepare("
             SELECT m.*
             FROM {$this->table} m
-            JOIN CONTAINS_CONTENTS cc ON cc.Id_MEDIA = m.Id_MEDIA
-            WHERE cc.Id_ARTICLE = :id_article
-              AND cc.is_cover = 1
+            JOIN CONTAINS_COVER cv ON cv.Id_MEDIA = m.Id_MEDIA
+            WHERE cv.Id_ARTICLE = :id_article
         ");
 
         $stmt->execute([':id_article' => $idArticle]);
